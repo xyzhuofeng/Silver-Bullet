@@ -36,7 +36,7 @@
 <body>
 <div id="app" v-cloak>
     <header>
-        <h1>Blade Works</h1>
+        <h1>Silver Bullet</h1>
     </header>
     <el-form v-model="form" @submit.native.prevent="login">
         <el-form-item>

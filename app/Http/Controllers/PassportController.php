@@ -21,4 +21,11 @@ class PassportController extends Controller
     {
         return view('passport.index');
     }
+
+    /**
+     * 登录逻辑
+     */
+    public function login(){
+
+    }
 }
