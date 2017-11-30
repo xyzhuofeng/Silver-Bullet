@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+// 首页
+Route::get('/', 'IndexController@index');
+// 注册登录页面
+Route::get('/login', 'PassportController@index');
