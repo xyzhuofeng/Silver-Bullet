@@ -16,6 +16,11 @@
 //});
 
 // 首页
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', 'IndexController@index');
 // 注册登录页面
 Route::get('/login', 'PassportController@index');
+// 项目首页
+Route::get('/project', 'ProjectController@index')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class);

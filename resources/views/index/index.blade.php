@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
     <title>Laravel</title>
     <style>
-        .clearfloat::after {
+        header:after {
             display: block;
             content: ' ';
             clear: both;
@@ -73,7 +73,7 @@
             margin-bottom: 20px;
         }
 
-        footer{
+        footer {
             position: fixed;
             bottom: 20px;
             width: 100%;
@@ -86,7 +86,7 @@
 </head>
 <body>
 <div id="app">
-    <header class=clearfloat">
+    <header>
         <div class="container">
             <div class="pull-left">
                 <h3>Silver Bullet</h3>
@@ -114,7 +114,7 @@
         el: "#app",
         methods: {
             start: function () {
-                window.location.href = "{{ url('/projects') }}";
+                window.location.href = "{{ url('/project') }}";
             }
         }
     })
