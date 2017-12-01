@@ -88,7 +88,7 @@
                 let that = this;
                 that.btnLogin = "正在登录...";
                 that.isLoading = true;
-                axios.post("{:url('index/Passport/login')}", that.form)
+                axios.post("{{ url('passport/login') }}", that.form)
                   .then(function (response) {
                       that.isLoading = false;
                       that.btnLogin = "登录";

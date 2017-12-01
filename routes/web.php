@@ -15,12 +15,22 @@
 //    return view('welcome');
 //});
 
-// 首页
+
 use Illuminate\Support\Facades\Route;
 
+// 首页
 Route::get('/', 'IndexController@index');
+/**
+ * PassportController
+ */
 // 注册登录页面
-Route::get('/login', 'PassportController@index');
+Route::get('passport/index', 'PassportController@index');
+// 提交登录表单
+Route::post('passport/login', 'PassportController@login');
+
+/**
+ * ProjectController
+ */
 // 项目首页
 Route::get('/project', 'ProjectController@index')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class);

@@ -17,7 +17,7 @@ class CheckLoginStatus
     {
         // 检查登录状态
         if (!$request->session()->has('user_id')) {
-            return redirect('login');
+            return redirect('passport/index');
         }
         return $next($request);
     }

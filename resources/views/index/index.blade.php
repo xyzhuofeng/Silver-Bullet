@@ -99,7 +99,7 @@
                 <h3>Silver Bullet</h3>
             </div>
             <div class="pull-right">
-                <a href="{{ url('/projects') }}">进入项目中心</a>
+                <a href="{{ url('/project') }}">进入项目中心</a>
             </div>
         </div>
     </header>
