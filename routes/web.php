@@ -27,10 +27,12 @@ Route::get('/', 'IndexController@index');
 Route::get('passport/index', 'PassportController@index');
 // 提交登录表单
 Route::post('passport/login', 'PassportController@login');
+// 提交注册表单
+Route::post('passport/register', 'PassportController@register');
 
 /**
  * ProjectController
  */
 // 项目首页
-Route::get('/project', 'ProjectController@index')
+Route::get('project', 'ProjectController@index')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
