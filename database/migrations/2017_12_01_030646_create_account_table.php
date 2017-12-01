@@ -39,6 +39,6 @@ class CreateAccountTable extends Migration
             //
         });
 
-        Schema::drop('blade_account');
+        Schema::dropIfExists('blade_account');
     }
 }
