@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Li
- * Date: 2017/11/30
- * Time: 10:01
- */
 
 namespace App\Http\Controllers;
 
@@ -79,6 +73,10 @@ class PassportController extends Controller
         $account->setAttribute('created_at', time());
         $account->setAttribute('updated_at', time());
         if ($account->save()) {
+
+            $request->session()->put('user_id', $account->getAttribute('user_id'));
+            $request->session()->put('user_name', $account->getAttribute('user_name'));
+            $request->session()->put('email', $account->getAttribute('email'));
             return response()->json([
                 'info' => '注册成功！正在跳转到项目中心...',
                 'status' => 1,
