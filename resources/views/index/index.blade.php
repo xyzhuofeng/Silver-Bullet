@@ -49,7 +49,7 @@
         }
 
         header h3 {
-
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
         }
 
         header a {
@@ -69,8 +69,15 @@
             font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
         }
 
-        .content h1, .content, h3 {
+
+        .content h1, .content h3 {
             margin-bottom: 20px;
+            font-weight: lighter;
+            font-size: 40px;
+        }
+        .content h3{
+            font-weight: bold;
+            font-size: 25px;
         }
 
         footer {

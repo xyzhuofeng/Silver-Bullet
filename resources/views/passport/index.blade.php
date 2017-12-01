@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>登录 - 团队协作工具</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
     <script src="https://cdn.bootcss.com/vue/2.5.8/vue.min.js"></script>
     <script src="https://cdn.bootcss.com/element-ui/2.0.5/index.js"></script>
     <link href="https://cdn.bootcss.com/element-ui/2.0.5/theme-chalk/index.css" rel="stylesheet">
@@ -31,12 +32,18 @@
         .btn-login {
             width: 100%;
         }
+
+        a {
+            color: #555;
+            text-decoration: none;
+            font-family: 'Raleway', sans-serif;
+        }
     </style>
 </head>
 <body>
 <div id="app" v-cloak>
     <header>
-        <h1>Silver Bullet</h1>
+        <a href="{{url('/')}}"><h1>Silver Bullet</h1></a>
     </header>
     <el-form v-model="form" @submit.native.prevent="login">
         <el-form-item>
