@@ -24,6 +24,7 @@ Route::get('/', 'IndexController@index');
  * PassportController
  */
 // 注册登录页面
+Route::get('passport', 'PassportController@index');
 Route::get('passport/index', 'PassportController@index');
 // 提交登录表单
 Route::post('passport/login', 'PassportController@login');
@@ -38,4 +39,7 @@ Route::get('passport/logout', 'PassportController@logout');
  */
 // 项目首页
 Route::get('project', 'ProjectController@index')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
+// 创建和保存项目信息
+Route::post('project', 'ProjectController@save')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
