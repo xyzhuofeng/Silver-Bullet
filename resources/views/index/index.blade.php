@@ -111,7 +111,6 @@
         </div>
     </div>
     <footer>
-
         Copyright&copy;2017 Designed by HyperQing
     </footer>
 </div>

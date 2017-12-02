@@ -58,7 +58,7 @@
             </el-row>
             <el-form-item>
                 <el-button type="primary" native-type="submit" class="btn-login" :loading="isLoading">
-                    @{{loginBox.btnLogin}}
+                    @{{loginBtn}}
                 </el-button>
             </el-form-item>
         </el-form>
@@ -84,7 +84,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" native-type="submit" class="btn-login" :loading="isLoading">
-                    @{{registerBox.btnLogin}}
+                    @{{registerBtn}}
                 </el-button>
             </el-form-item>
         </el-form>
@@ -100,7 +100,7 @@
 </div>
 </body>
 <script>
-    new Vue({
+    let app = new Vue({
         el: '#app',
         data() {
             return {
@@ -111,24 +111,19 @@
                     name: "" // 用户名
                 },
                 isLoading: false, // 加载中
-                loginBox: {
-                    btnLogin: "登录"
-                },
-                registerBox: {
-                    btnLogin: "创建账号"
-                }
+                loginBtn: "登录",
+                registerBtn: "创建账号"
             }
         },
         methods: {
             login() {
                 let that = this;
-                that.login.btnLogin = "正在登录...";
+                that.loginBtn = "正在登录...";
                 that.isLoading = true;
                 axios.post("{{ url('passport/login') }}", that.form)
                   .then(function (response) {
                       that.isLoading = false;
-                      that.login.btnLogin = "登录";
-                      console.log(response.data);
+                      that.loginBtn = "登录";
                       if (response.data.status === 1) {
                           window.location.href = response.data.redirect_url;
                       } else {
@@ -142,20 +137,19 @@
             },
             register() {
                 let that = this;
-                that.register.btnLogin = "正在创建...";
+                that.registerBtn = "正在创建...";
                 that.isLoading = true;
                 axios.post("{{ url('passport/register') }}", that.form)
                   .then(function (response) {
                       that.isLoading = false;
-                      that.register.btnLogin = "创建账号";
-                      console.log(response.data);
+                      that.registerBtn = "创建账号";
                       if (response.data.status === 1) {
                           // 弹出说明文字
-                          this.$message({
+                          that.$message({
                               message: response.data.info,
                               type: 'success'
                           });
-                          if (response.data.data.redirect_url !== undefined){
+                          if (response.data.redirect_url !== undefined) {
                               window.location.href = response.data.redirect_url;
                           }
                       } else {

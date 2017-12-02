@@ -15,51 +15,201 @@
             display: none;
         }
 
-        .text-center {
-            text-align: center;
-        }
-
-        #app {
-            width: 345px;
-            margin: 80px auto 0;
-        }
-
-        header {
-            text-align: center;
-        }
-
-        .btn-login {
+        html, body {
+            height: 100%;
             width: 100%;
+            margin: 0;
+            padding: 0;
+            background: #e7eaf1;
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+
+        }
+
+        /*整页采用flex纵向布局，实现页脚自适应*/
+        .page {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /*header样式*/
+        .el-row {
+            outline: none;
+        }
+
+        .page-title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+        }
+
+        .page-title span {
+            display: block;
+            font-size: 20px;
+        }
+
+        .page-right-corner {
+            display: flex;
+            justify-content: flex-end;
+            height: 60px;
+            padding-right: 20px;
+        }
+
+        .avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar img {
+            display: block;
+            width: 32px;
+        }
+
+        /*页面主体样式*/
+        main {
+            flex: 1;
+        }
+
+        .project {
+            width: 1200px;
+            min-height: 700px;
+            margin: 15px auto 0;
+            padding: 25px;
+            box-sizing: border-box;
+            border: 1px #ccc solid;
+            border-radius: 10px;
+            background: #fff;
+            overflow-y: auto;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .project-box {
+            width: 150px;
+            height: 150px;
+            padding: 20px 0 0 0;
+            box-sizing: border-box;
+            text-align: center;
+            cursor: pointer;
+            border: 0;
+            border-radius:10px;
+            transition: transform .2s ease, background .2s ease;
+        }
+
+        .project-box:hover {
+            transform: translateY(-5px);
+            background: #e7eaf1;
+        }
+
+        .project-box img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .project-box span {
+            display: block;
+            margin-top: 8px;
+        }
+
+        /*页脚样式*/
+        footer {
+            margin: 15px 0;
+            text-align: center;
+            color: #888;
         }
     </style>
 </head>
 <body>
 <div id="app" v-cloak>
-    <header>
-        <h1>Silver Bullet</h1>
-    </header>
-    <el-form v-model="form" @submit.native.prevent="login">
-        <el-form-item>
-            <el-input type="email" v-model="form.email" placeholder="您的邮箱"></el-input>
-        </el-form-item>
-        <el-input type="password" v-model="form.password" placeholder="您的密码"></el-input>
-        <el-row>
-            <el-col :span="5" :offset="19">
-                <el-button type="text">忘记密码？</el-button>
-            </el-col>
-        </el-row>
-        <el-form-item>
-            <el-button type="primary" native-type="submit" class="btn-login" :loading="isLoading">@{{btnLogin}}
-            </el-button>
-        </el-form-item>
-    </el-form>
-    <hr>
-    <div class="text-center">
-        <el-button type="text">第三方账号登录</el-button>
-    </div>
-    <div class="text-center">
-        <span style="color:#a6a6a6;font-size: 14px;">还没有账号？</span>
-        <el-button type="text">创建新账号</el-button>
+    <div class="page">
+        <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="">
+            <el-row>
+                <el-col span="8">
+                    <el-menu-item index="1">处理中心</el-menu-item>
+                    <el-submenu index="2">
+                        <template slot="title">我的工作台</template>
+                        <el-menu-item index="2-1">选项1</el-menu-item>
+                        <el-menu-item index="2-2">选项2</el-menu-item>
+                        <el-menu-item index="2-3">选项3</el-menu-item>
+                    </el-submenu>
+                </el-col>
+                <el-col span="8">
+                    <div class="page-title">
+                        <span>项目中心</span>
+                    </div>
+                </el-col>
+                <el-col span="8">
+                    <div class="page-right-corner">
+                        <el-submenu index="3">
+                            <template slot="title">您好，HyperQing</template>
+                            <el-menu-item index="3-1">个人中心</el-menu-item>
+                            <el-menu-item index="3-2">退出</el-menu-item>
+                        </el-submenu>
+                        <el-menu-item index="4" class="avatar">
+                            <img src="{{asset('images/物品申请.png')}}" alt="">
+                        </el-menu-item>
+
+                    </div>
+                </el-col>
+            </el-row>
+        </el-menu>
+        <main>
+            <div class="project">
+                <div class="row">
+                    <div class="project-box">
+                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
+                        <span>小喵小程序</span>
+                    </div>
+                    <div class="project-box">
+                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
+                        <span>小喵小程序</span>
+                    </div>
+                    <div class="project-box">
+                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
+                        <span>小喵小程序</span>
+                    </div>
+                    <div class="project-box">
+                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
+                        <span>小喵小程序</span>
+                    </div>
+                    <div class="project-box">
+                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
+                        <span>小喵小程序</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="project-box">
+                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
+                        <span>小喵小程序</span>
+                    </div>
+                    <div class="project-box">
+                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
+                        <span>小喵小程序</span>
+                    </div>
+                    <div class="project-box">
+                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
+                        <span>小喵小程序</span>
+                    </div>
+                    <div class="project-box">
+                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
+                        <span>小喵小程序</span>
+                    </div>
+                    <div class="project-box">
+                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
+                        <span>小喵小程序</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            Copyright&copy;2017 Designed by HyperQing
+        </footer>
     </div>
 </div>
 </body>
@@ -67,37 +217,9 @@
     new Vue({
         el: '#app',
         data() {
-            return {
-                form: {
-                    email: "", // 邮箱
-                    password: "" // 密码
-                },
-                isLoading: false, // 加载中
-                btnLogin: "登录"
-            }
+            return {}
         },
-        methods: {
-            login() {
-                let that = this;
-                that.btnLogin = "正在登录...";
-                that.isLoading = true;
-                axios.post("{:url('index/Passport/login')}", that.form)
-                  .then(function (response) {
-                      that.isLoading = false;
-                      that.btnLogin = "登录";
-                      console.log(response.data);
-                      if (response.data.status === 1) {
-                          window.location.href = response.data.data.redirect_url;
-                      } else {
-                          that.$message.error(response.data.info);
-                      }
-                  })
-                  .catch(function (error) {
-                      that.isLoading = false;
-                      console.log(error);
-                  });
-            }
-        }
+        methods: {}
     })
 </script>
 </html>
