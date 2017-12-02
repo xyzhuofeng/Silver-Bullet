@@ -12,10 +12,9 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
     <title>Laravel</title>
     <style>
-        header:after {
-            display: block;
-            content: ' ';
-            clear: both;
+        a.el-button--text {
+            text-decoration: none;
+            font-size: 16px;
         }
 
         .pull-left {
@@ -41,6 +40,13 @@
             margin: 0;
             padding: 0;
             background: #f7fafc;
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+        }
+
+        .page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         header {
@@ -48,43 +54,48 @@
             padding: 25px;
         }
 
-        header h3 {
-            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+        header:after {
+            display: block;
+            content: ' ';
+            clear: both;
         }
 
-        header a {
-            display: inline-block;
-            color: #09f;
-            text-decoration: none;
+        .silver {
+            font-size: 22px;
+            color: #555;
+            font-family: 'Raleway', sans-serif;
         }
 
-        header a + a {
-            margin-left: 15px;
+        header a.el-button--text {
+            font-size: 18px;
         }
 
-        .content {
+        main {
+            flex: 1;
             margin-top: 200px;
             text-align: center;
-            color: #2a2a2a;
-            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+            color: #222;
         }
 
-
-        .content h1, .content h3 {
+        main h1, main h3 {
             margin-bottom: 20px;
             font-weight: lighter;
             font-size: 40px;
         }
-        .content h3{
+
+        main h3 {
             font-weight: bold;
+            font-size: 25px;
+            color: #2a2a2a;
+        }
+
+        main .el-button {
+            width: 200px;
             font-size: 25px;
         }
 
         footer {
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
-            margin: 0 auto;
+            margin: 20px 0;
             text-align: center;
             color: #888;
         }
@@ -93,34 +104,38 @@
 </head>
 <body>
 <div id="app">
-    <header>
-        <div class="container">
-            <div class="pull-left">
-                <h3>Silver Bullet</h3>
+    <div class="page">
+        <header>
+            <div class="container">
+                <div class="pull-left">
+                    <a href="{{ url('/') }}" class="el-button el-button--text">
+                        <h3 class="silver">Silver Bullet</h3>
+                    </a>
+                </div>
+                <div class="pull-right">
+                    <a href="{{ url('/project') }}" class="el-button el-button--text">进入项目中心</a>
+                </div>
             </div>
-            <div class="pull-right">
-                <a href="{{ url('/project') }}">进入项目中心</a>
+        </header>
+        <main>
+            <div class="container">
+                <h1>银弹 - 属于你的协作平台</h1>
+                <h3>专为小型开发团队设计</h3>
+                <el-button type="primary" @click="goto('{{ url("/project") }}')">立即开始</el-button>
             </div>
-        </div>
-    </header>
-    <div class="content">
-        <div class="container">
-            <h1>银弹 - 属于你的协作平台</h1>
-            <h3>专为小型开发团队设计</h3>
-            <el-button type="primary" style="width: 200px;font-size: 25px" plain @click="start">立即开始</el-button>
-        </div>
+        </main>
+        <footer>
+            Copyright&copy;2017 Designed by HyperQing
+        </footer>
     </div>
-    <footer>
-        Copyright&copy;2017 Designed by HyperQing
-    </footer>
 </div>
 </body>
 <script>
     let vue = new Vue({
         el: "#app",
         methods: {
-            start: function () {
-                window.location.href = "{{ url('/project') }}";
+            goto: function (url) {
+                window.location.href = url;
             }
         }
     })

@@ -11,6 +11,11 @@
     <script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
     <title>Laravel</title>
     <style>
+        a.el-button--text {
+            text-decoration: none;
+            font-size: 16px;
+        }
+
         [v-cloak] {
             display: none;
         }
@@ -35,6 +40,12 @@
         /*header样式*/
         .el-row {
             outline: none;
+        }
+
+        .silver {
+            font-size: 22px;
+            color: #555;
+            font-family: 'Raleway', sans-serif;
         }
 
         .page-title {
@@ -64,7 +75,12 @@
 
         .avatar img {
             display: block;
-            width: 32px;
+            width: 40px;
+            border: 0;
+            border-radius: 50px;
+            -moz-box-shadow: 0px 0px 6px #666666;
+            -webkit-box-shadow: 0px 0px 6px #666666;
+            box-shadow: 0px 0px 6px #666666;
         }
 
         /*页面主体样式*/
@@ -98,7 +114,7 @@
             text-align: center;
             cursor: pointer;
             border: 0;
-            border-radius:10px;
+            border-radius: 10px;
             transition: transform .2s ease, background .2s ease;
         }
 
@@ -117,9 +133,13 @@
             margin-top: 8px;
         }
 
+        .create-project {
+            border: 1px dashed #888;
+        }
+
         /*页脚样式*/
         footer {
-            margin: 15px 0;
+            margin: 20px 0;
             text-align: center;
             color: #888;
         }
@@ -131,7 +151,12 @@
         <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="">
             <el-row>
                 <el-col span="8">
-                    <el-menu-item index="1">处理中心</el-menu-item>
+                    <el-menu-item>
+                        <a href="{{url('/')}}" class="el-button el-button--text">
+                            <span class="silver">Silver Bullet</span>
+                        </a>
+                    </el-menu-item>
+                    <el-menu-item index="1">项目中心</el-menu-item>
                     <el-submenu index="2">
                         <template slot="title">我的工作台</template>
                         <el-menu-item index="2-1">选项1</el-menu-item>
@@ -162,9 +187,9 @@
         <main>
             <div class="project">
                 <div class="row">
-                    <div class="project-box">
-                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
-                        <span>小喵小程序</span>
+                    <div class="project-box create-project" @click="openCreateProjectjDialog">
+                        <img src="{{asset('images/加号1.png')}}" alt="添加项目">
+                        <span>创建您的项目</span>
                     </div>
                     <div class="project-box">
                         <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
@@ -211,15 +236,35 @@
             Copyright&copy;2017 Designed by HyperQing
         </footer>
     </div>
+    <el-dialog title="创建项目" :visible.sync="createProjdlgVisible" width="30%">
+        <el-form label-width="80px">
+            <el-form-item label="项目名称">
+                <el-input placeholder="例如: XX网站"></el-input>
+            </el-form-item>
+            <el-form-item label="项目备注">
+                <el-input type="textarea"></el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="createProjdlgVisible = false">取 消</el-button>
+                <el-button type="primary" @click="createProjdlgVisible = false">创 建</el-button>
+            </span>
+    </el-dialog>
 </div>
 </body>
 <script>
     new Vue({
         el: '#app',
         data() {
-            return {}
+            return {
+                createProjdlgVisible: false
+            }
         },
-        methods: {}
+        methods: {
+            openCreateProjectjDialog: function () {
+                this.createProjdlgVisible = true;
+            }
+        }
     })
 </script>
 </html>
