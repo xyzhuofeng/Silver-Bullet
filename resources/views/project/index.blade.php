@@ -172,12 +172,12 @@
                 <el-col span="8">
                     <div class="page-right-corner">
                         <el-submenu index="3">
-                            <template slot="title">您好，HyperQing</template>
+                            <template slot="title">您好，{{ session('user_name') }}</template>
                             <el-menu-item index="3-1">个人中心</el-menu-item>
                             <el-menu-item index="louout">退出</el-menu-item>
                         </el-submenu>
                         <el-menu-item index="4" class="avatar">
-                            <img src="{{asset('images/物品申请.png')}}" alt="">
+                            <img src="{{ session('user_avatar') }}" alt="">
                         </el-menu-item>
 
                     </div>

@@ -42,6 +42,7 @@ class ProjectController
 
     /**
      * 编辑项目信息页面
+     * @param Request $request
      */
     public function edit(Request $request){
         $project_id = $request->get('project_id');

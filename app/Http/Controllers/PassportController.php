@@ -44,6 +44,7 @@ class PassportController extends Controller
         }
         $request->session()->put('user_id', $account->user_id);
         $request->session()->put('user_name', $account->user_name);
+        $request->session()->put('user_avatar', $account->user_avatar);
         $request->session()->put('email', $account->email);
         return response()->json([
             'info' => '登录成功',
@@ -69,12 +70,13 @@ class PassportController extends Controller
         $account->setAttribute('email', $email);
         $account->setAttribute('user_name', $name);
         $account->setAttribute('user_password', Password::crypt($password));
+        $account->setAttribute('user_avatar', 'images/男.png');
         $account->setAttribute('created_at', time());
         $account->setAttribute('updated_at', time());
         if ($account->save()) {
-
             $request->session()->put('user_id', $account->getAttribute('user_id'));
             $request->session()->put('user_name', $account->getAttribute('user_name'));
+            $request->session()->put('user_avatar', $account->getAttribute('user_avatar'));
             $request->session()->put('email', $account->getAttribute('email'));
             return response()->json([
                 'info' => '注册成功！正在跳转到项目中心...',
