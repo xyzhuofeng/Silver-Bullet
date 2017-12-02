@@ -29,6 +29,9 @@ Route::get('passport/index', 'PassportController@index');
 Route::post('passport/login', 'PassportController@login');
 // 提交注册表单
 Route::post('passport/register', 'PassportController@register');
+// 退出登录
+Route::get('passport/logout', 'PassportController@logout');
+
 
 /**
  * ProjectController

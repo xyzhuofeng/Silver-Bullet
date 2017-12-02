@@ -6,7 +6,6 @@ use App\Http\model\Account;
 use hyperqing\Password;
 use Illuminate\Http\Request;
 
-
 /**
  * 用户通行证管理器
  * @package App\Http\Controllers
@@ -87,6 +86,18 @@ class PassportController extends Controller
             'info' => '注册失败',
             'status' => 0
         ]);
+    }
 
+    /**
+     * 退出登录
+     *
+     * 退出登录后返回登录页面
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function logout(Request $request)
+    {
+        $request->session()->flush();
+        return redirect('passport/index');
     }
 }

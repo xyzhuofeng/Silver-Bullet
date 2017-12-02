@@ -148,7 +148,7 @@
 <body>
 <div id="app" v-cloak>
     <div class="page">
-        <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="">
+        <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="handleSelect">
             <el-row>
                 <el-col span="8">
                     <el-menu-item>
@@ -174,7 +174,7 @@
                         <el-submenu index="3">
                             <template slot="title">您好，HyperQing</template>
                             <el-menu-item index="3-1">个人中心</el-menu-item>
-                            <el-menu-item index="3-2">退出</el-menu-item>
+                            <el-menu-item index="louout">退出</el-menu-item>
                         </el-submenu>
                         <el-menu-item index="4" class="avatar">
                             <img src="{{asset('images/物品申请.png')}}" alt="">
@@ -263,6 +263,12 @@
         methods: {
             openCreateProjectjDialog: function () {
                 this.createProjdlgVisible = true;
+            },
+            handleSelect: function (key, keyPath) {
+                switch (key) {
+                    case 'louout':
+                        window.location.href = "{{ url('passport/logout') }}"
+                }
             }
         }
     })
