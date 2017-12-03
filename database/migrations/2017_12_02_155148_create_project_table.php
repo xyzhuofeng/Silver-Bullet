@@ -21,7 +21,7 @@ class CreateProjectTable extends Migration
             $table->string('project_name', 20)->comment('项目名称');
             $table->text('project_comment')->comment('项目备注');
             $table->unsignedBigInteger('creator')->comment('项目创建者');
-            $table->text('project_thumb')->comment('项目图标图片');
+            $table->text('project_thumb')->nullable()->comment('项目图标图片');
             $table->timestamps();
         });
     }
