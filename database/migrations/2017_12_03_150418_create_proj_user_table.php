@@ -13,7 +13,7 @@ class CreateProjUserTable extends Migration
      */
     public function up()
     {
-        Schema::table('blade_project_user', function (Blueprint $table) {
+        Schema::create('blade_project_user', function (Blueprint $table) {
             //
         });
     }
@@ -25,8 +25,6 @@ class CreateProjUserTable extends Migration
      */
     public function down()
     {
-        Schema::table('blade_project_user', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('blade_project_user');
     }
 }

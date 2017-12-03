@@ -4,6 +4,10 @@ namespace App\Http\model;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * 项目表模型
+ * @package App\Http\model
+ */
 class Project extends Model
 {
     /**
@@ -13,5 +17,5 @@ class Project extends Model
      */
     protected $table = 'blade_project';
 
-    protected $primaryKey = 'project_id';
+    protected $primaryKey = 'project_user_id';
 }
