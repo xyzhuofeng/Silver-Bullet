@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\model\Project;
 use Illuminate\Http\Request;
 
 /**
@@ -22,11 +23,32 @@ class ProjectController
      * 创建项目信息
      *
      * POST
+     * project_name: 项目名称
+     * project_comment: 项目备注
      * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function save(Request $request)
     {
-
+        $project_name = $request->post('project_name');
+        $project_comment = $request->post('project_comment');
+        $project = new Project();
+        $project->setAttribute('project_name', $project_name);
+        $project->setAttribute('project_comment', $project_comment);
+        $project->setAttribute('creator', $request->session()->get('user_id'));
+        $project->setCreatedAt(time());
+        $project->setUpdatedAt(time());
+        if ($project->save()) {
+            return response()->json([
+                'info' => '创建成功',
+                'status' => 1,
+                'redirect_url' => url('project')
+            ]);
+        }
+        return response()->json([
+            'info' => '创建失败',
+            'status' => 0
+        ]);
     }
 
     /**
