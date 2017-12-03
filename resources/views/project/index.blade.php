@@ -7,16 +7,12 @@
     <title>项目中心 - 团队协作平台</title>
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ asset('js/element-ui/2.0.5/theme-chalk/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('js/public.css') }}">
     <script src="{{ asset('js/vue.js') }}"></script>
     <script src="{{ asset('js/element-ui/2.0.5/index.js') }}"></script>
     <script src="{{ asset('js/axios/0.17.1/axios.min.js') }}"></script>
     <title>项目中心 - 团队协作平台</title>
     <style>
-        a.el-button--text {
-            text-decoration: none;
-            font-size: 16px;
-        }
-
         [v-cloak] {
             display: none;
         }
@@ -40,13 +36,6 @@
         /*header样式*/
         .el-row {
             outline: none;
-        }
-
-        .silver {
-            font-size: 22px;
-            color: #555;
-            font-family: 'Raleway', sans-serif;
-            font-weight: bold;
         }
 
         .page-title {
@@ -151,8 +140,8 @@
     <div class="page">
         <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="handleSelect">
             <el-row>
-                <el-col span="8">
-                    <el-menu-item>
+                <el-col :span="8">
+                    <el-menu-item index="0">
                         <a href="{{url('/')}}" class="el-button el-button--text">
                             <span class="silver">Silver Bullet</span>
                         </a>
@@ -165,12 +154,12 @@
                         <el-menu-item index="2-3">选项3</el-menu-item>
                     </el-submenu>
                 </el-col>
-                <el-col span="8">
+                <el-col :span="8">
                     <div class="page-title">
                         <span>项目中心</span>
                     </div>
                 </el-col>
-                <el-col span="8">
+                <el-col :span="8">
                     <div class="page-right-corner">
                         <el-submenu index="3">
                             <template slot="title">您好，{{ session('user_name') }}</template>
@@ -238,19 +227,19 @@
             Copyright&copy;2017 Designed by HyperQing
         </footer>
     </div>
-    <el-dialog title="创建项目" :visible.sync="createProjdlgVisible" width="30%">
-        <el-form label-width="80px" @submit.native.prevent="createProject">
+    <el-dialog title="创建项目" :visible.sync="createProj.dlgVisible" width="580px">
+        <el-form label-width="80px">
             <el-form-item label="项目名称">
-                <el-input placeholder="例如: XX网站"></el-input>
+                <el-input placeholder="例如: XX网站" v-model="createProj.form.project_name"></el-input>
             </el-form-item>
             <el-form-item label="项目备注">
-                <el-input type="textarea"></el-input>
+                <el-input type="textarea" v-model="createProj.form.project_comment"></el-input>
             </el-form-item>
         </el-form>
-        <span slot="footer" class="dialog-footer">
-                <el-button @click="createProjdlgVisible = false">取 消</el-button>
-                <el-button type="primary" @click="createProjdlgVisible = false">创 建</el-button>
-            </span>
+        <span slot="footer">
+            <el-button @click="createProj.dlgVisible = false">取消</el-button>
+            <el-button type="primary" @click="createProject">@{{createProj.btn}}</el-button>
+        </span>
     </el-dialog>
 </div>
 </body>
@@ -260,6 +249,7 @@
         data() {
             return {
                 createProj: {
+                    btn: "创建",
                     isLoading: false, // 等待图标
                     dlgVisible: false, // 显示创建项目对话框
                     form: {  // 创建项目表单
@@ -271,7 +261,7 @@
         },
         methods: {
             openCreateProjectjDialog: function () {
-                this.createProjdlgVisible = true;
+                this.createProj.dlgVisible = true;
             },
             handleSelect: function (key, keyPath) {
                 switch (key) {
@@ -281,20 +271,29 @@
             },
             createProject: function () {
                 let that = this;
-                that.loginBtn = "正在登录...";
-                that.isLoading = true;
-                axios.post("{{ url('passport/login') }}", that.form)
+                that.createProj.btn = "正在创建...";
+                that.createProj.isLoading = true;
+                axios.post("{{ url('project') }}", that.createProj.form)
                   .then(function (response) {
-                      that.isLoading = false;
-                      that.loginBtn = "登录";
-                      if (response.data.status === 1) {
-                          window.location.href = response.data.redirect_url;
-                      } else {
+                      that.createProj.isLoading = false;
+                      that.createProj.btn = "创建";
+                      if (response.data.status !== 1) {
                           that.$message.error(response.data.info);
+                      } else {
+                          // 成功的情况，弹窗消失，表单清理
+                          that.$message({
+                              message: response.data.info,
+                              type: "success",
+                              center: true
+                          });
+                          that.createProj.dlgVisible = false;
+                          that.createProj.form.project_name = ""
+                          that.createProj.form.project_comment = ""
                       }
                   })
                   .catch(function (error) {
                       that.isLoading = false;
+                      that.createProj.btn = "创建";
                       console.log(error);
                   });
             }
