@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>登录 - 团队协作平台</title>
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-    <script src="https://cdn.bootcss.com/vue/2.5.8/vue.min.js"></script>
-    <script src="https://cdn.bootcss.com/element-ui/2.0.5/index.js"></script>
-    <link href="https://cdn.bootcss.com/element-ui/2.0.5/theme-chalk/index.css" rel="stylesheet">
-    <script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('js/element-ui/2.0.5/theme-chalk/index.css') }}">
+    <script src="{{ asset('js/vue.js') }}"></script>
+    <script src="{{ asset('js/element-ui/2.0.5/index.js') }}"></script>
+    <script src="{{ asset('js/axios/0.17.1/axios.min.js') }}"></script>
     <title>Laravel</title>
     <style>
         [v-cloak] {

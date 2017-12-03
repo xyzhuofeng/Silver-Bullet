@@ -5,11 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>项目中心 - 团队协作平台</title>
-    <script src="https://cdn.bootcss.com/vue/2.5.8/vue.min.js"></script>
-    <script src="https://cdn.bootcss.com/element-ui/2.0.5/index.js"></script>
-    <link href="https://cdn.bootcss.com/element-ui/2.0.5/theme-chalk/index.css" rel="stylesheet">
-    <script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
-    <title>Laravel</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ asset('js/element-ui/2.0.5/theme-chalk/index.css') }}">
+    <script src="{{ asset('js/vue.js') }}"></script>
+    <script src="{{ asset('js/element-ui/2.0.5/index.js') }}"></script>
+    <script src="{{ asset('js/axios/0.17.1/axios.min.js') }}"></script>
+    <title>项目中心 - 团队协作平台</title>
     <style>
         a.el-button--text {
             text-decoration: none;
@@ -27,7 +28,6 @@
             padding: 0;
             background: #e7eaf1;
             font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-
         }
 
         /*整页采用flex纵向布局，实现页脚自适应*/
@@ -46,6 +46,7 @@
             font-size: 22px;
             color: #555;
             font-family: 'Raleway', sans-serif;
+            font-weight: bold;
         }
 
         .page-title {
@@ -174,7 +175,8 @@
                         <el-submenu index="3">
                             <template slot="title">您好，{{ session('user_name') }}</template>
                             <el-menu-item index="3-1">个人中心</el-menu-item>
-                            <el-menu-item index="louout">退出</el-menu-item>
+                            <el-menu-item index="3-1">账号设置</el-menu-item>
+                            <el-menu-item index="louout"><a href=""></a>退出</el-menu-item>
                         </el-submenu>
                         <el-menu-item index="4" class="avatar">
                             <img src="{{ session('user_avatar') }}" alt="">
@@ -237,7 +239,7 @@
         </footer>
     </div>
     <el-dialog title="创建项目" :visible.sync="createProjdlgVisible" width="30%">
-        <el-form label-width="80px">
+        <el-form label-width="80px" @submit.native.prevent="createProject">
             <el-form-item label="项目名称">
                 <el-input placeholder="例如: XX网站"></el-input>
             </el-form-item>
@@ -257,7 +259,14 @@
         el: '#app',
         data() {
             return {
-                createProjdlgVisible: false
+                createProj: {
+                    isLoading: false, // 等待图标
+                    dlgVisible: false, // 显示创建项目对话框
+                    form: {  // 创建项目表单
+                        project_name: "",
+                        project_comment: ""
+                    }
+                },
             }
         },
         methods: {
@@ -269,6 +278,25 @@
                     case 'louout':
                         window.location.href = "{{ url('passport/logout') }}"
                 }
+            },
+            createProject: function () {
+                let that = this;
+                that.loginBtn = "正在登录...";
+                that.isLoading = true;
+                axios.post("{{ url('passport/login') }}", that.form)
+                  .then(function (response) {
+                      that.isLoading = false;
+                      that.loginBtn = "登录";
+                      if (response.data.status === 1) {
+                          window.location.href = response.data.redirect_url;
+                      } else {
+                          that.$message.error(response.data.info);
+                      }
+                  })
+                  .catch(function (error) {
+                      that.isLoading = false;
+                      console.log(error);
+                  });
             }
         }
     })
