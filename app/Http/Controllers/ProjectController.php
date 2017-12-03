@@ -15,7 +15,7 @@ class ProjectController
      */
     public function index()
     {
-        return view('project.index');
+        return response();
     }
 
     /**
@@ -44,7 +44,8 @@ class ProjectController
      * 编辑项目信息页面
      * @param Request $request
      */
-    public function edit(Request $request){
+    public function edit(Request $request)
+    {
         $project_id = $request->get('project_id');
 
     }
@@ -55,7 +56,8 @@ class ProjectController
      * PUT
      * @param Request $request
      */
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         $project_id = $request->input('project_id');
     }
 
@@ -65,7 +67,8 @@ class ProjectController
      * DELETE
      * @param Request $request
      */
-    public function delete(Request $request){
+    public function delete(Request $request)
+    {
 
     }
 }

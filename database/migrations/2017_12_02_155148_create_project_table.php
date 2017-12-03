@@ -15,6 +15,10 @@ class CreateProjectTable extends Migration
     {
         Schema::create('blade_project', function (Blueprint $table) {
             $table->bigIncrements('project_id')->comment('项目id');
+            $table->string('project_name', 20)->comment('项目名称');
+            $table->text('project_comment')->comment('项目备注');
+            $table->bigInteger('creator')->comment('项目创建者');
+            $table->timestamps();
         });
     }
 
