@@ -13,9 +13,12 @@ class ProjectController
 {
     /**
      * 项目首页
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
+        dump(Project::where(['creator' => $request->session()->get('user_id')])->get());
         return view('project.index');
     }
 
