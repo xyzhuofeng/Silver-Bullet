@@ -15,7 +15,7 @@ class ProjectController
      */
     public function index()
     {
-        return response();
+        return view('project.index');
     }
 
     /**
