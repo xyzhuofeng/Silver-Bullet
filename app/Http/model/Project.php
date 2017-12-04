@@ -17,5 +17,5 @@ class Project extends Model
      */
     protected $table = 'blade_project';
 
-    protected $primaryKey = 'project_user_id';
+    protected $primaryKey = 'project_id';
 }
