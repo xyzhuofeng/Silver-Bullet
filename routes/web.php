@@ -18,8 +18,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+/**
+ * IndexController
+ */
 // 首页
 Route::get('/', 'IndexController@index');
+
 /**
  * PassportController
  */
@@ -37,8 +41,11 @@ Route::get('passport/logout', 'PassportController@logout');
 /**
  * ProjectController
  */
-// 项目首页
-Route::get('project', 'ProjectController@index')
+// 项目首页纯页面
+Route::get('project/index', 'ProjectController@index')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
+// 项目列表AJAX纯数据
+Route::get('project', 'ProjectController@projList')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
 // 创建和保存项目信息
 Route::post('project', 'ProjectController@save')

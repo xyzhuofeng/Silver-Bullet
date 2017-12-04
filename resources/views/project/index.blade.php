@@ -176,7 +176,7 @@
             </el-row>
         </el-menu>
         <main>
-            <div class="project">
+            <div class="project" v-loading="projLoading">
                 <div class="row">
                     <div class="project-box create-project" @click="openCreateProjectjDialog">
                         <img src="{{asset('images/加号1.png')}}" alt="添加项目">
@@ -248,14 +248,20 @@
         el: '#app',
         data() {
             return {
+                projLoading: true,
+                projList: [],
                 createProj: {
                     btn: "创建",
-                    isLoading: false, // 等待图标
-                    dlgVisible: false, // 显示创建项目对话框
-                    form: {  // 创建项目表单
-                        project_name: "",
-                        project_comment: ""
-                    }
+                    isLoading:
+                      false, // 等待图标
+                    dlgVisible:
+                      false, // 显示创建项目对话框
+                    form:
+                      {  // 创建项目表单
+                          project_name: "",
+                          project_comment:
+                            ""
+                      }
                 },
             }
         },
@@ -296,7 +302,29 @@
                       that.createProj.btn = "创建";
                       console.log(error);
                   });
+            },
+            loadProjectList: function () {
+                // 开始加载
+                this.projLoading = true;
+                let that = this;
+                axios.get("{{ url('project') }}", that.createProj.form)
+                  .then(function (response) {
+                      that.projLoading = false;
+                      if (response.data.status !== 1) {
+                          that.$message.error(response.data.info);
+                      } else {
+                          that.projList = response.data.data
+                      }
+                  })
+                  .catch(function (error) {
+                      that.isLoading = false;
+                      that.createProj.btn = "创建";
+                      console.log(error);
+                  });
             }
+        },
+        mounted: function () {
+
         }
     })
 </script>
