@@ -18,8 +18,18 @@ class ProjectController
      */
     public function index(Request $request)
     {
-        dump(Project::where(['creator' => $request->session()->get('user_id')])->get());
+//        dump(Project::where(['creator' => $request->session()->get('user_id')])->get());
         return view('project.index');
+    }
+
+    /**
+     *
+     * 为AJAX刷新数据设计的接口
+     * @param Request $request
+     */
+    public function projList(Request $request)
+    {
+        dump(Project::where(['creator' => $request->session()->get('user_id')])->get());
     }
 
     /**

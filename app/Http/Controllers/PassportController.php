@@ -49,7 +49,7 @@ class PassportController extends Controller
         return response()->json([
             'info' => '登录成功',
             'status' => 1,
-            'redirect_url' => url('project')
+            'redirect_url' => url('project/index')
         ]);
     }
 
@@ -81,7 +81,7 @@ class PassportController extends Controller
             return response()->json([
                 'info' => '注册成功！正在跳转到项目中心...',
                 'status' => 1,
-                'redirect_url' => url('project')
+                'redirect_url' => url('project/index')
             ]);
         }
         return response()->json([
