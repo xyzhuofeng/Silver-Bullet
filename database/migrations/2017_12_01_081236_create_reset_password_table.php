@@ -21,7 +21,7 @@ class CreateResetPasswordTable extends Migration
             $table->bigIncrements('resets_id')->commet('重置密码id');
             $table->string('email')->commet('邮箱');
             $table->string('token')->commet('密钥');
-            $table->timestamp('created_at')->nullable();
+            $table->timestamps();
         });
     }
 
