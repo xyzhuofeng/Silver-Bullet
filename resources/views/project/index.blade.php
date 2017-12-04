@@ -68,9 +68,9 @@
             width: 40px;
             border: 0;
             border-radius: 50px;
-            -moz-box-shadow: 0px 0px 6px #666666;
-            -webkit-box-shadow: 0px 0px 6px #666666;
-            box-shadow: 0px 0px 6px #666666;
+            -moz-box-shadow: 0 0 6px #666;
+            -webkit-box-shadow: 0 0 6px #666;
+            box-shadow: 0 0 6px #666;
         }
 
         /*页面主体样式*/
@@ -82,23 +82,26 @@
             width: 1200px;
             min-height: 700px;
             margin: 15px auto 0;
-            padding: 25px;
             box-sizing: border-box;
-            border: 1px #ccc solid;
+            border: 1px solid #ccc;
             border-radius: 10px;
             background: #fff;
             overflow-y: auto;
         }
 
-        .row {
+        .project-list {
             display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
+            flex-wrap: wrap;
+            margin: 25px auto;
+            width: 1080px;
+            box-sizing: border-box;
         }
 
         .project-box {
-            width: 150px;
+            flex: 1 150px;
+            max-width: 150px;
             height: 150px;
+            margin: 15px;
             padding: 20px 0 0 0;
             box-sizing: border-box;
             text-align: center;
@@ -168,7 +171,7 @@
                             <el-menu-item index="louout"><a href=""></a>退出</el-menu-item>
                         </el-submenu>
                         <el-menu-item index="4" class="avatar">
-                            <img src="{{ session('user_avatar') }}" alt="">
+                            <img src="{{ session('user_avatar') }}" alt="用户头像">
                         </el-menu-item>
 
                     </div>
@@ -177,48 +180,14 @@
         </el-menu>
         <main>
             <div class="project" v-loading="projLoading">
-                <div class="row">
+                <div class="project-list">
                     <div class="project-box create-project" @click="openCreateProjectjDialog">
-                        <img src="{{asset('images/加号1.png')}}" alt="添加项目">
+                        <img src="{{ asset('images/加号1.png') }}" alt="添加项目">
                         <span>创建您的项目</span>
                     </div>
-                    <div class="project-box">
+                    <div class="project-box" v-for="item in projList">
                         <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
-                        <span>小喵小程序</span>
-                    </div>
-                    <div class="project-box">
-                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
-                        <span>小喵小程序</span>
-                    </div>
-                    <div class="project-box">
-                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
-                        <span>小喵小程序</span>
-                    </div>
-                    <div class="project-box">
-                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
-                        <span>小喵小程序</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="project-box">
-                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
-                        <span>小喵小程序</span>
-                    </div>
-                    <div class="project-box">
-                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
-                        <span>小喵小程序</span>
-                    </div>
-                    <div class="project-box">
-                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
-                        <span>小喵小程序</span>
-                    </div>
-                    <div class="project-box">
-                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
-                        <span>小喵小程序</span>
-                    </div>
-                    <div class="project-box">
-                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
-                        <span>小喵小程序</span>
+                        <span>@{{ item.project_name }}</span>
                     </div>
                 </div>
             </div>
@@ -248,7 +217,7 @@
         el: '#app',
         data() {
             return {
-                projLoading: true,
+                projLoading: false,
                 projList: [],
                 createProj: {
                     btn: "创建",
@@ -295,6 +264,8 @@
                           that.createProj.dlgVisible = false;
                           that.createProj.form.project_name = ""
                           that.createProj.form.project_comment = ""
+                          // 刷新项目列表
+                          that.loadProjectList()
                       }
                   })
                   .catch(function (error) {
@@ -307,7 +278,7 @@
                 // 开始加载
                 this.projLoading = true;
                 let that = this;
-                axios.get("{{ url('project') }}", that.createProj.form)
+                axios.get("{{ url('project') }}")
                   .then(function (response) {
                       that.projLoading = false;
                       if (response.data.status !== 1) {
@@ -324,7 +295,7 @@
             }
         },
         mounted: function () {
-
+            this.loadProjectList()
         }
     })
 </script>

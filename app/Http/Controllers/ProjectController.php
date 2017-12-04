@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\model\Project;
+use App\Http\model\ProjectUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * 项目控制器
@@ -13,31 +15,49 @@ class ProjectController
 {
     /**
      * 项目首页
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
-//        dump(Project::where(['creator' => $request->session()->get('user_id')])->get());
         return view('project.index');
     }
 
     /**
+     * 获取用户参与的项目列表数据
      *
-     * 为AJAX刷新数据设计的接口
-     * @param Request $request
+     * 为AJAX获取数据设计的接口
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function projList(Request $request)
+    public function projList()
     {
-        dump(Project::where(['creator' => $request->session()->get('user_id')])->get());
+        $project_model = new Project();
+        $project_user_model = new ProjectUser();
+        $data = DB::table($project_model->table)
+            ->join($project_user_model->table,
+                $project_model->table . '.project_id',
+                '=',
+                $project_user_model->table . '.project_id'
+            )
+            ->select($project_model->table . '.*')
+            ->orderBy('updated_at', 'desc')
+            ->where('user_id', session('user_id'))
+            ->get();
+        return response()->json([
+            'info' => '获取成功',
+            'status' => 1,
+            'data' => $data
+        ]);
     }
 
     /**
      * 创建项目信息
      *
+     * 创建项目的同时，会将创建者添加到项目用户关联表中
+     *
      * POST
      * project_name: 项目名称
      * project_comment: 项目备注
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -48,20 +68,29 @@ class ProjectController
         $project = new Project();
         $project->setAttribute('project_name', $project_name);
         $project->setAttribute('project_comment', $project_comment);
+        $project->setAttribute('project_thumb', 'images/物品申请.png');
         $project->setAttribute('creator', $request->session()->get('user_id'));
-        $project->setCreatedAt(time());
-        $project->setUpdatedAt(time());
-        if ($project->save()) {
+        DB::beginTransaction();
+        try {
+            $project->save();
+            // 添加创建者本人的项目用户关联记录
+            $project_user = new ProjectUser();
+            $project_user->setAttribute('project_id', $project->getAttribute('project_id'));
+            $project_user->setAttribute('user_id', $request->session()->get('user_id'));
+            $project_user->setAttribute('role', 'creator'); // 创建者角色
+            $project_user->save();
+            DB::commit();
             return response()->json([
                 'info' => '创建成功',
-                'status' => 1,
-                'redirect_url' => url('project')
+                'status' => 1
+            ]);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'info' => '创建失败',
+                'status' => 0
             ]);
         }
-        return response()->json([
-            'info' => '创建失败',
-            'status' => 0
-        ]);
     }
 
     /**

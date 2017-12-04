@@ -15,7 +15,10 @@ class ProjectUser extends Model
      *
      * @var string
      */
-    protected $table = 'blade_project_user';
+    public $table = 'blade_project_user';
+
+    // 禁用自增主键
+    public $incrementing = false;
 
     protected $primaryKey = 'project_user_id';
 }

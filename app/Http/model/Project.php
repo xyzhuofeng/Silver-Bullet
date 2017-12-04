@@ -13,9 +13,10 @@ class Project extends Model
     /**
      * 与模型关联的数据表
      *
+     * public供外部读取表名
      * @var string
      */
-    protected $table = 'blade_project';
+    public $table = 'blade_project';
 
     protected $primaryKey = 'project_id';
 }
