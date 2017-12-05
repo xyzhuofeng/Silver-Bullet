@@ -22,6 +22,7 @@ class CreateTaskTable extends Migration
             $table->bigInteger('creator')->comment('创建者');
             $table->bigInteger('project_id')->comment('项目id');
             $table->tinyInteger('is_finished')->comment('完成标识，1完成/0未完成');
+            $table->timestamp('deadline')->comment('截止时间');
             $table->timestamps();
         });
     }
