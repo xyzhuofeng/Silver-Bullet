@@ -4,8 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>项目中心 - 团队协作平台</title>
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ asset('js/fonts.googleapis.com.css') }}">
     <link rel="stylesheet" href="{{ asset('js/element-ui/2.0.5/theme-chalk/index.css') }}">
     <link rel="stylesheet" href="{{ asset('js/public.css') }}">
     <script src="{{ asset('js/vue.js') }}"></script>
@@ -13,15 +12,7 @@
     <script src="{{ asset('js/axios/0.17.1/axios.min.js') }}"></script>
     <title>项目中心 - 团队协作平台</title>
     <style>
-        [v-cloak] {
-            display: none;
-        }
-
         html, body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
             background: #e7eaf1;
             font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
         }
@@ -150,7 +141,8 @@
                             <span class="silver">Silver Bullet</span>
                         </a>
                     </el-menu-item>
-                    <el-menu-item index="1"><a class="el-button el-button--text" href="{{ url('project') }}">项目中心</a></el-menu-item>
+                    <el-menu-item index="1"><a class="el-button el-button--text" href="{{ url('project') }}">项目中心</a>
+                    </el-menu-item>
                     <el-submenu index="2">
                         <template slot="title">我的工作台</template>
                         <el-menu-item index="2-1">选项1</el-menu-item>
@@ -195,13 +187,13 @@
             </div>
         </main>
         <footer>
-            Copyright&copy;2017 Designed by HyperQing
+            Copyright &copy; 2017 Designed by HyperQing
         </footer>
     </div>
     <el-dialog title="创建项目" :visible.sync="createProj.dlgVisible" width="580px">
         <el-form label-width="80px">
             <el-form-item label="项目名称">
-                <el-input placeholder="例如: XX网站" v-model="createProj.form.project_name"></el-input>
+                <el-input placeholder="例如: 我的博客" v-model="createProj.form.project_name"></el-input>
             </el-form-item>
             <el-form-item label="项目备注">
                 <el-input type="textarea" v-model="createProj.form.project_comment"></el-input>
@@ -215,7 +207,7 @@
 </div>
 </body>
 <script>
-    new Vue({
+    let app = new Vue({
         el: '#app',
         data() {
             return {
@@ -223,16 +215,12 @@
                 projList: [],
                 createProj: {
                     btn: "创建",
-                    isLoading:
-                      false, // 等待图标
-                    dlgVisible:
-                      false, // 显示创建项目对话框
-                    form:
-                      {  // 创建项目表单
-                          project_name: "",
-                          project_comment:
-                            ""
-                      }
+                    isLoading: false, // 等待图标
+                    dlgVisible: false, // 显示创建项目对话框
+                    form: {  // 创建项目表单
+                        project_name: "",
+                        project_comment: ""
+                    }
                 },
             }
         },
@@ -274,7 +262,7 @@
                       }
                   })
                   .catch(function (error) {
-                      that.isLoading = false;
+                      that.createProj.isLoading = false;
                       that.createProj.btn = "创建";
                       console.log(error);
                   });
@@ -294,7 +282,7 @@
                       }
                   })
                   .catch(function (error) {
-                      that.isLoading = false;
+                      that.createProj.isLoading = false;
                       that.createProj.btn = "创建";
                       console.log(error);
                   });

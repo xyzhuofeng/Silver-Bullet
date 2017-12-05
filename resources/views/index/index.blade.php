@@ -4,27 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>银弹 - 您的团队协作平台</title>
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ asset('js/fonts.googleapis.com.css') }}">
     <link rel="stylesheet" href="{{ asset('js/element-ui/2.0.5/theme-chalk/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('js/public.css') }}">
     <script src="{{ asset('js/vue.js') }}"></script>
     <script src="{{ asset('js/element-ui/2.0.5/index.js') }}"></script>
     <script src="{{ asset('js/axios/0.17.1/axios.min.js') }}"></script>
-    <title>Laravel</title>
+    <title>银弹 - 您的团队协作平台</title>
     <style>
-        a.el-button--text {
-            text-decoration: none;
-            font-size: 16px;
-        }
-
-        .pull-left {
-            float: left;
-        }
-
-        .pull-right {
-            float: right;
-        }
-
         .container {
             width: 100%;
             max-width: 1000px;
@@ -36,10 +23,6 @@
         }
 
         html, body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
             background: #fff;
             font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
         }
@@ -126,13 +109,13 @@
             </div>
         </main>
         <footer>
-            Copyright&copy;2017 Designed by HyperQing
+            Copyright &copy; 2017 Designed by HyperQing
         </footer>
     </div>
 </div>
 </body>
 <script>
-    let vue = new Vue({
+    let app = new Vue({
         el: "#app",
         methods: {
             goto: function (url) {

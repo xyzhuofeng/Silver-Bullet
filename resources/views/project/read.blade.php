@@ -4,24 +4,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>项目中心 - 团队协作平台</title>
-    {{--<link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">--}}
+    <link rel="stylesheet" href="{{ asset('js/fonts.googleapis.com.css') }}">
     <link rel="stylesheet" href="{{ asset('js/element-ui/2.0.5/theme-chalk/index.css') }}">
     <link rel="stylesheet" href="{{ asset('js/public.css') }}">
     <script src="{{ asset('js/vue.js') }}"></script>
     <script src="{{ asset('js/element-ui/2.0.5/index.js') }}"></script>
     <script src="{{ asset('js/axios/0.17.1/axios.min.js') }}"></script>
-    <title>项目中心 - 团队协作平台</title>
+    <title>从心约App - 看板 - 团队协作平台</title>
     <style>
-        [v-cloak] {
-            display: none;
-        }
-
         html, body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
             background: #e7eaf1;
             font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
         }
@@ -230,7 +221,7 @@
                             <div class="title">
                                 <span>我的任务</span>
                                 <div>
-                                    <a href="" class="el-button el-button--text">
+                                    <a class="el-button el-button--text" @click="createTask.dlgVisible = true">
                                         <i class="el-icon-plus"></i> 创建任务
                                     </a>
                                 </div>
@@ -243,7 +234,7 @@
                                 </div>
                             </div>
                             <div class="task">
-                                <el-checkbox checked="true">修复XXXx逻辑错误</el-checkbox>
+                                <el-checkbox>修复XXXx逻辑错误</el-checkbox>
                                 <el-tag size="small" type="danger">修复bug</el-tag>
                                 <div class="deadline deadline-warning">
                                     <span>后天 18:00 截止</span>
@@ -325,29 +316,75 @@
             </el-row>
         </main>
         <footer>
-            Copyright&copy;2017 Designed by HyperQing
+            Copyright &copy; 2017 Designed by HyperQing
         </footer>
     </div>
+    <el-dialog title="创建任务" :visible.sync="createTask.dlgVisible" width="30%">
+        <el-form label-width="80px">
+            <el-form-item label="任务内容">
+                <el-input v-model="createTask.form.task_content"></el-input>
+            </el-form-item>
+            <el-form-item label="截止时间">
+                <el-date-picker type="datetime" placeholder="选择日期时间" align="center" v-model="createTask.form.deadline"
+                                :picker-options="pickerOptions">
+                </el-date-picker>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="createTask.dlgVisible = false">取 消</el-button>
+            <el-button type="primary" @click="createTask.dlgVisible = false">@{{createTask.btn}}</el-button>
+        </span>
+    </el-dialog>
 </div>
 </body>
 <script>
-    new Vue({
+    let app = new Vue({
         el: '#app',
         data() {
             return {
+                // 时间选择器快捷菜单
+                pickerOptions: {
+                    shortcuts: [{
+                        text: '今天下班前',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    }, {
+                        text: '明天下班前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '后天下班前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }]
+                },
+                // 创建任务
+                createTask: {
+                    btn: "创建",
+                    isLoading: false, // 等待图标
+                    dlgVisible: false, // 显示创建对话框
+                    form: {  // 创建项目表单
+                        task_content: ""
+                    }
+                },
+
                 projLoading: false,
                 projList: [],
                 createProj: {
                     btn: "创建",
-                    isLoading:
-                      false, // 等待图标
-                    dlgVisible:
-                      false, // 显示创建项目对话框
-                    form:
-                      {  // 创建项目表单
-                          project_name: "",
-                          project_comment: ""
-                      }
+                    isLoading: false, // 等待图标
+                    dlgVisible: false, // 显示创建项目对话框
+                    form: {  // 创建项目表单
+                        project_name: "",
+                        project_comment: ""
+                    }
                 },
             }
         },
@@ -364,14 +401,14 @@
                 }
             },
             // 创建项目ajax
-            createProject: function () {
+            createTask: function () {
                 let that = this;
-                that.createProj.btn = "正在创建...";
-                that.createProj.isLoading = true;
-                axios.post("{{ url('project') }}", that.createProj.form)
+                that.createTask.btn = "正在创建...";
+                that.createTask.isLoading = true;
+                axios.post("{{ url('task') }}", that.createTask.form)
                   .then(function (response) {
-                      that.createProj.isLoading = false;
-                      that.createProj.btn = "创建";
+                      that.createTask.isLoading = false;
+                      that.createTask.btn = "创建";
                       if (response.data.status !== 1) {
                           that.$message.error(response.data.info);
                       } else {
@@ -381,35 +418,11 @@
                               type: "success",
                               center: true
                           });
-                          that.createProj.dlgVisible = false;
-                          that.createProj.form.project_name = "";
-                          that.createProj.form.project_comment = "";
-                          // 刷新项目列表
-                          that.loadProjectList()
+                          that.createTask.dlgVisible = false;
                       }
                   })
                   .catch(function (error) {
-                      that.isLoading = false;
-                      that.createProj.btn = "创建";
-                      console.log(error);
-                  });
-            },
-            // 加载项目列表
-            loadProjectList: function () {
-                // 开始加载
-                this.projLoading = true;
-                let that = this;
-                axios.get("{{ url('project') }}")
-                  .then(function (response) {
-                      that.projLoading = false;
-                      if (response.data.status !== 1) {
-                          that.$message.error(response.data.info);
-                      } else {
-                          that.projList = response.data.data
-                      }
-                  })
-                  .catch(function (error) {
-                      that.isLoading = false;
+                      that.createTask = false;
                       that.createProj.btn = "创建";
                       console.log(error);
                   });
@@ -417,8 +430,7 @@
         },
         // vue生命周期
         mounted: function () {
-            // 加载项目列表
-            this.loadProjectList()
+
         }
     })
 </script>
