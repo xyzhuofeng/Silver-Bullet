@@ -85,7 +85,7 @@
             margin: 15px auto 0;
             box-sizing: border-box;
             border: 1px solid #ccc;
-            border-radius: 10px;
+            border-radius: 6px;
             background: #fff;
             overflow-y: auto;
         }
@@ -150,7 +150,7 @@
                             <span class="silver">Silver Bullet</span>
                         </a>
                     </el-menu-item>
-                    <el-menu-item index="1">项目中心</el-menu-item>
+                    <el-menu-item index="1"><a class="el-button el-button--text" href="{{ url('project') }}">项目中心</a></el-menu-item>
                     <el-submenu index="2">
                         <template slot="title">我的工作台</template>
                         <el-menu-item index="2-1">选项1</el-menu-item>
