@@ -42,11 +42,15 @@ Route::get('passport/logout', 'PassportController@logout');
  * ProjectController
  */
 // 项目首页纯页面
-Route::get('project/index', 'ProjectController@index')
+Route::get('project', 'ProjectController@index')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
 // 项目列表AJAX纯数据
-Route::get('project', 'ProjectController@projList')
+Route::get('project/list', 'ProjectController@projList')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
 // 创建和保存项目信息
 Route::post('project', 'ProjectController@save')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
+// 打开指定项目详情
+Route::get('project/{project_id}', 'ProjectController@read')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
+

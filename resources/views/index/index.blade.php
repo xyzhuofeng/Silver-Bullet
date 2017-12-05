@@ -113,7 +113,7 @@
                     </a>
                 </div>
                 <div class="pull-right">
-                    <a href="{{ url('project/index') }}" class="el-button el-button--text">进入项目中心</a>
+                    <a href="{{ url('project') }}" class="el-button el-button--text">进入项目中心</a>
                 </div>
             </div>
         </header>
@@ -121,7 +121,7 @@
             <div class="container">
                 <h1>银弹 - 属于你的协作平台</h1>
                 <h3>专为小型开发团队设计</h3>
-                <el-button type="primary" @click="goto('{{ url("project/index") }}')">立即开始</el-button>
+                <el-button type="primary" @click="goto('{{ url("project") }}')">立即开始</el-button>
             </div>
         </main>
         <footer>

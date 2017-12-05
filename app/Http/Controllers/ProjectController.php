@@ -44,6 +44,7 @@ class ProjectController
             ->get();
         foreach ($data as $key => &$val) {
             $val->project_thumb = asset($val->project_thumb);
+            $val->project_url = url('project', ['project_id' => $val->project_id]);
         }
         return response()->json([
             'info' => '获取成功',
@@ -101,10 +102,15 @@ class ProjectController
      *
      * GET
      * @param Request $request
+     * @param string $project_id 项目id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function read(Request $request)
+    public function read(Request $request, $project_id)
     {
-        $project_id = $request->get('project_id');
+        $project_id = intval($project_id);
+//        $project = Project::where('project_id',$project_id)->first();
+//        var_dump($project);
+        return view('project.read');
     }
 
     /**

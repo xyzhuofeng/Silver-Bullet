@@ -31,6 +31,7 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            min-height: 100vh;
         }
 
         /*header样式*/
@@ -185,10 +186,12 @@
                         <img src="{{ asset('images/加号1.png') }}" alt="添加项目">
                         <span>创建您的项目</span>
                     </div>
-                    <div class="project-box" v-for="item in projList" :title="item.project_name">
-                        <img :src="item.project_thumb" :alt="item.project_name ">
-                        <span>@{{ item.project_name }}</span>
-                    </div>
+                    <template v-for="item in projList">
+                        <div class="project-box" :title="item.project_name" @click="openProjPage(item.project_url)">
+                            <img :src="item.project_thumb" :alt="item.project_name ">
+                            <span>@{{ item.project_name }}</span>
+                        </div>
+                    </template>
                 </div>
             </div>
         </main>
@@ -235,6 +238,10 @@
             }
         },
         methods: {
+            // 打开指定项目详情页面
+            openProjPage: function (url) {
+                window.location.href = url
+            },
             // 导航条选择相应方法
             handleSelect: function (key, keyPath) {
                 switch (key) {
@@ -278,7 +285,7 @@
                 // 开始加载
                 this.projLoading = true;
                 let that = this;
-                axios.get("{{ url('project') }}")
+                axios.get("{{ url('project/list') }}")
                   .then(function (response) {
                       that.projLoading = false;
                       if (response.data.status !== 1) {
