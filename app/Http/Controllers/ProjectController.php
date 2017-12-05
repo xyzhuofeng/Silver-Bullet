@@ -110,7 +110,9 @@ class ProjectController
         $project_id = intval($project_id);
 //        $project = Project::where('project_id',$project_id)->first();
 //        var_dump($project);
-        return view('project.read');
+        return view('project.read', [
+            'project_id' => $project_id
+        ]);
     }
 
     /**

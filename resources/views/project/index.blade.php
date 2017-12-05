@@ -174,7 +174,6 @@
                         <el-menu-item index="4" class="avatar">
                             <img src="{{ session('user_avatar') }}" alt="用户头像">
                         </el-menu-item>
-
                     </div>
                 </el-col>
             </el-row>
