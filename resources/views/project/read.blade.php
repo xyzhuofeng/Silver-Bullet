@@ -169,7 +169,7 @@
     <div class="page">
         <el-menu default-active="1" mode="horizontal" @select="handleSelect">
             <el-row>
-                <el-col :span="8">
+                <el-col :span="9">
                     <el-menu-item index="0">
                         <a href="{{url('/')}}" class="el-button el-button--text">
                             <span class="silver">Silver Bullet</span>
@@ -184,12 +184,12 @@
                         <el-menu-item index="2-3">选项3</el-menu-item>
                     </el-submenu>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6">
                     <div class="page-title">
                         <span>从心约App</span>
                     </div>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="9">
                     <div class="page-right-corner">
                         <el-submenu index="3">
                             <template slot="title">您好，{{ session('user_name') }}</template>
