@@ -39,7 +39,7 @@
             width: 100%;
             margin: 0;
             padding: 0;
-            background: #f7fafc;
+            background: #fff;
             font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
         }
 
