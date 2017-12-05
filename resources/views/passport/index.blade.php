@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>登录 - 团队协作平台</title>
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+    <link href="{{ asset('js/fonts.googleapis.com.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ asset('js/element-ui/2.0.5/theme-chalk/index.css') }}">
     <script src="{{ asset('js/vue.js') }}"></script>
     <script src="{{ asset('js/element-ui/2.0.5/index.js') }}"></script>
@@ -102,7 +102,7 @@
 <script>
     let app = new Vue({
         el: '#app',
-        data() {
+        data: function () {
             return {
                 loginPage: true, //默认为登录页
                 form: {
@@ -116,7 +116,7 @@
             }
         },
         methods: {
-            login() {
+            login: function () {
                 let that = this;
                 that.loginBtn = "正在登录...";
                 that.isLoading = true;
@@ -135,7 +135,7 @@
                       console.log(error);
                   });
             },
-            register() {
+            register: function () {
                 let that = this;
                 that.registerBtn = "正在创建...";
                 that.isLoading = true;
