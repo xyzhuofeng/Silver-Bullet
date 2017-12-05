@@ -181,12 +181,12 @@
         <main>
             <div class="project" v-loading="projLoading">
                 <div class="project-list">
-                    <div class="project-box create-project" @click="openCreateProjectjDialog">
+                    <div class="project-box create-project" @click="createProj.dlgVisible = true">
                         <img src="{{ asset('images/加号1.png') }}" alt="添加项目">
                         <span>创建您的项目</span>
                     </div>
-                    <div class="project-box" v-for="item in projList">
-                        <img src="{{asset('images/物品申请.png')}}" alt="项目图片">
+                    <div class="project-box" v-for="item in projList" :title="item.project_name">
+                        <img :src="item.project_thumb" :alt="item.project_name ">
                         <span>@{{ item.project_name }}</span>
                     </div>
                 </div>
@@ -235,15 +235,14 @@
             }
         },
         methods: {
-            openCreateProjectjDialog: function () {
-                this.createProj.dlgVisible = true;
-            },
+            // 导航条选择相应方法
             handleSelect: function (key, keyPath) {
                 switch (key) {
                     case 'louout':
                         window.location.href = "{{ url('passport/logout') }}"
                 }
             },
+            // 创建项目ajax
             createProject: function () {
                 let that = this;
                 that.createProj.btn = "正在创建...";
@@ -262,8 +261,8 @@
                               center: true
                           });
                           that.createProj.dlgVisible = false;
-                          that.createProj.form.project_name = ""
-                          that.createProj.form.project_comment = ""
+                          that.createProj.form.project_name = "";
+                          that.createProj.form.project_comment = "";
                           // 刷新项目列表
                           that.loadProjectList()
                       }
@@ -274,6 +273,7 @@
                       console.log(error);
                   });
             },
+            // 加载项目列表
             loadProjectList: function () {
                 // 开始加载
                 this.projLoading = true;
@@ -294,7 +294,9 @@
                   });
             }
         },
+        // vue生命周期
         mounted: function () {
+            // 加载项目列表
             this.loadProjectList()
         }
     })

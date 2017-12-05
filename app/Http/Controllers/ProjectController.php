@@ -42,6 +42,9 @@ class ProjectController
             ->orderBy('updated_at', 'desc')
             ->where('user_id', session('user_id'))
             ->get();
+        foreach ($data as $key => &$val) {
+            $val->project_thumb = asset($val->project_thumb);
+        }
         return response()->json([
             'info' => '获取成功',
             'status' => 1,
