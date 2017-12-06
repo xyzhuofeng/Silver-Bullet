@@ -226,6 +226,16 @@
                                     </a>
                                 </div>
                             </div>
+                            <template v-for="item in myTaskList">
+                                <div class="task">
+                                    <el-checkbox v-model="item.is_finished">@{{item.task_content}}
+                                    </el-checkbox>
+                                    <el-tag size="small">实现功能</el-tag>
+                                    <div class="deadline deadline-danger">
+                                        <span>明天 23：00 截止</span>
+                                    </div>
+                                </div>
+                            </template>
                             <div class="task">
                                 <el-checkbox>XXX功能修改</el-checkbox>
                                 <el-tag size="small">实现功能</el-tag>
@@ -353,6 +363,8 @@
                         project_id: "{{ $project_id }}"
                     }
                 },
+                // 我的任务列表
+                myTaskList: [],
                 // 时间选择器快捷菜单
                 pickerOptions: {
                     shortcuts: [{
@@ -408,6 +420,7 @@
                               type: "success",
                               center: true
                           });
+                          that.loadMyTask();
                           that.createTask.dlgVisible = false;
                       }
                   })
@@ -425,12 +438,24 @@
                       if (response.data.status !== 1) {
                           that.$message.error(response.data.info);
                       } else {
-                          // 成功的情况，弹窗消失，表单清理
-                          that.$message({
-                              message: response.data.info,
-                              type: "success",
-                              center: true
-                          });
+                          that.myTaskList = response.data.data;
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
+            },
+            // 完成任务
+            finishTask(task_id) {
+                alert();
+                return;
+                let that = this;
+                axios.get("{{ route('mytask', ['protect_id'=>$project_id]) }}")
+                  .then(function (response) {
+                      if (response.data.status !== 1) {
+                          that.$message.error(response.data.info);
+                      } else {
+                          that.myTaskList = response.data.data;
                       }
                   })
                   .catch(function (error) {

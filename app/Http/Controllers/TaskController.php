@@ -27,9 +27,13 @@ class TaskController
         )
             ->where(TaskUser::table . '.user_id', session()->get('user_id'))
             ->where(Task::table . '.project_id', $project_id)
-            ->orderBy('deadline','desc')
-            ->orderBy(Task::table . '.updated_at','desc')
+            ->orderBy('deadline', 'desc')
+            ->orderBy(Task::table . '.updated_at', 'desc')
             ->get();
+        // 转换为bool方便渲染
+        foreach ($data as &$val) {
+            $val->is_finished = $val->is_finished == 1 ? true : false;
+        }
         return response()->json([
             'info' => '获取成功',
             'status' => 1,
@@ -49,14 +53,15 @@ class TaskController
         $task_content = $request->post('task_content');
         $deadline = $request->post('deadline');
         $project_id = $request->post('project_id');
-        $task = new Task();
-        $task->setAttribute('task_content', $task_content);
-        $task->setAttribute('creator', session()->get('user_id'));
-        $task->setAttribute('project_id', $project_id);
-        $task->setAttribute('is_finished', 0);
-        $task->setAttribute('deadline', $deadline);
         DB::beginTransaction();
         try {
+            // 分别写入任务和用户任务关联表
+            $task = new Task();
+            $task->setAttribute('task_content', $task_content);
+            $task->setAttribute('creator', session()->get('user_id'));
+            $task->setAttribute('project_id', $project_id);
+            $task->setAttribute('is_finished', 0);
+            $task->setAttribute('deadline', $deadline);
             $task->save();
             $task_user = new TaskUser();
             $task_user->setAttribute('task_id', $task->getAttribute('task_id'));
