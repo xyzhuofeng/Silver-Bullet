@@ -4,9 +4,9 @@ namespace App\Http\model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends Model
+class TaskUser extends Model
 {
-    const table = 'blade_task';
+    const table = 'blade_task_user';
 
     /**
      * 与模型关联的数据表
@@ -14,7 +14,7 @@ class Task extends Model
      * public供外部读取表名
      * @var string
      */
-    public $table = 'blade_task';
+    protected $table = 'blade_task_user';
 
     protected $primaryKey = 'task_id';
 }

@@ -319,20 +319,20 @@
             Copyright &copy; 2017 Designed by HyperQing
         </footer>
     </div>
-    <el-dialog title="创建任务" :visible.sync="createTask.dlgVisible" width="30%">
+    <el-dialog title="创建任务" :visible.sync="createTask.dlgVisible" width="400px">
         <el-form label-width="80px">
             <el-form-item label="任务内容">
                 <el-input v-model="createTask.form.task_content"></el-input>
             </el-form-item>
             <el-form-item label="截止时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间" align="center" v-model="createTask.form.deadline"
-                                :picker-options="pickerOptions">
+                                :picker-options="pickerOptions" value-format="yyyy-MM-dd HH:mm:ss">
                 </el-date-picker>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="createTask.dlgVisible = false">取 消</el-button>
-            <el-button type="primary" @click="createTask.dlgVisible = false">@{{createTask.btn}}</el-button>
+            <el-button type="primary" @click="createTaskFunc">@{{createTask.btn}}</el-button>
         </span>
     </el-dialog>
 </div>
@@ -342,6 +342,17 @@
         el: '#app',
         data() {
             return {
+                // 创建任务
+                createTask: {
+                    btn: "创建",
+                    isLoading: false, // 等待图标
+                    dlgVisible: false, // 显示创建对话框
+                    form: {  // 创建项目表单
+                        task_content: "",
+                        deadline: "",
+                        project_id: "{{ $project_id }}"
+                    }
+                },
                 // 时间选择器快捷菜单
                 pickerOptions: {
                     shortcuts: [{
@@ -364,28 +375,7 @@
                             picker.$emit('pick', date);
                         }
                     }]
-                },
-                // 创建任务
-                createTask: {
-                    btn: "创建",
-                    isLoading: false, // 等待图标
-                    dlgVisible: false, // 显示创建对话框
-                    form: {  // 创建项目表单
-                        task_content: ""
-                    }
-                },
-
-                projLoading: false,
-                projList: [],
-                createProj: {
-                    btn: "创建",
-                    isLoading: false, // 等待图标
-                    dlgVisible: false, // 显示创建项目对话框
-                    form: {  // 创建项目表单
-                        project_name: "",
-                        project_comment: ""
-                    }
-                },
+                }
             }
         },
         methods: {
@@ -400,8 +390,8 @@
                         window.location.href = "{{ url('passport/logout') }}"
                 }
             },
-            // 创建项目ajax
-            createTask: function () {
+            // 创建任务
+            createTaskFunc: function () {
                 let that = this;
                 that.createTask.btn = "正在创建...";
                 that.createTask.isLoading = true;
@@ -422,15 +412,35 @@
                       }
                   })
                   .catch(function (error) {
-                      that.createTask = false;
-                      that.createProj.btn = "创建";
+                      that.createTask.isLoading = false;
+                      that.createTask.btn = "创建";
+                      console.log(error);
+                  });
+            },
+            // 读取我的任务
+            loadMyTask() {
+                let that = this;
+                axios.get("{{ route('mytask', ['protect_id'=>$project_id]) }}")
+                  .then(function (response) {
+                      if (response.data.status !== 1) {
+                          that.$message.error(response.data.info);
+                      } else {
+                          // 成功的情况，弹窗消失，表单清理
+                          that.$message({
+                              message: response.data.info,
+                              type: "success",
+                              center: true
+                          });
+                      }
+                  })
+                  .catch(function (error) {
                       console.log(error);
                   });
             }
         },
         // vue生命周期
         mounted: function () {
-
+            this.loadMyTask();
         }
     })
 </script>

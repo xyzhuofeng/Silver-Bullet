@@ -58,7 +58,8 @@ Route::get('project/{project_id}', 'ProjectController@read')
  * TaskController
  */
 // 项目任务AJAX纯数据
-
+Route::get('project/{project_id}/task/my', 'TaskController@my')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)->name('mytask');;
 // 创建任务
 Route::post('task', 'TaskController@save')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
