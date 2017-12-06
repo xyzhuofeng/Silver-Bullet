@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\model\Account;
 use App\Http\model\Task;
 use App\Http\model\TaskUser;
 use Illuminate\Http\Request;
@@ -15,6 +16,32 @@ use Illuminate\Support\Facades\DB;
 class TaskController
 {
     /**
+     * 任务面板首页
+     * @param Request $request
+     * @param string $project_id 项目id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index(Request $request, $project_id)
+    {
+        // 获取项目所有任务
+        $task_list = Task::join(TaskUser::table,
+            TaskUser::table . '.task_id', '=', Task::table . '.task_id'
+        )
+            ->where(Task::table . '.project_id', $project_id)
+            ->orderBy('deadline', 'desc')
+            ->orderBy(Task::table . '.updated_at', 'desc')
+            ->get();
+        // 转换为bool方便渲染
+        foreach ($task_list as &$val) {
+            $val->is_finished = $val->is_finished == 1 ? true : false;
+        }
+        return view('task.index', [
+            'project_id' => $project_id,
+            'task_list' => $task_list
+        ]);
+    }
+
+    /**
      * 获取我的项目任务
      * @param Request $request
      * @param string $project_id 项目id
@@ -25,6 +52,9 @@ class TaskController
         $data = Task::join(TaskUser::table,
             TaskUser::table . '.task_id', '=', Task::table . '.task_id'
         )
+            ->join(Account::table,
+                Account::table . '.user_id', '=', Task::table . '.creator'
+            )
             ->where(TaskUser::table . '.user_id', session()->get('user_id'))
             ->where(Task::table . '.project_id', $project_id)
             ->orderBy('deadline', 'desc')

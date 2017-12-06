@@ -42,7 +42,7 @@ class ProjectController
             ->orderBy('updated_at', 'desc')
             ->where('user_id', session('user_id'))
             ->get();
-        foreach ($data as $key => &$val) {
+        foreach ($data as &$val) {
             $val->project_thumb = asset($val->project_thumb);
             $val->project_url = url('project', ['project_id' => $val->project_id]);
         }

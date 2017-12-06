@@ -10,7 +10,7 @@
     <script src="{{ asset('js/vue.js') }}"></script>
     <script src="{{ asset('js/element-ui/2.0.5/index.js') }}"></script>
     <script src="{{ asset('js/axios/0.17.1/axios.min.js') }}"></script>
-    <title>看板 - 从心约App - 团队协作平台</title>
+    <title>任务 - 从心约App - 团队协作平台</title>
     <style>
         html, body {
             background: #e7eaf1;
@@ -73,6 +73,8 @@
 
         /*页面主题各部分内容*/
         section {
+            width: 800px;
+            margin: 0 auto;
             padding: 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
@@ -195,7 +197,7 @@
                 </el-col>
             </el-row>
         </el-menu>
-        <el-menu default-active="看板" mode="horizontal" @select="handleSelect"
+        <el-menu default-active="任务" mode="horizontal" @select="handleSelect"
                  style="display: flex; justify-content: center">
             <el-menu-item index="看板">
                 <a href="{{ url('project', $project_id) }}" class="el-button el-button--text">看板</a>
@@ -214,116 +216,46 @@
             </el-menu-item>
         </el-menu>
         <main>
-            <el-row :gutter="20">
-                <el-col :span="10">
-                    <div class="left">
-                        <section class="my-task">
-                            <div class="title">
-                                <span>我的任务</span>
-                                <div>
-                                    <a class="el-button el-button--text" @click="createTask.dlgVisible = true">
-                                        <i class="el-icon-plus"></i> 创建任务
-                                    </a>
-                                </div>
-                            </div>
-                            <template v-for="item in myTaskList">
-                                <div class="task">
-                                    <el-checkbox v-model="item.is_finished">@{{item.task_content}}
-                                    </el-checkbox>
-                                    <el-tag size="small">实现功能</el-tag>
-                                    <div class="deadline deadline-danger">
-                                        <span>明天 23：00 截止</span>创建者：@{{item.user_name}}
-                                    </div>
-                                </div>
-                            </template>
-                            <div class="task">
-                                <el-checkbox>XXX功能修改</el-checkbox>
-                                <el-tag size="small">实现功能</el-tag>
-                                <div class="deadline deadline-danger">
-                                    <span>明天 23：00 截止</span>
-                                </div>
-                            </div>
-                            <div class="task">
-                                <el-checkbox>修复XXXx逻辑错误</el-checkbox>
-                                <el-tag size="small" type="danger">修复bug</el-tag>
-                                <div class="deadline deadline-warning">
-                                    <span>后天 18:00 截止</span>
-                                </div>
-                            </div>
-                            <div class="task">
-                                <el-checkbox>优化页面样式</el-checkbox>
-                                <div class="deadline deadline-normal">
-                                    <span>12月5日18:00 截止</span>
-                                </div>
-                            </div>
-                        </section>
-                        <section class="project-progress">
-                            <div class="title"><span>项目进度</span></div>
-                            <el-row>
-                                <el-col :span="8">8 个紧急任务待处理</el-col>
-                                <el-col :span="8">4个 功能正在开发</el-col>
-                                <el-col :span="8">2个 需求待开发</el-col>
-                            </el-row>
-                            <el-row>
-                                <el-col :span="8">1个线上版本正在运行</el-col>
-                                <el-col :span="8">1个测试进行中</el-col>
-                                <el-col :span="8">5个 Bug待修复</el-col>
-                            </el-row>
-                        </section>
+            <section>
+                <div class="title">
+                    <span>项目任务</span>
+                    <div>
+                        <a class="el-button el-button--text" @click="createTask.dlgVisible = true">
+                            <i class="el-icon-plus"></i> 创建任务
+                        </a>
                     </div>
-
-                </el-col>
-                <el-col :span="8">
-                    <div class="center">
-                        <section class="docker-history">
-                            <div class="title">
-                                <span>Docker容器版本</span>
-                                <div>
-                                    <a href="" class="el-button el-button--text"><i class="el-icon-refresh"></i> 刷新</a>
-                                </div>
-                            </div>
-                            <div>
-                                服务器 i1289a2f8b9: 已部署镜像 2f269a
-                            </div>
-                        </section>
-                        <section class="commit-history">
-                            <div class="title">
-                                <span>代码提交记录</span>
-                                <a href="" class="el-button el-button--text"><i class="el-icon-refresh"></i> 刷新</a>
-                            </div>
-                            <div>
-
-                                <h3>GitHub hyperqing/congxinyue</h3>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 2f269a <br>
-                                comment message：添加页面内容 <br>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 76cba2 <br>
-                                comment message：添加页面内容 <br>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 968ade <br>
-                                comment message：添加页面内容 <br>
-                                <h3>码云 hyperqing/congxinyue</h3>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 2f269a <br>
-                                comment message：添加页面内容 <br>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 76cba2 <br>
-                                comment message：添加页面内容 <br>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 968ade <br>
-                                comment message：添加页面内容 <br>
-                            </div>
-                        </section>
+                </div>
+                <template v-for="item in myTaskList">
+                    <div class="task">
+                        <el-checkbox v-model="item.is_finished">@{{item.task_content}}
+                        </el-checkbox>
+                        <el-tag size="small">实现功能</el-tag>
+                        <div class="deadline deadline-danger">
+                            <span>明天 23：00 截止</span>创建者：@{{item.user_name}}
+                        </div>
                     </div>
-                </el-col>
-                <el-col :span="6">
-                    <div class="right">
-                        <section class="project-news">
-                            <div class="title"><span>项目动态</span></div>
-                            <div>
-                                用户A 更新了代码<br>
-                                用户B 上传了文件 xxxx.doc<br>
-                                用户C 添加了新任务<br>
-                            </div>
-                        </section>
+                </template>
+                <div class="task">
+                    <el-checkbox>XXX功能修改</el-checkbox>
+                    <el-tag size="small">实现功能</el-tag>
+                    <div class="deadline deadline-danger">
+                        <span>明天 23：00 截止</span>
                     </div>
-                </el-col>
-            </el-row>
+                </div>
+                <div class="task">
+                    <el-checkbox>修复XXXx逻辑错误</el-checkbox>
+                    <el-tag size="small" type="danger">修复bug</el-tag>
+                    <div class="deadline deadline-warning">
+                        <span>后天 18:00 截止</span>
+                    </div>
+                </div>
+                <div class="task">
+                    <el-checkbox>优化页面样式</el-checkbox>
+                    <div class="deadline deadline-normal">
+                        <span>12月5日18:00 截止</span>
+                    </div>
+                </div>
+            </section>
         </main>
         <footer>
             Copyright &copy; 2017 Designed by HyperQing

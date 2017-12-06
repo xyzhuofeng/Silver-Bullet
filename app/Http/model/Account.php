@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Account extends Model
 {
+    const table = 'blade_account';
     /**
      * 与模型关联的数据表
      *
