@@ -197,7 +197,7 @@
                 </el-col>
             </el-row>
         </el-menu>
-        <el-menu default-active="任务" mode="horizontal" @select="handleSelect"
+        <el-menu default-active="文件" mode="horizontal" @select="handleSelect"
                  style="display: flex; justify-content: center">
             <el-menu-item index="看板">
                 <a href="{{ url('project', $project_id) }}" class="el-button el-button--text">看板</a>
@@ -209,7 +209,7 @@
                 <a href="{{url('/')}}" class="el-button el-button--text">需求</a>
             </el-menu-item>
             <el-menu-item index="文件">
-                <a href="{{url('/')}}" class="el-button el-button--text">文件</a>
+                <a href="{{ route('file/index', $project_id) }}" class="el-button el-button--text">文件</a>
             </el-menu-item>
             <el-menu-item index="审批">
                 <a href="{{url('/')}}" class="el-button el-button--text">审批</a>
@@ -218,41 +218,11 @@
         <main>
             <section>
                 <div class="title">
-                    <span>项目任务</span>
+                    <span>文件</span>
                     <div>
                         <a class="el-button el-button--text" @click="createTask.dlgVisible = true">
-                            <i class="el-icon-plus"></i> 创建任务
+                            <i class="el-icon-plus"></i> 上传文件
                         </a>
-                    </div>
-                </div>
-                <template v-for="item in myTaskList">
-                    <div class="task">
-                        <el-checkbox v-model="item.is_finished">@{{item.task_content}}
-                        </el-checkbox>
-                        <el-tag size="small">实现功能</el-tag>
-                        <div class="deadline deadline-danger">
-                            <span>明天 23：00 截止</span>创建者：@{{item.user_name}}
-                        </div>
-                    </div>
-                </template>
-                <div class="task">
-                    <el-checkbox>XXX功能修改</el-checkbox>
-                    <el-tag size="small">实现功能</el-tag>
-                    <div class="deadline deadline-danger">
-                        <span>明天 23：00 截止</span>
-                    </div>
-                </div>
-                <div class="task">
-                    <el-checkbox>修复XXXx逻辑错误</el-checkbox>
-                    <el-tag size="small" type="danger">修复bug</el-tag>
-                    <div class="deadline deadline-warning">
-                        <span>后天 18:00 截止</span>
-                    </div>
-                </div>
-                <div class="task">
-                    <el-checkbox>优化页面样式</el-checkbox>
-                    <div class="deadline deadline-normal">
-                        <span>12月5日18:00 截止</span>
                     </div>
                 </div>
             </section>

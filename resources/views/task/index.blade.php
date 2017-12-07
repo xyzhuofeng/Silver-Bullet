@@ -209,7 +209,7 @@
                 <a href="{{url('/')}}" class="el-button el-button--text">需求</a>
             </el-menu-item>
             <el-menu-item index="文件">
-                <a href="{{url('/')}}" class="el-button el-button--text">文件</a>
+                <a href="{{ route('file/index', $project_id) }}" class="el-button el-button--text">文件</a>
             </el-menu-item>
             <el-menu-item index="审批">
                 <a href="{{url('/')}}" class="el-button el-button--text">审批</a>
@@ -227,8 +227,7 @@
                 </div>
                 <template v-for="item in myTaskList">
                     <div class="task">
-                        <el-checkbox v-model="item.is_finished">@{{item.task_content}}
-                        </el-checkbox>
+                        <el-checkbox v-model="item.is_finished">@{{item.task_content}}</el-checkbox>
                         <el-tag size="small">实现功能</el-tag>
                         <div class="deadline deadline-danger">
                             <span>明天 23：00 截止</span>创建者：@{{item.user_name}}

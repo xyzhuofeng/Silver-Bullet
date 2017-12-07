@@ -207,7 +207,7 @@
                 <a href="{{url('/')}}" class="el-button el-button--text">需求</a>
             </el-menu-item>
             <el-menu-item index="文件">
-                <a href="{{url('/')}}" class="el-button el-button--text">文件</a>
+                <a href="{{ route('file/index', $project_id) }}" class="el-button el-button--text">文件</a>
             </el-menu-item>
             <el-menu-item index="审批">
                 <a href="{{url('/')}}" class="el-button el-button--text">审批</a>

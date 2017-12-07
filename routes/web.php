@@ -69,3 +69,11 @@ Route::get('project/{project_id}/task/my', 'TaskController@my')
 Route::post('task', 'TaskController@save')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
 
+/**
+ * FileController
+ */
+// 文件面板首页
+Route::get('project/{project_id}/file', 'FileController@index')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
+    ->name('file/index');
+
