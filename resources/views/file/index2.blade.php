@@ -34,7 +34,7 @@
 
         /*页面主题各部分内容*/
         section {
-            width: 800px;
+            width: 1000px;
             margin: 0 auto;
             padding: 15px;
             border: 1px solid #ccc;
@@ -68,20 +68,11 @@
         <second-nav :second-nav-data="secondNavData"></second-nav>
         <main>
             <section>
-                <file-explorer></file-explorer>
-                <div class="title">
-                    <span>文件</span>
-                    <div>
-                        <a class="el-button el-button--text" @click="createTask.dlgVisible = true">
-                            <i class="el-icon-plus"></i> 上传文件
-                        </a>
-                    </div>
-                </div>
+                <file-explorer :file-explorer-data="fileExplorerData"></file-explorer>
             </section>
         </main>
         <footer-component></footer-component>
     </div>
-
 </div>
 </body>
 <script src="{{ url(mix('js/app.js')) }}"></script>
@@ -103,6 +94,9 @@
                     requirement: "{{url('/')}}", // 需求
                     file: "{{ route('file/index', $project_id) }}", // 文件
                     access: "{{ url('/') }}" // 审批
+                },
+                fileExplorerData: {
+                    uploadUrl: "{{ url('file/upload') }}"
                 }
             }
         }

@@ -34,7 +34,9 @@ Vue.component('second-nav', SecondNav);
 
 
 // 添加文件浏览器组件
-Vue.component('file-explorer', require('./components/FileExplorer.vue'));
+let FileExplorer = require('./components/FileExplorer.vue');
+FileExplorer.props = ['fileExplorerData']; // 声明props
+Vue.component('file-explorer', FileExplorer);
 
 // 页脚组件
 Vue.component('footer-component', require('./components/FooterComponent.vue'));
