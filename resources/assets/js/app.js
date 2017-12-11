@@ -22,12 +22,25 @@ Vue.use(ElementUI);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('file-explorer', require('./components/FileExplorer.vue'));
-// Vue.component('header-nav', require('./components/HeaderNav.vue'));
 
+// 添加导航条组件
 let HeaderNav = require('./components/HeaderNav.vue');
 HeaderNav.props = ['headerData']; // 声明props
 Vue.component('header-nav', HeaderNav);
 
+// 添加二级导航条组件
+let SecondNav = require('./components/SecondNav.vue');
+SecondNav.props = ['secondNavData']; // 声明props
+Vue.component('second-nav', SecondNav);
+
+
+// 添加文件浏览器组件
+Vue.component('file-explorer', require('./components/FileExplorer.vue'));
+
+// 页脚组件
+Vue.component('footer-component', require('./components/FooterComponent.vue'));
+
+// 由页面进行实例化，不在此处操作
 // const app = new Vue({
 //     el: '#app',
 //     data(){
