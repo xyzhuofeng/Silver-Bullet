@@ -29,6 +29,12 @@ class PassportController extends Controller
     {
         $email = $request->post('email');
         $password = $request->post('password');
+        if (empty($email) || empty($password)) {
+            return response()->json([
+                'info' => '邮箱和密码不能为空',
+                'code' => 0
+            ]);
+        }
         $account = Account::where('email', $email)->first();
         if (!$account) {
             return response()->json([
