@@ -5,8 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HTML教程</title>
-    <meta name="keywords" content="HTML,ASP,PHP,SQL">
+    <title>文件 - 从心约App - 团队协作平台</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
     <style>
@@ -26,7 +25,7 @@
 <body>
 <div id="app" v-cloak>
     <div class="page">
-        <header-explorer></header-explorer>
+        <header-nav :header-data="headerData"></header-nav>
     </div>
     <file-explorer></file-explorer>
 </div>
@@ -34,7 +33,17 @@
 <script src="{{ url(mix('js/app.js')) }}"></script>
 <script>
     new Vue({
-        el: '#app'
+        el: '#app',
+        data() {
+            return {
+                // 传给子组件数据
+                // 页头
+                headerData: {
+                    avatarUrl: "{{ asset('images/男.png') }}",
+                    logoutUrl: "{{ url('passport/logout') }}"
+                }
+            }
+        }
     })
 </script>
 </html>

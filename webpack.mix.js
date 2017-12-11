@@ -16,7 +16,9 @@ mix.browserSync('localhost/smartwork/public');
 mix.js('resources/assets/js/app.js', 'public/js')
   .sass('resources/assets/sass/app.scss', 'public/css');
 
-mix.setResourceRoot('/smartwork/public/');
+mix.setResourceRoot('/smartwork/public/'); // 避免字体文件目录错误
+
+mix.copyDirectory('resources/assets/images', 'public/images'); // 移动图片目录
 
 if (mix.config.inProduction) {
     mix.version();

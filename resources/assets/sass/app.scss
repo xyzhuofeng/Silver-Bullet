@@ -1,1 +1,28 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
 
+/*令a标签拥有与element-ui一致的风格*/
+a.el-button--text {
+  text-decoration: none;
+  font-size: 16px;
+}
+
+/*网站标题标准样式*/
+.silver {
+  font-size: 22px;
+  color: #555;
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}

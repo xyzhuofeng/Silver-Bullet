@@ -9,9 +9,10 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 // 引入Elemenet-UI
-require('element-ui');
-require('element-ui/lib/theme-chalk/index.css');
-Vue.use(require('element-ui'));
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
+Vue.use(ElementUI);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -21,9 +22,17 @@ Vue.use(require('element-ui'));
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('file-explorer', require('./components/FileExplorer.vue'));
-Vue.component('header-explorer', require('./components/HeaderNav.vue'));
+// Vue.component('header-nav', require('./components/HeaderNav.vue'));
 
+let HeaderNav = require('./components/HeaderNav.vue');
+HeaderNav.props = ['headerData']; // 声明props
+Vue.component('header-nav', HeaderNav);
 
-const app = new Vue({
-    el: '#app'
-});
+// const app = new Vue({
+//     el: '#app',
+//     data(){
+//         return{
+//             msg:""
+//         }
+//     }
+// });
