@@ -8,9 +8,9 @@ window._ = require('lodash');
  */
 
 try {
-    window.$ = window.jQuery = require('jquery');
+    // window.$ = window.jQuery = require('jquery'); 禁用jQuery
 
-    require('bootstrap-sass');
+    // require('bootstrap-sass'); 禁用bootstrapUI库
 } catch (e) {}
 
 /**

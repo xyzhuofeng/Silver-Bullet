@@ -10,6 +10,8 @@
     <script src="{{ asset('js/vue.js') }}"></script>
     <script src="{{ asset('js/element-ui/2.0.5/index.js') }}"></script>
     <script src="{{ asset('js/axios/0.17.1/axios.min.js') }}"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="{{ url(mix('/css/app.css')) }}">
     <title>任务 - 从心约App - 团队协作平台</title>
     <style>
         html, body {
@@ -225,6 +227,7 @@
                         </a>
                     </div>
                 </div>
+                <file-explorer></file-explorer>
             </section>
         </main>
         <footer>
@@ -249,8 +252,9 @@
     </el-dialog>
 </div>
 </body>
+<script src="{{ url(mix('js/app.js')) }}"></script>
 <script>
-    let app = new Vue({
+    let app2 = new Vue({
         el: '#app',
         data() {
             return {

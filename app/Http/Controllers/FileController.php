@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 
 
@@ -22,4 +23,13 @@ class FileController extends Controller
             'project_id' => $project_id
         ]);
     }
+
+    /**
+     * 文件管理器
+     */
+    public function explorer()
+    {
+
+    }
+
 }
