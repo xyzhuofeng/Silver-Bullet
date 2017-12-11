@@ -9,6 +9,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
     <style>
+        html, body {
+            background: #e7eaf1;
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+        }
+
         [v-cloak] {
             display: none;
         }
@@ -20,14 +25,63 @@
             height: 100%;
             min-height: 100vh;
         }
+
+        /*页面主体样式*/
+        main {
+            flex: 1;
+            padding: 15px 20px 0;
+        }
+
+        /*页面主题各部分内容*/
+        section {
+            width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #fff;
+            box-sizing: border-box;
+        }
+
+        /*section之间的间距*/
+        section + section {
+            margin-top: 20px;
+        }
+
+        section .title {
+            display: flex;
+            justify-content: space-between;
+
+        }
+
+        section .title span {
+            display: block;
+            font-size: 18px;
+            padding: 12px 0;
+        }
     </style>
 </head>
 <body>
 <div id="app" v-cloak>
     <div class="page">
         <header-nav :header-data="headerData"></header-nav>
+        <second-nav :second-nav-data="secondNavData"></second-nav>
+        <main>
+            <section>
+                <file-explorer></file-explorer>
+                <div class="title">
+                    <span>文件</span>
+                    <div>
+                        <a class="el-button el-button--text" @click="createTask.dlgVisible = true">
+                            <i class="el-icon-plus"></i> 上传文件
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer-component></footer-component>
     </div>
-    <file-explorer></file-explorer>
+
 </div>
 </body>
 <script src="{{ url(mix('js/app.js')) }}"></script>
@@ -37,10 +91,18 @@
         data() {
             return {
                 // 传给子组件数据
-                // 页头
+                // 导航条数据
                 headerData: {
                     avatarUrl: "{{ asset('images/男.png') }}",
                     logoutUrl: "{{ url('passport/logout') }}"
+                },
+                // 二级导航数据
+                secondNavData: {
+                    summary: "{{ url('project', $project_id) }}", // 看板
+                    task: "{{ route('task/index', $project_id) }}", // 任务
+                    requirement: "{{url('/')}}", // 需求
+                    file: "{{ route('file/index', $project_id) }}", // 文件
+                    access: "{{ url('/') }}" // 审批
                 }
             }
         }

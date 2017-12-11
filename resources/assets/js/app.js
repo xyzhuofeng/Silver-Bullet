@@ -20,8 +20,7 @@ Vue.use(ElementUI);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-Vue.component('file-explorer', require('./components/FileExplorer.vue'));
+// Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
 // 添加导航条组件
 let HeaderNav = require('./components/HeaderNav.vue');
