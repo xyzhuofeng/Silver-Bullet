@@ -19,7 +19,7 @@ class FileController extends Controller
      */
     public function index(Request $request, $project_id)
     {
-        return view('file.index', [
+        return view('file.index2', [
             'project_id' => $project_id
         ]);
     }
