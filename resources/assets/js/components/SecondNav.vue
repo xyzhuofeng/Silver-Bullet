@@ -28,7 +28,6 @@
         },
         methods: {},
         mounted() {
-            console.log(this.secondNavData)
         },
     }
 </script>

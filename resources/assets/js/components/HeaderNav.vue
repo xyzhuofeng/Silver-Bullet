@@ -56,7 +56,6 @@
             }
         },
         mounted() {
-            console.log(this.headerData);
         }
     }
 </script>

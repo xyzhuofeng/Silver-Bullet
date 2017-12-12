@@ -28,12 +28,14 @@
 
         /*页面主体样式*/
         main {
+            display: flex;
             flex: 1;
             padding: 15px 20px 0;
         }
 
         /*页面主题各部分内容*/
         section {
+            flex: 1;
             width: 1000px;
             margin: 0 auto;
             padding: 15px;
