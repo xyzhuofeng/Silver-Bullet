@@ -96,7 +96,7 @@
                     access: "{{ url('/') }}" // 审批
                 },
                 fileExplorerData: {
-                    uploadUrl: "{{ url('file/upload') }}"
+                    uploadUrl: "{{ route('file/upload', $project_id) }}"
                 }
             }
         }

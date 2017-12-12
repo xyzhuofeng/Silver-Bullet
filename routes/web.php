@@ -76,4 +76,8 @@ Route::post('task', 'TaskController@save')
 Route::get('project/{project_id}/file', 'FileController@index')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
     ->name('file/index');
+// 文件上传
+Route::post('project/{project_id}/file/upload', 'FileController@upload')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
+    ->name('file/upload');
 
