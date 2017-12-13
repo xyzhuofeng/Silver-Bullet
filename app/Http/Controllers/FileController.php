@@ -41,10 +41,6 @@ class FileController extends Controller
      */
     public function upload(Request $request, $project_id)
     {
-        var_dump($request->file());
-        var_dump($request->post());
-
-        return;
         if ($request->file('myfile')->isValid()) {
             $path = $request->file('myfile')->store('myfile');
             if ($path) {
