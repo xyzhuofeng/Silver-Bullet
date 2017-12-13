@@ -21,7 +21,9 @@ class CreateProjectFile extends Migration
             $table->bigInteger('creator')->comment('文件创建者id');
             $table->bigInteger('project_id')->comment('项目id');
             $table->text('virtual_path')->comment('文件虚拟路径，如“全部文件/项目文件”');
-            $table->string('real_name', 255)->comment('真实文件名');
+            $table->text('relative_path')->comment('真实相对路径');
+            $table->string('original_name', 255)->comment('原始文件名');
+            $table->text('hash_name')->comment('Hash文件名');
             $table->timestamps();
         });
     }
