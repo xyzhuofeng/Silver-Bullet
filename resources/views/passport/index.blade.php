@@ -106,8 +106,8 @@
             return {
                 loginPage: true, //默认为登录页
                 form: {
-                    email: "", // 邮箱
-                    password: "", // 密码
+                    email: "469379004@qq.com", // 邮箱
+                    password: "123456", // 密码
                     name: "" // 用户名
                 },
                 isLoading: false, // 加载中
