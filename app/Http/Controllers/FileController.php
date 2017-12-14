@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\model\Account;
 use App\Http\model\ProjectFile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 
 /**
@@ -63,6 +63,7 @@ class FileController extends Controller
                 $project_file->setAttribute('relative_path', $relative_path);
                 $project_file->setAttribute('original_name', $file->getClientOriginalName());
                 $project_file->setAttribute('hash_name', $file->hashName());
+                $project_file->setAttribute('file_size', $file->getSize());
                 $project_file->save();
                 return response()->json([
                     'info' => '上传成功',
@@ -76,6 +77,50 @@ class FileController extends Controller
         return response()->json([
             'info' => '上传失败，错误码：' . $file->getErrorMessage(),
             'status' => 0
+        ]);
+
+    }
+
+    /**
+     * 预览目录
+     * @param Request $request
+     * @param string $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function previewDir(Request $request, string $project_id)
+    {
+        $virtual_path = $request->post('virtual_path');
+        $project_file_list = ProjectFile::join(Account::table,
+            Account::table . '.user_id',
+            '=',
+            ProjectFile::table . '.creator')
+            ->select([
+                ProjectFile::table . '.original_name',
+                Account::table . '.user_name as creator_name',
+                ProjectFile::table . '.updated_at',
+                ProjectFile::table . '.file_size'
+            ])
+            ->where('project_id', $project_id)
+            ->where('virtual_path', $virtual_path)
+            ->get();
+        foreach ($project_file_list as &$val) {
+            $short_size = $val['file_size'];
+            // 精简文件大小显示，按B、KB、MB、GB的方式显示
+            if ($short_size >= 0 && $short_size < 1024) { // B
+                $val['file_size'] = floor($short_size) . 'B';
+            }
+            if ($short_size >= 1024 && $short_size < 1048576) { // KB
+                $val['file_size'] = floor($short_size / 1024) . 'KB';
+            }
+            if ($short_size >= 1048576 && $short_size < 1073741824) { // MB
+                $val['file_size'] = floor($short_size / 1024 / 1024) . 'MB';
+            }
+            if ($short_size >= 1073741824) { // GB
+                $val['file_size'] = floor($short_size / 1024 / 1024 / 1024) . 'GB';
+            }
+        }
+        return response()->json([
+            'data' => $project_file_list
         ]);
 
     }
