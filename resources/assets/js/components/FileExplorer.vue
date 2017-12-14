@@ -5,7 +5,7 @@
             <span>文件</span>
         </div>
         <el-upload class="upload-demo" :action="fileExplorerData.uploadUrl"
-                   :on-preview="handlePreview"
+                   :on-preview="handlePreview" :on-success="uploadSuccess"
                    :on-remove="handleRemove"
                    multiple :data="fileExtData" :before-upload="beforeUpload"
                    :file-list="fileList"
@@ -104,6 +104,9 @@
             beforeUpload() {
                 // 文件路径
                 this.fileExtData.virtual_path = this.fileExtData.virtual_path + "";
+            },
+            uploadSuccess() {
+                this.updatePreviewDir();
             },
             handleNodeClick(data) {
                 this.fileExtData.virtual_path = data.path;
