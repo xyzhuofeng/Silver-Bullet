@@ -13,19 +13,25 @@
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
-        <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-            <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-        </el-breadcrumb>
         <div class="explorer">
             <div class="tree">
                 目录树
                 <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick" ref="tree"></el-tree>
             </div>
             <div class="preview">
-                文件预览
+                路径
+                <el-breadcrumb separator="/">
+                    <el-breadcrumb-item :to="{ path: '/' }">全部文件</el-breadcrumb-item>
+                    <el-breadcrumb-item>项目文件夹</el-breadcrumb-item>
+                    <!--<el-breadcrumb-item>活动列表</el-breadcrumb-item>-->
+                    <!--<el-breadcrumb-item>活动详情</el-breadcrumb-item>-->
+                </el-breadcrumb>
+                <el-table :data="previewData" style="width: 100%">
+                    <el-table-column prop="original_name" label="文件名"></el-table-column>
+                    <el-table-column prop="updated_at" label="修改时间"></el-table-column>
+                    <el-table-column prop="creator_name" label="创建者"></el-table-column>
+                    <el-table-column prop="file_size" label="大小"></el-table-column>
+                </el-table>
             </div>
         </div>
     </div>
@@ -86,6 +92,8 @@
                         ]
                     }
                 ],
+                // 文件目录数据
+                previewData: [],
                 defaultProps: {
                     children: 'children',
                     label: 'label'
@@ -106,7 +114,26 @@
             },
             handlePreview(file) {
                 console.log(file);
+            },
+            updatePreviewDir() {
+                let that = this;
+                axios.post(that.fileExplorerData.previewDirUrl, {
+                    virtual_path: that.fileExtData.virtual_path
+                })
+                  .then(function (response) {
+                      if (response.data.status !== 1) {
+                          that.$message.error(response.data.info);
+                      } else {
+                          that.previewData = response.data.data;
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
             }
+        },
+        mounted() {
+            this.updatePreviewDir();
         }
     }
 </script>
@@ -129,22 +156,18 @@
         height: 100%;
         display: flex;
         box-sizing: border-box;
-        border: 1px solid red;
     }
 
     .tree {
         flex: 1;
         height: 100%;
         box-sizing: border-box;
-        border: 1px solid blue;
     }
 
     .preview {
         flex: 3;
         height: 100%;
-
         box-sizing: border-box;
-        border: 1px solid green;
         margin-left: 10px;
     }
 </style>

@@ -96,8 +96,8 @@ class FileController extends Controller
             ProjectFile::table . '.creator')
             ->select([
                 ProjectFile::table . '.original_name',
-                Account::table . '.user_name as creator_name',
                 ProjectFile::table . '.updated_at',
+                Account::table . '.user_name as creator_name',
                 ProjectFile::table . '.file_size'
             ])
             ->where('project_id', $project_id)
@@ -120,6 +120,8 @@ class FileController extends Controller
             }
         }
         return response()->json([
+            'info' => '获取成功',
+            'status' => 1,
             'data' => $project_file_list
         ]);
 
