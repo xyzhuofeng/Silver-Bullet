@@ -101,12 +101,14 @@
             }
         },
         methods: {
+            // 上传前更新虚拟路径
             beforeUpload() {
                 // 文件路径
                 this.fileExtData.virtual_path = this.fileExtData.virtual_path + "";
             },
+            // 成功上传的处理
             uploadSuccess() {
-                this.updatePreviewDir();
+                this.updatePreviewDir(); // 刷新目录预览
             },
             handleNodeClick(data) {
                 this.fileExtData.virtual_path = data.path;
