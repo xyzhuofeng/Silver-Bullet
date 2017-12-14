@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ProjectFile extends Model
 {
+    const table = 'blade_project_file';
     /**
      * 与模型关联的数据表
      *

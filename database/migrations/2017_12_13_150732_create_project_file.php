@@ -24,6 +24,7 @@ class CreateProjectFile extends Migration
             $table->text('relative_path')->comment('真实相对路径');
             $table->string('original_name', 255)->comment('原始文件名');
             $table->text('hash_name')->comment('Hash文件名');
+            $table->text('file_size')->comment('文件大小，单位字节');
             $table->timestamps();
         });
     }

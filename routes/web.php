@@ -80,4 +80,8 @@ Route::get('project/{project_id}/file', 'FileController@index')
 Route::post('project/{project_id}/file/upload', 'FileController@upload')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
     ->name('file/upload');
+// 目录预览
+Route::post('project/{project_id}/file/previewDir', 'FileController@previewDir')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
+    ->name('file/previewDir');
 
