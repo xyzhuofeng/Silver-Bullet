@@ -144,4 +144,30 @@ class FileController extends Controller
             'data' => json_decode($structure)
         ]);
     }
+
+    /**
+     * 保存新目录
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveDir(Request $request, $project_id)
+    {
+        $new_dir = $request->post('new_dir');
+        $virtual_path = $request->post('virtual_path');
+
+        $data = [
+            'label' => $new_dir,
+            'path' => implode('/', [$virtual_path, $new_dir])
+        ];
+
+        $structure = DirStructure::where('project_id', $project_id)->first()->value('structure');
+
+        print_r(json_decode($structure));
+        return response()->json([
+            'info' => '获取成功',
+            'status' => 1,
+            'data' => json_decode($structure)
+        ]);
+    }
 }
