@@ -1,37 +1,25 @@
 <!-- 文件浏览器 -->
 <template>
     <div class="container">
-        <div class="title">
-            <span>文件</span>
-        </div>
-        <div class="operation-btn-group">
-            <el-dropdown>
-                <el-button type="primary" size="medium" plain>
-                    <i class="el-icon-circle-plus-outline el-icon--left"></i>
-                    新建
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>Markdown</el-dropdown-item>
-                    <el-dropdown-item>文件夹</el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
-            <el-button type="primary" size="medium" plain>
-                <i class="el-icon-upload el-icon--left"></i>
-                上传文件
-            </el-button>
-        </div>
-        <el-upload class="upload-demo" :action="fileExplorerData.uploadUrl"
-                   :on-preview="handlePreview" :on-success="uploadSuccess"
-                   :on-remove="handleRemove"
-                   multiple :data="fileExtData" :before-upload="beforeUpload"
-                   :file-list="fileList"
-                   name="myfile">
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
         <div class="explorer">
             <div class="tree">
+                <div class="operation-btn-group">
+                    <el-dropdown>
+                        <el-button type="primary" size="medium" plain>
+                            <i class="el-icon-circle-plus-outline el-icon--left"></i>
+                            新建
+                            <i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>Markdown</el-dropdown-item>
+                            <el-dropdown-item>文件夹</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <el-button type="primary" size="medium" plain @click="fileList = []; uploadDiaVisible = true">
+                        <i class="el-icon-upload el-icon--left"></i>
+                        上传文件
+                    </el-button>
+                </div>
                 <el-tree :data="treeData" :props="defaultProps"
                          @node-click="handleNodeClick" ref="tree"
                          :expand-on-click-node="false"
@@ -46,13 +34,28 @@
                     </el-breadcrumb-item>
                 </el-breadcrumb>
                 <el-table :data="previewData" style="width: 100%">
-                    <el-table-column prop="original_name" label="文件名"></el-table-column>
-                    <el-table-column prop="updated_at" label="修改时间"></el-table-column>
-                    <el-table-column prop="creator_name" label="创建者"></el-table-column>
-                    <el-table-column prop="file_size" label="大小"></el-table-column>
+                    <el-table-column prop="original_name" label="文件名" sortable></el-table-column>
+                    <el-table-column prop="updated_at" label="修改时间" sortable></el-table-column>
+                    <el-table-column prop="creator_name" label="创建者" sortable></el-table-column>
+                    <el-table-column prop="file_size" label="大小" sortable></el-table-column>
                 </el-table>
             </div>
         </div>
+        <el-dialog title="上传文件" width="30%" :visible.sync="uploadDiaVisible">
+            <el-upload class="upload-demo" :action="fileExplorerData.uploadUrl"
+                       :on-preview="handlePreview" :on-success="uploadSuccess"
+                       :on-remove="handleRemove"
+                       multiple :data="fileExtData" :before-upload="beforeUpload"
+                       :file-list="fileList"
+                       name="myfile">
+                <el-button size="small" type="primary">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="uploadDiaVisible = false">关 闭</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 <script>
@@ -60,6 +63,8 @@
         name: "file-explorer",
         data() {
             return {
+                // 上传对话框
+                uploadDiaVisible: false, // 默认关闭
                 // 上传文件列表
                 fileList: [],
                 // 虚拟文件夹路径
@@ -99,6 +104,11 @@
             }
         },
         methods: {
+            // 打开上传文件对话框
+            openUploadDia() {
+                this.fileList = [];
+                this.uploadDiaVisible = true;
+            },
             // 上传前更新虚拟路径
             beforeUpload() {
                 // 文件路径
@@ -165,17 +175,7 @@
 
 <style scoped>
     .container {
-        display: flex;
-        flex-direction: column;
         height: 100%;
-        max-height: 100%;
-        overflow-y: auto;
-    }
-
-    .title span {
-        display: block;
-        font-size: 18px;
-        padding: 12px 0;
     }
 
     .el-dropdown + .el-dropdown {
@@ -187,7 +187,6 @@
     }
 
     .explorer {
-        flex: 1;
         height: 100%;
         display: flex;
         box-sizing: border-box;
