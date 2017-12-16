@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\model\Account;
+use App\Http\model\DirStructure;
 use App\Http\model\ProjectFile;
 use Illuminate\Http\Request;
 
@@ -21,17 +22,9 @@ class FileController extends Controller
      */
     public function index(Request $request, $project_id)
     {
-        return view('file.index2', [
+        return view('file.index', [
             'project_id' => $project_id
         ]);
-    }
-
-    /**
-     * 文件管理器
-     */
-    public function explorer()
-    {
-
     }
 
     /**
@@ -83,6 +76,12 @@ class FileController extends Controller
 
     /**
      * 预览目录
+     *
+     * 预览指定项目、指定虚拟路径的目录树
+     *
+     * POST
+     * virtual_path: 虚拟路径，如"全部文件/项目资料"
+     *
      * @param Request $request
      * @param string $project_id
      * @return \Illuminate\Http\JsonResponse
@@ -125,5 +124,24 @@ class FileController extends Controller
             'data' => $project_file_list
         ]);
 
+    }
+
+    /**
+     * 获取目录树
+     *
+     * 获取指定项目的文件目录树
+     *
+     * @param Request $request
+     * @param string $project_id 项目id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function tree(Request $request, $project_id)
+    {
+        $structure = DirStructure::where('project_id', $project_id)->first()->value('structure');
+        return response()->json([
+            'info' => '获取成功',
+            'status' => 1,
+            'data' => json_decode($structure)
+        ]);
     }
 }

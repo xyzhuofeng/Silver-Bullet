@@ -84,4 +84,7 @@ Route::post('project/{project_id}/file/upload', 'FileController@upload')
 Route::post('project/{project_id}/file/previewDir', 'FileController@previewDir')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
     ->name('file/previewDir');
-
+// 获取目录树
+Route::get('project/{project_id}/file/tree', 'FileController@tree')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
+    ->name('file/tree');

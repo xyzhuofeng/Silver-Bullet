@@ -4,6 +4,23 @@
         <div class="title">
             <span>文件</span>
         </div>
+        <div class="operation-btn-group">
+            <el-dropdown>
+                <el-button type="primary" size="medium" plain>
+                    <i class="el-icon-circle-plus-outline el-icon--left"></i>
+                    新建
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>Markdown</el-dropdown-item>
+                    <el-dropdown-item>文件夹</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+            <el-button type="primary" size="medium" plain>
+                <i class="el-icon-upload el-icon--left"></i>
+                上传文件
+            </el-button>
+        </div>
         <el-upload class="upload-demo" :action="fileExplorerData.uploadUrl"
                    :on-preview="handlePreview" :on-success="uploadSuccess"
                    :on-remove="handleRemove"
@@ -15,16 +32,18 @@
         </el-upload>
         <div class="explorer">
             <div class="tree">
-                目录树
-                <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick" ref="tree"></el-tree>
+                <el-tree :data="treeData" :props="defaultProps"
+                         @node-click="handleNodeClick" ref="tree"
+                         :expand-on-click-node="false"
+                         :default-expanded-keys="['全部文件']"
+                         node-key="path">
+                </el-tree>
             </div>
             <div class="preview">
-                路径
                 <el-breadcrumb separator="/">
-                    <el-breadcrumb-item :to="{ path: '/' }">全部文件</el-breadcrumb-item>
-                    <el-breadcrumb-item>项目文件夹</el-breadcrumb-item>
-                    <!--<el-breadcrumb-item>活动列表</el-breadcrumb-item>-->
-                    <!--<el-breadcrumb-item>活动详情</el-breadcrumb-item>-->
+                    <el-breadcrumb-item v-for="item in breadcrumb" key="breadcrumb">
+                        {{item}}
+                    </el-breadcrumb-item>
                 </el-breadcrumb>
                 <el-table :data="previewData" style="width: 100%">
                     <el-table-column prop="original_name" label="文件名"></el-table-column>
@@ -54,40 +73,11 @@
                         path: "全部文件",
                         children: [
                             {
-                                label: '工作室资料',
-                                path: "全部资料/工作室资料",
-                                children: [{
-                                    label: '二级 1-1',
-                                    children: [{
-                                        label: '三级 1-1-1'
-                                    }]
-                                }]
-                            }, {
                                 label: '项目资料',
-                                children: [{
-                                    label: '二级 2-1',
-                                    children: [{
-                                        label: '三级 2-1-1'
-                                    }]
-                                }, {
-                                    label: '二级 2-2',
-                                    children: [{
-                                        label: '三级 2-2-1'
-                                    }]
-                                }]
+                                path: "全部文件/项目资料",
                             }, {
-                                label: '一级 3',
-                                children: [{
-                                    label: '二级 3-1',
-                                    children: [{
-                                        label: '三级 3-1-1'
-                                    }]
-                                }, {
-                                    label: '二级 3-2',
-                                    children: [{
-                                        label: '三级 3-2-1'
-                                    }]
-                                }]
+                                label: '项目资料2',
+                                path: "全部文件/项目资料2",
                             }
                         ]
                     }
@@ -98,6 +88,14 @@
                     children: 'children',
                     label: 'label'
                 }
+            }
+        },
+        computed: {
+            // 用于面包屑导航的计算属性，返回一个路径数组
+            breadcrumb: function () {
+                let arr = this.fileExtData.virtual_path.split("/");
+                console.log(arr);
+                return arr;
             }
         },
         methods: {
@@ -112,7 +110,9 @@
             },
             handleNodeClick(data) {
                 this.fileExtData.virtual_path = data.path;
-                console.log(data);
+                // console.log(data);
+                this.updatePreviewDir();
+                console.log(JSON.stringify(this.treeData));
             },
             handleRemove(file, fileList) {
                 console.log(file, fileList);
@@ -120,6 +120,7 @@
             handlePreview(file) {
                 console.log(file);
             },
+            // 更新目录预览
             updatePreviewDir() {
                 let that = this;
                 axios.post(that.fileExplorerData.previewDirUrl, {
@@ -135,10 +136,29 @@
                   .catch(function (error) {
                       console.log(error);
                   });
+            },
+            // 更新目录树
+            updateExplorerTree() {
+                let that = this;
+                axios.get(that.fileExplorerData.treeUrl)
+                  .then(function (response) {
+                      if (response.data.status !== 1) {
+                          that.$message.error(response.data.info);
+                      } else {
+                          that.treeData = response.data.data;
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
             }
         },
         mounted() {
+            // 更新目录树
+            this.updateExplorerTree();
+            // 更新目录预览
             this.updatePreviewDir();
+
         }
     }
 </script>
@@ -148,12 +168,22 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        max-height: 100%;
+        overflow-y: auto;
     }
 
     .title span {
         display: block;
         font-size: 18px;
         padding: 12px 0;
+    }
+
+    .el-dropdown + .el-dropdown {
+        margin-left: 15px;
+    }
+
+    .el-icon-arrow-down {
+        font-size: 12px;
     }
 
     .explorer {
