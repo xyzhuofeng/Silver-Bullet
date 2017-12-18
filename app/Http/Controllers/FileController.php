@@ -7,10 +7,21 @@ use App\Http\model\DirStructure;
 use App\Http\model\ProjectFile;
 use Illuminate\Http\Request;
 
-
 /**
  * 文件模块控制器
  * @package App\Http\Controllers
+ *
+ * 文件系统设计：
+ *
+ * 本文件系统采用JSON表示文件目录树结构
+ * 对于任意一个文件夹均有：
+ * path: 文件夹完整路径,如："全部文件/工作室文件/A项目"
+ * label: 当前文件夹名，如："A项目"
+ * children: 子目录JSON，如：[{"path":"","label":""}]
+ *
+ * 具体定义：
+ * path: 可以唯一地标识目录树中的任意一个文件夹，要求同一个文件夹下不能有相同的文件名
+ * label: 仅仅是文件夹名，用于显示，要求同一个文件夹下不能有相同的文件名
  */
 class FileController extends Controller
 {
@@ -147,27 +158,77 @@ class FileController extends Controller
 
     /**
      * 保存新目录
+     *
+     * 在指定虚拟路径下创建文件。如"全部文件"下创建"项目资料"，最终得到"全部文件/项目资料"
+     *
+     * POST
+     * new_dir: 新文件夹名
+     * virtual_path: 虚拟路径
+     *
      * @param Request $request
-     * @param $project_id
+     * @param string $project_id 项目id
      * @return \Illuminate\Http\JsonResponse
      */
     public function saveDir(Request $request, $project_id)
     {
         $new_dir = $request->post('new_dir');
         $virtual_path = $request->post('virtual_path');
+        if (empty($new_dir) || empty($virtual_path)) {
+            return response()->json(['info' => '新文件夹名和路径不能为空', 'status' => 0]);
+        }
 
-        $data = [
-            'label' => $new_dir,
-            'path' => implode('/', [$virtual_path, $new_dir])
+        $new_dir_data = [
+            'path' => implode('/', [$virtual_path, $new_dir]),
+            'label' => $new_dir
         ];
 
-        $structure = DirStructure::where('project_id', $project_id)->first()->value('structure');
+        $structure_json = DirStructure::where('project_id', $project_id)->first()->value('structure');
+        $structure = json_decode($structure_json, true);
+        if (!$this->addNodeToStructure($structure, $virtual_path, $new_dir_data)) {
+            return response()->json([
+                'info' => '创建失败，无法找到指定路径',
+                'status' => 0
+            ]);
+        }
 
-        print_r(json_decode($structure));
+
         return response()->json([
             'info' => '获取成功',
             'status' => 1,
-            'data' => json_decode($structure)
+            'data' => $structure
         ]);
+    }
+
+    /**
+     * 在指定目录路径下创建新目录
+     *
+     * 该方法会在找到指定路径，操作完成后立即结束，不会进行多余的遍历
+     *
+     * @param array $structure 目录树数组
+     * @param string $needle 指定目录路径（注意是已存在的路径，新建的文件夹会在这个路径下）
+     * @param array $new_dir_data 新文件夹信息，包括这些字段['path','label']
+     * @return bool 插入成功为true，失败为false
+     */
+    private function addNodeToStructure(array &$structure, string $needle, array $new_dir_data)
+    {
+        // 对于任意一个数组都进行遍历
+        if (is_array($structure)) {
+            foreach ($structure as &$value) {
+                // 当前节点path即为目标路径时，插入新文件夹，结束递归
+                if ($needle == $value['path']) {
+                    if (!isset($value['children'])) {
+                        $value['children'] = $new_dir_data;
+                    } else {
+                        $value['children'][] = $new_dir_data;
+                    }
+                    return true;
+                }
+                // 如果有children段，则取出进行递归
+                if (isset($value['children'])) {
+                    return $this->addNodeToStructure($value['children'], $needle, $new_dir_data);
+                }
+            }
+        }
+        return false;
     }
 }
