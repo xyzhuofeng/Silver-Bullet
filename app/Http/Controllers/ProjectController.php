@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\model\DirStructure;
 use App\Http\model\Project;
 use App\Http\model\ProjectUser;
 use Illuminate\Http\Request;
@@ -83,6 +84,11 @@ class ProjectController
             $project_user->setAttribute('user_id', $request->session()->get('user_id'));
             $project_user->setAttribute('role', 'creator'); // 创建者角色
             $project_user->save();
+            // 初始化文件系统根目录
+            $dirStructure = new DirStructure();
+            $dirStructure->setAttribute('project_id', $project->getAttribute('project_id'));
+            $dirStructure->setAttribute('structure', json_encode([['path' => '全部文件', 'label' => '全部文件']]));
+            $dirStructure->save();
             DB::commit();
             return response()->json([
                 'info' => '创建成功',
