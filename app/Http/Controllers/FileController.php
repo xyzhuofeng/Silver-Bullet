@@ -254,10 +254,7 @@ class FileController extends Controller
         $structure = json_decode($structure_json, true);
 
         // 递归搜索删除目录
-        $isFinish = $this->delNodeFromStructure($structure, $virtual_path, function ($val) {
-
-        });
-        dump($structure);
+        $isFinish = $this->delNodeFromStructure($structure, $virtual_path);
 
         if (!$isFinish) {
             return response()->json([
@@ -276,14 +273,15 @@ class FileController extends Controller
     /**
      * 删除指定路径
      *
-     * 该方法会在找到指定路径，操作完成后立即结束，不会进行多余的遍历
+     * 注意：
+     * 该方法可直接删除任意路径。
+     * 该方法会在找到指定路径，操作完成后立即结束，不会进行多余的遍历。
      *
      * @param array $structure 目录树数组
      * @param string $needle 指定目录路径（注意是已存在的路径，新建的文件夹会在这个路径下）
-     * @param \Closure $closure 删除时执行的前置操作，return true则允许删除，可用于删除前检查是否有其他文件
      * @return bool 插入成功为true，失败为false
      */
-    private function delNodeFromStructure(array &$structure, string $needle, \Closure $closure = null)
+    private function delNodeFromStructure(array &$structure, string $needle)
     {
         // 对于任意一个数组都进行遍历
         if (is_array($structure)) {
@@ -299,7 +297,7 @@ class FileController extends Controller
                 }
                 // 如果有children段，则取出进行递归
                 if (isset($value['children'])) {
-                    $isFinish = $this->delNodeFromStructure($value['children'], $needle, $closure);
+                    $isFinish = $this->delNodeFromStructure($value['children'], $needle);
                     // 如果成功删除，再次检查 children 内是否还有目录，没有的话，清理 children 字段
                     if ($isFinish && count($value['children']) === 0) {
                         unset($structure[$key]['children']);
