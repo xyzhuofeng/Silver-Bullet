@@ -68,6 +68,7 @@ class FileController extends Controller
                 $project_file->setAttribute('original_name', $file->getClientOriginalName());
                 $project_file->setAttribute('hash_name', $file->hashName());
                 $project_file->setAttribute('file_size', $file->getSize());
+                $project_file->setAttribute('file_ext', $file->getClientOriginalExtension());
                 $project_file->save();
                 return response()->json([
                     'info' => '上传成功',
