@@ -92,3 +92,7 @@ Route::get('project/{project_id}/file/tree', 'FileController@tree')
 Route::post('project/{project_id}/file/saveDir', 'FileController@saveDir')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
     ->name('file/saveDir');
+// 删除目录
+Route::post('project/{project_id}/file/delDir', 'FileController@delDir')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
+    ->name('file/delDir');

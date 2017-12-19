@@ -190,7 +190,7 @@ class FileController extends Controller
                 'status' => 0
             ]);
         }
-
+        // 写入记录
 
         return response()->json([
             'info' => '获取成功',
@@ -202,8 +202,8 @@ class FileController extends Controller
     /**
      * 在指定目录路径下创建新目录
      *
-     * 该方法会在找到指定路径，操作完成后立即结束，不会进行多余的遍历
-     *
+     * 该方法会在找到指定路径，操作完成后立即结束，不会进行多余的遍历和递归<br>
+     * <b>注意这个方法是递归的</b>
      * @param array $structure 目录树数组
      * @param string $needle 指定目录路径（注意是已存在的路径，新建的文件夹会在这个路径下）
      * @param array $new_dir_data 新文件夹信息，包括这些字段['path','label']
@@ -226,6 +226,85 @@ class FileController extends Controller
                 // 如果有children段，则取出进行递归
                 if (isset($value['children'])) {
                     return $this->addNodeToStructure($value['children'], $needle, $new_dir_data);
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 删除目录
+     *
+     * 删除指定虚拟路径
+     *
+     * POST
+     * virtual_post: 要删除的虚拟路径
+     * @param Request $request
+     * @param string $project_id 项目id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delDir(Request $request, $project_id)
+    {
+        $virtual_path = $request->post('virtual_path');
+        if (empty($virtual_path)) {
+            return response()->json(['info' => '路径不能为空', 'status' => 0]);
+        }
+        $structure_json = DirStructure::where('project_id', $project_id)->first()->value('structure');
+        $structure = json_decode($structure_json, true);
+
+        // 递归搜索删除目录
+        $isFinish = $this->delNodeFromStructure($structure, $virtual_path, function ($val) {
+
+        });
+        dump($structure);
+
+        if (!$isFinish) {
+            return response()->json([
+                'info' => '删除失败，无法找到指定路径',
+                'status' => 0
+            ]);
+        }
+        // 写入记录
+        return response()->json([
+            'info' => '删除成功',
+            'status' => 1,
+            'data' => $structure
+        ]);
+    }
+
+    /**
+     * 删除指定路径
+     *
+     * 该方法会在找到指定路径，操作完成后立即结束，不会进行多余的遍历
+     *
+     * @param array $structure 目录树数组
+     * @param string $needle 指定目录路径（注意是已存在的路径，新建的文件夹会在这个路径下）
+     * @param \Closure $closure 删除时执行的前置操作，return true则允许删除，可用于删除前检查是否有其他文件
+     * @return bool 插入成功为true，失败为false
+     */
+    private function delNodeFromStructure(array &$structure, string $needle, \Closure $closure = null)
+    {
+        // 对于任意一个数组都进行遍历
+        if (is_array($structure)) {
+            // 必须带&引用，递归内部需要对$structure造成修改
+            foreach ($structure as $key => &$value) {
+                // 当前节点path即为目标路径时，删除文件夹，结束递归
+                if ($needle == $value['path']) {
+                    // 删除节点
+                    unset($structure[$key]);
+                    // 重新索引
+                    $structure = array_merge($structure);
+                    return true;
+                }
+                // 如果有children段，则取出进行递归
+                if (isset($value['children'])) {
+                    $isFinish = $this->delNodeFromStructure($value['children'], $needle, $closure);
+                    // 如果成功删除，再次检查 children 内是否还有目录，没有的话，清理 children 字段
+                    if ($isFinish && count($value['children']) === 0) {
+                        unset($structure[$key]['children']);
+                    }
+                    return $isFinish;
                 }
             }
         }
