@@ -58,11 +58,11 @@
                 <el-button @click="uploadDiaVisible = false">关 闭</el-button>
             </span>
         </el-dialog>
-        <el-dialog title="新建文件夹" width="30%" :visible.sync="createDirDiaVisible">
-            <el-input placeholder="输入您的新文件夹名" value=""></el-input>
+        <el-dialog title="新建文件夹" width="30%" :visible.sync="createDir.diaVisible">
+            <el-input placeholder="输入您的新文件夹名" v-model="createDir.newName"></el-input>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="createDirDiaVisible = false">关 闭</el-button>
-                <el-button type="primary" @click="createDirDiaVisible = false">确认</el-button>
+                <el-button @click="createDir.diaVisible = false">关 闭</el-button>
+                <el-button type="primary" @click="saveDir">确认</el-button>
             </span>
         </el-dialog>
     </div>
@@ -72,8 +72,11 @@
         name: "file-explorer",
         data() {
             return {
-                // 创建文件夹对话框
-                createDirDiaVisible: false, // 默认关闭
+                // 创建文件夹
+                createDir: {
+                    diaVisible: false, // 创建文件夹对话框，默认关闭
+                    newName: "" // 新文件名
+                },
                 // 上传对话框
                 uploadDiaVisible: false, // 默认关闭
                 // 上传文件列表
@@ -114,23 +117,27 @@
             handleCommand(command) {
                 switch (command) {
                     case "createDir": // 创建文件夹
-                        this.createDirDiaVisible = true;
+                        this.createDir.diaVisible = true;
                         break;
                     case "createMD": // 创建Markdown文件
                         break;
                 }
             },
-            // 更新目录预览
-            updatePreviewDir() {
+            saveDir() {
                 let that = this;
-                axios.post(that.fileExplorerData.previewDirUrl, {
-                    virtual_path: that.fileExtData.virtual_path
+                axios.post(that.fileExplorerData.saveDirUrl, {
+                    virtual_path: that.fileExtData.virtual_path,
+                    new_dir: that.createDir.newName
                 })
                   .then(function (response) {
                       if (response.data.status !== 1) {
                           that.$message.error(response.data.info);
                       } else {
-                          that.previewData = response.data.data;
+                          that.treeData = response.data.data;
+                          // 清理数据，关闭弹窗
+                          that.createDir.diaVisible = false;
+                          that.createDir.newName = "";
+                          that.$message({message: response.data.info, type: "success"});
                       }
                   })
                   .catch(function (error) {
@@ -151,6 +158,23 @@
                   .catch(function (error) {
                       console.log(error);
                   });
+            },
+            // 更新目录预览
+            updatePreviewDir() {
+                let that = this;
+                axios.post(that.fileExplorerData.previewDirUrl, {
+                    virtual_path: that.fileExtData.virtual_path
+                })
+                  .then(function (response) {
+                      if (response.data.status !== 1) {
+                          that.$message.error(response.data.info);
+                      } else {
+                          that.previewData = response.data.data;
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
             }
         },
         mounted() {
@@ -158,7 +182,6 @@
             this.updateExplorerTree();
             // 更新目录预览
             this.updatePreviewDir();
-
         }
     }
 </script>
