@@ -43,6 +43,11 @@
                     <el-table-column prop="updated_at" label="修改时间" sortable></el-table-column>
                     <el-table-column prop="creator_name" label="创建者" sortable></el-table-column>
                     <el-table-column prop="file_size" label="大小" sortable></el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button @click="delFile(scope.row)" type="text" size="small">删除</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </div>
         </div>
@@ -123,6 +128,35 @@
                         break;
                 }
             },
+            // 删除文件
+            delFile(row) {
+                let that = this;
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.post(that.fileExplorerData.deleteFilrUrl, {
+                        file_id: row.file_id
+                    })
+                      .then(function (response) {
+                          if (response.data.status !== 1) {
+                              that.$message.error(response.data.info);
+                          } else {
+                              that.$message({message: response.data.info, type: "success"});
+                          }
+                      })
+                      .catch(function (error) {
+                          console.log(error);
+                      });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            // 保存新目录
             saveDir() {
                 let that = this;
                 axios.post(that.fileExplorerData.saveDirUrl, {

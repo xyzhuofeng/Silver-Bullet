@@ -99,6 +99,7 @@
                 },
                 fileExplorerData: {
                     uploadUrl: "{{ route('file/upload', $project_id) }}", // 上传文件
+                    deleteFilrUrl: "{{ route('file/delete', $project_id) }}", // 删除文件
                     previewDirUrl: "{{ route('file/previewDir', $project_id) }}", // 目录预览
                     treeUrl: "{{ route('file/tree', $project_id) }}", // 目录树
                     saveDirUrl: "{{ route('file/saveDir', $project_id) }}", // 保存新目录

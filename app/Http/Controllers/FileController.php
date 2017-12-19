@@ -83,7 +83,42 @@ class FileController extends Controller
             'info' => '上传失败，错误码：' . $file->getErrorMessage(),
             'status' => 0
         ]);
+    }
 
+    /**
+     * 删除文件
+     *
+     * POST
+     * file_id: 要删除的文件的file_id
+     * @param Request $request
+     * @param string $project_id 项目id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(Request $request, string $project_id)
+    {
+        $file_id = $request->post('file_id');
+        $result = ProjectFile::where('file_id', $file_id)
+            ->where('project_id', $project_id)
+            ->first();
+        if (!$result) {
+            return response()->json([
+                'info' => '删除失败，没有找到记录',
+                'status' => 0
+            ]);
+        }
+        try {
+            $result->delete();
+            unlink(public_path('app/' . $result->relative_path));
+        } catch (\Exception $exception) {
+            return response()->json([
+                'info' => '删除失败，找不到文件',
+                'status' => 0
+            ]);
+        }
+        return response()->json([
+            'info' => '删除成功',
+            'status' => 1
+        ]);
     }
 
     /**
@@ -106,10 +141,11 @@ class FileController extends Controller
             '=',
             ProjectFile::table . '.creator')
             ->select([
-                ProjectFile::table . '.original_name',
-                ProjectFile::table . '.updated_at',
+                ProjectFile::tableWithDot . 'file_id',
+                ProjectFile::tableWithDot . 'original_name',
+                ProjectFile::tableWithDot . 'updated_at',
                 Account::table . '.user_name as creator_name',
-                ProjectFile::table . '.file_size'
+                ProjectFile::tableWithDot . 'file_size',
             ])
             ->where('project_id', $project_id)
             ->where('virtual_path', $virtual_path)

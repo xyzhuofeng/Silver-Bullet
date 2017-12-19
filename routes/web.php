@@ -76,10 +76,14 @@ Route::post('task', 'TaskController@save')
 Route::get('project/{project_id}/file', 'FileController@index')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
     ->name('file/index');
-// 文件上传
+// 上传文件
 Route::post('project/{project_id}/file/upload', 'FileController@upload')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
     ->name('file/upload');
+// 删除文件
+Route::post('project/{project_id}/file/delete', 'FileController@delete')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
+    ->name('file/delete');
 // 目录预览
 Route::post('project/{project_id}/file/previewDir', 'FileController@previewDir')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
