@@ -148,11 +148,11 @@ class FileController extends Controller
      */
     public function tree(Request $request, $project_id)
     {
-        $structure = DirStructure::where('project_id', $project_id)->first()->value('structure');
+        $dirStructure = DirStructure::where('project_id', intval($project_id))->first();
         return response()->json([
             'info' => '获取成功',
             'status' => 1,
-            'data' => json_decode($structure)
+            'data' => json_decode($dirStructure['structure'])
         ]);
     }
 
