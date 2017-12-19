@@ -31,14 +31,17 @@
                          node-key="path">
                 </el-tree>
             </div>
-            <div class="preview">
+            <div class="preview" v-if="!viewFileData.isVisible">
                 <el-breadcrumb separator="/">
                     <el-breadcrumb-item v-for="item in breadcrumb" key="breadcrumb">
                         {{item}}
                     </el-breadcrumb-item>
                 </el-breadcrumb>
                 <el-table :data="previewData" style="width: 100%">
-                    <el-table-column prop="original_name" label="文件名" sortable>
+                    <el-table-column label="文件名" sortable>
+                        <template slot-scope="scope">
+                            <a class="el-button el-button--text" @click="viewFile(scope.row)">{{scope.row.original_name}}</a>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="updated_at" label="修改时间" sortable></el-table-column>
                     <el-table-column prop="creator_name" label="创建者" sortable></el-table-column>
@@ -49,6 +52,14 @@
                         </template>
                     </el-table-column>
                 </el-table>
+            </div>
+            <div class="viewfile" v-if="viewFileData.isVisible">
+                <div>
+                    <el-button type="primary" native-type="button" plain @click="viewFileData.isVisible=false">
+                        <i class="el-icon-back el-icon--left"></i>返回
+                    </el-button>
+                </div>
+                <iframe :src="viewFileData.src" frameborder="0"></iframe>
             </div>
         </div>
         <el-dialog title="上传文件" width="30%" :visible.sync="uploadDiaVisible">
@@ -77,6 +88,11 @@
         name: "file-explorer",
         data() {
             return {
+                // 查看文件
+                viewFileData: {
+                    isVisible: false, // 默认隐藏查看器
+                    src: "" // iframe 地址
+                },
                 // 创建文件夹
                 createDir: {
                     diaVisible: false, // 创建文件夹对话框，默认关闭
@@ -144,6 +160,7 @@
                               that.$message.error(response.data.info);
                           } else {
                               that.$message({message: response.data.info, type: "success"});
+                              that.updatePreviewDir();
                           }
                       })
                       .catch(function (error) {
@@ -155,6 +172,12 @@
                         message: '已取消删除'
                     });
                 });
+            },
+            // 查看文件
+            viewFile(row) {
+                let that = this;
+                this.viewFileData.isVisible = true;
+                this.viewFileData.src = this.fileExplorerData.viewFileUrl + "?file_id=" + row.file_id
             },
             // 保存新目录
             saveDir() {
@@ -250,5 +273,18 @@
         height: 100%;
         box-sizing: border-box;
         margin-left: 10px;
+    }
+
+    .viewfile {
+        flex: 3;
+        height: 100%;
+        box-sizing: border-box;
+        margin-left: 10px;
+    }
+
+    .viewfile iframe {
+        width: 100%;
+        height: 800px;
+        margin-top: 15px;
     }
 </style>

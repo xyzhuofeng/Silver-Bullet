@@ -122,6 +122,30 @@ class FileController extends Controller
     }
 
     /**
+     * 查看文件
+     *
+     * GET
+     * file_id: 文件id
+     * @param Request $request
+     * @param string $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function view(Request $request, string $project_id)
+    {
+        $file_id = $request->get('file_id');
+        $result = ProjectFile::where('file_id', $file_id)
+            ->where('project_id', $project_id)
+            ->first();
+        if (!$result) {
+            return response()->json([
+                'info' => '删除失败，没有找到记录',
+                'status' => 0
+            ]);
+        }
+        return response()->file(public_path('app/' . $result->relative_path));
+    }
+
+    /**
      * 预览目录
      *
      * 预览指定项目、指定虚拟路径的目录树
