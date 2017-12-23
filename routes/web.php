@@ -101,6 +101,6 @@ Route::post('project/{project_id}/file/saveDir', 'FileController@saveDir')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
     ->name('file/saveDir');
 // 删除目录
-Route::post('project/{project_id}/file/delDir', 'FileController@delDir')
+Route::post('project/{project_id}/file/deleteDir', 'FileController@deleteDir')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('file/delDir');
+    ->name('file/deleteDir');

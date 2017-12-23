@@ -23,6 +23,10 @@
                         <i class="el-icon-upload el-icon--left"></i>
                         上传文件
                     </el-button>
+                    <el-button type="primary" size="medium" plain @click="delDir">
+                        <i class="el-icon-delete el-icon--left"></i>
+                        删除目录
+                    </el-button>
                 </div>
                 <el-tree :data="treeData"
                          @node-click="handleNodeClick" ref="tree"
@@ -98,6 +102,7 @@
                     diaVisible: false, // 创建文件夹对话框，默认关闭
                     newName: "" // 新文件名
                 },
+                deleteDirDiaVisible: false, // 删除文件夹窗口
                 // 上传对话框
                 uploadDiaVisible: false, // 默认关闭
                 // 上传文件列表
@@ -152,7 +157,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.post(that.fileExplorerData.deleteFilrUrl, {
+                    axios.post(that.fileExplorerData.deleteFileUrl, {
                         file_id: row.file_id
                     })
                       .then(function (response) {
@@ -232,6 +237,46 @@
                   .catch(function (error) {
                       console.log(error);
                   });
+            },
+            // 删除目录
+            delDir() {
+                console.log(this.fileExtData.virtual_path)
+                // 防止删除根目录
+                if (this.fileExtData.virtual_path === '全部文件') {
+                    return;
+                }
+                let that = this;
+                // 获取当前目录路径
+                let arr = this.fileExtData.virtual_path.split('/');
+                this.$confirm('此操作将永久删除该文件夹及其内容, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.post(that.fileExplorerData.deleteDirUrl, {
+                        virtual_path: that.fileExtData.virtual_path
+                    })
+                      .then(function (response) {
+                          if (response.data.status !== 1) {
+                              that.$message.error(response.data.info);
+                          } else {
+                              that.$message({message: response.data.info, type: "success"});
+                              // 路径重新赋值，自动排除最后一级目录
+                              arr.pop();
+                              that.fileExtData.virtual_path = arr.join('/');
+                              that.updateExplorerTree();
+                              that.updatePreviewDir();
+                          }
+                      })
+                      .catch(function (error) {
+                          console.log(error);
+                      });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             }
         },
         mounted() {
@@ -254,6 +299,10 @@
 
     .el-icon-arrow-down {
         font-size: 12px;
+    }
+
+    .el-button + .el-button {
+        margin-left: 0;
     }
 
     .explorer {

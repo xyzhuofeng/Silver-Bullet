@@ -331,25 +331,26 @@ class FileController extends Controller
      * @param string $project_id 项目id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delDir(Request $request, $project_id)
+    public function deleteDir(Request $request, $project_id)
     {
         $virtual_path = $request->post('virtual_path');
         if (empty($virtual_path)) {
             return response()->json(['info' => '路径不能为空', 'status' => 0]);
         }
-        $structure_json = DirStructure::where('project_id', $project_id)->first()->value('structure');
-        $structure = json_decode($structure_json, true);
-
+        $dirStructure = DirStructure::where('project_id', $project_id)->first();
+        $structure = json_decode($dirStructure->structure, true);
         // 递归搜索删除目录
-        $isFinish = $this->delNodeFromStructure($structure, $virtual_path);
-
-        if (!$isFinish) {
+        try {
+            $this->deleteNodeFromStructure($structure, $virtual_path);
+        } catch (\Exception $e) {
             return response()->json([
                 'info' => '删除失败，无法找到指定路径',
                 'status' => 0
             ]);
         }
         // 写入记录
+        $dirStructure->structure = json_encode($structure);
+        $dirStructure->save();
         return response()->json([
             'info' => '删除成功',
             'status' => 1,
@@ -358,41 +359,56 @@ class FileController extends Controller
     }
 
     /**
-     * 删除指定路径
+     * 删除指定文件夹
      *
      * 注意：
-     * 该方法可直接删除任意路径。
+     * 该方法可直接删除任意子目录路径，除了根目录，因为根目录自身不是“子目录”。
      * 该方法会在找到指定路径，操作完成后立即结束，不会进行多余的遍历。
      *
      * @param array $structure 目录树数组
      * @param string $needle 指定目录路径（注意是已存在的路径，新建的文件夹会在这个路径下）
-     * @return bool 插入成功为true，失败为false
+     * @return bool
+     * @throws \Exception
      */
-    private function delNodeFromStructure(array &$structure, string $needle)
+    private function deleteNodeFromStructure(array &$structure, string $needle)
     {
-        // 对于任意一个数组都进行遍历
-        if (is_array($structure)) {
-            // 必须带&引用，递归内部需要对$structure造成修改
-            foreach ($structure as $key => &$value) {
-                // 当前节点path即为目标路径时，删除文件夹，结束递归
-                if ($needle == $value['path']) {
-                    // 删除节点
-                    unset($structure[$key]);
-                    // 重新索引
-                    $structure = array_merge($structure);
-                    return true;
-                }
-                // 如果有children段，则取出进行递归
-                if (isset($value['children'])) {
-                    $isFinish = $this->delNodeFromStructure($value['children'], $needle);
-                    // 如果成功删除，再次检查 children 内是否还有目录，没有的话，清理 children 字段
-                    if ($isFinish && count($value['children']) === 0) {
-                        unset($structure[$key]['children']);
+        $queue = new \SplQueue();
+        // 判空，原始目录树的根节点不能为空
+        if (count($structure) === 0) {
+            throw new \Exception('文件目录树为空');
+        }
+        // 写入队列
+        foreach ($structure as $key => $val) {
+            $obj = new \stdClass();
+            $obj->data = &$structure[$key];
+            $queue->enqueue($obj);
+        }
+        // 开始自动化操作
+        while (!$queue->isEmpty()) {
+            $obj = $queue->dequeue();
+            // 检查是否当前为当前路径
+//            if ($obj->data['path'] === $needle) {
+//                unset($obj);
+//                return true;
+//            }
+            // 当前不是目标路径的情况，将其他子目录放入队列，等待遍历
+            if (isset($obj->data['children'])) {
+                foreach ($obj->data['children'] as $key => $val) {
+                    // 放入过程中如果已经找到该目录，直接删除目录，如果没有任何子目录，连同children一起删除
+                    if ($obj->data['children'][$key]['path'] == $needle) {
+                        unset($obj->data['children'][$key]);
+                        if (count($obj->data['children']) === 0) {
+                            unset($obj->data['children']);
+                        }
+                        return true;
                     }
-                    return $isFinish;
+                    // 将数据放入变量中以维持引用的状态，避免发生复制
+                    $obj2 = new \stdClass();
+                    $obj2->data = &$obj->data['children'][$key];
+                    $queue->enqueue($obj2);
                 }
             }
         }
-        return false;
+        throw new \Exception('没有找到指定路径');
     }
 }
