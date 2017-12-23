@@ -365,6 +365,8 @@ class FileController extends Controller
         }
         $dirStructure = DirStructure::where('project_id', $project_id)->first();
         $structure = json_decode($dirStructure->structure, true);
+        dump($structure);
+        dump(json_encode($structure));
         // 递归搜索删除目录
         try {
             $this->deleteNodeFromStructure($structure, $virtual_path);
@@ -375,6 +377,10 @@ class FileController extends Controller
             ]);
         }
         // 写入记录
+        dump($structure);
+        dump(json_encode($structure));
+
+        return;
         $dirStructure->structure = json_encode($structure);
         $dirStructure->save();
         return response()->json([
@@ -423,8 +429,12 @@ class FileController extends Controller
                     // 放入过程中如果已经找到该目录，直接删除目录，如果没有任何子目录，连同children一起删除
                     if ($obj->data['children'][$key]['path'] == $needle) {
                         unset($obj->data['children'][$key]);
+                        // 不存在子目录的，直接清理children，否则重新索引子目录
                         if (count($obj->data['children']) === 0) {
                             unset($obj->data['children']);
+                        } else {
+                            // 重新索引子目录，因为上面操作会使下标不连续，导致转成json时出现数字键名
+                            $obj->data['children'] = array_merge($obj->data['children']);
                         }
                         return true;
                     }
