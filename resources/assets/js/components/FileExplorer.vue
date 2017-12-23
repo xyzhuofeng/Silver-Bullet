@@ -52,6 +52,7 @@
                     <el-table-column prop="file_size" label="大小" sortable></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
+                            <a :href="scope.row.download_url"><el-button type="text" size="small">下载</el-button></a>
                             <el-button @click="delFile(scope.row)" type="text" size="small">删除</el-button>
                         </template>
                     </el-table-column>
@@ -121,7 +122,7 @@
             // 用于面包屑导航的计算属性，返回一个路径数组
             breadcrumb: function () {
                 return this.fileExtData.virtual_path.split("/");
-            }
+            },
         },
         methods: {
             // 上传前更新虚拟路径

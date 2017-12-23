@@ -88,6 +88,10 @@ Route::post('project/{project_id}/file/delete', 'FileController@delete')
 Route::get('project/{project_id}/file/view', 'FileController@view')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
     ->name('file/view');
+// 下载文件
+Route::get('project/{project_id}/file/download', 'FileController@download')
+    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
+    ->name('file/download');
 // 目录预览
 Route::post('project/{project_id}/file/previewDir', 'FileController@previewDir')
     ->middleware(\App\Http\Middleware\CheckLoginStatus::class)

@@ -138,11 +138,35 @@ class FileController extends Controller
             ->first();
         if (!$result) {
             return response()->json([
-                'info' => '删除失败，没有找到记录',
+                'info' => '获取失败，没有找到记录',
                 'status' => 0
             ]);
         }
         return response()->file(public_path('app/' . $result->relative_path));
+    }
+
+    /**
+     * 下载文件
+     *
+     * GET
+     * file_id: 文件id
+     * @param Request $request
+     * @param string $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function download(Request $request, string $project_id)
+    {
+        $file_id = $request->get('file_id');
+        $result = ProjectFile::where('file_id', $file_id)
+            ->where('project_id', $project_id)
+            ->first();
+        if (!$result) {
+            return response()->json([
+                'info' => '删除失败，没有找到记录',
+                'status' => 0
+            ]);
+        }
+        return response()->download(public_path('app/' . $result->relative_path), $result['original_name']);
     }
 
     /**
@@ -189,6 +213,8 @@ class FileController extends Controller
             if ($short_size >= 1073741824) { // GB
                 $val['file_size'] = floor($short_size / 1024 / 1024 / 1024) . 'GB';
             }
+            // 附加下载地址
+            $val['download_url'] = route('file/download', [$project_id, 'file_id' => $val['file_id']]);
         }
         return response()->json([
             'info' => '获取成功',
