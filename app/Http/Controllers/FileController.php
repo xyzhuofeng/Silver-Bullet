@@ -359,6 +359,7 @@ class FileController extends Controller
      */
     public function deleteDir(Request $request, $project_id)
     {
+
         $virtual_path = $request->post('virtual_path');
         if (empty($virtual_path)) {
             return response()->json(['info' => '路径不能为空', 'status' => 0]);
@@ -368,6 +369,11 @@ class FileController extends Controller
         // 递归搜索删除目录
         try {
             $this->deleteNodeFromStructure($structure, $virtual_path);
+            // 清理文件记录
+            ProjectFile::where('project_id', $project_id)
+                ->where('virtual_path', $virtual_path)
+                ->delete();
+            // TODO 删除存储的文件
         } catch (\Exception $e) {
             return response()->json([
                 'info' => '删除失败，无法找到指定路径',
