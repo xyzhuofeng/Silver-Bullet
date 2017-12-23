@@ -183,7 +183,6 @@
             },
             // 查看文件
             viewFile(row) {
-                let that = this;
                 this.viewFileData.isVisible = true;
                 this.viewFileData.src = this.fileExplorerData.viewFileUrl + "?file_id=" + row.file_id
             },
@@ -199,12 +198,12 @@
                           that.$message.error(response.data.info);
                       } else {
                           that.treeData = response.data.data;
+                          that.$message({message: response.data.info, type: "success"});
+                          // 更新虚拟路径
+                          that.fileExtData.virtual_path = that.fileExtData.virtual_path + '/' + that.createDir.newName;
                           // 清理数据，关闭弹窗
                           that.createDir.diaVisible = false;
                           that.createDir.newName = "";
-                          that.$message({message: response.data.info, type: "success"});
-                          // 打开刚创建的目录
-                          that.fileExtData.virtual_path = that.fileExtData.virtual_path + '/' + that.createDir.newName;
                           that.updateExplorerTree();
                           that.updatePreviewDir();
                       }
@@ -222,7 +221,7 @@
                           that.$message.error(response.data.info);
                       } else {
                           that.treeData = response.data.data;
-                          that.$refs.tree.setCheckedKeys([that.fileExtData.virtual_path]);
+                          that.$refs.tree.setCurrentKey(that.fileExtData.virtual_path);
                       }
                   })
                   .catch(function (error) {

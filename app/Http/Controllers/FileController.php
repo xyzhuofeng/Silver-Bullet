@@ -365,8 +365,6 @@ class FileController extends Controller
         }
         $dirStructure = DirStructure::where('project_id', $project_id)->first();
         $structure = json_decode($dirStructure->structure, true);
-        dump($structure);
-        dump(json_encode($structure));
         // 递归搜索删除目录
         try {
             $this->deleteNodeFromStructure($structure, $virtual_path);
@@ -377,10 +375,6 @@ class FileController extends Controller
             ]);
         }
         // 写入记录
-        dump($structure);
-        dump(json_encode($structure));
-
-        return;
         $dirStructure->structure = json_encode($structure);
         $dirStructure->save();
         return response()->json([
