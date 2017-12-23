@@ -31,8 +31,8 @@
                 <el-tree :data="treeData"
                          @node-click="handleNodeClick" ref="tree"
                          :expand-on-click-node="false"
-                         :default-expanded-keys="['全部文件']"
-                         node-key="path">
+                         :default-expand-all="true"
+                         node-key="path" :highlight-current="true">
                 </el-tree>
             </div>
             <div class="preview" v-if="!viewFileData.isVisible">
@@ -52,7 +52,9 @@
                     <el-table-column prop="file_size" label="大小" sortable></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <a :href="scope.row.download_url"><el-button type="text" size="small">下载</el-button></a>
+                            <a :href="scope.row.download_url">
+                                <el-button type="text" size="small">下载</el-button>
+                            </a>
                             <el-button @click="delFile(scope.row)" type="text" size="small">删除</el-button>
                         </template>
                     </el-table-column>
@@ -201,6 +203,10 @@
                           that.createDir.diaVisible = false;
                           that.createDir.newName = "";
                           that.$message({message: response.data.info, type: "success"});
+                          // 打开刚创建的目录
+                          that.fileExtData.virtual_path = that.fileExtData.virtual_path + '/' + that.createDir.newName;
+                          that.updateExplorerTree();
+                          that.updatePreviewDir();
                       }
                   })
                   .catch(function (error) {
@@ -216,6 +222,7 @@
                           that.$message.error(response.data.info);
                       } else {
                           that.treeData = response.data.data;
+                          that.$refs.tree.setCheckedKeys([that.fileExtData.virtual_path]);
                       }
                   })
                   .catch(function (error) {
