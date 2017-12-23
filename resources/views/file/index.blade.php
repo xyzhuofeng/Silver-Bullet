@@ -79,18 +79,20 @@
 </body>
 <script src="{{ url(mix('js/app.js')) }}"></script>
 <script>
-    new Vue({
+    let app =new Vue({
         el: '#app',
         data() {
             return {
                 // 传给子组件数据
                 // 导航条数据
                 headerData: {
+                    username: "{{ session('user_name') }}",
                     avatarUrl: "{{ asset('images/男.png') }}",
                     logoutUrl: "{{ url('passport/logout') }}"
                 },
                 // 二级导航数据
                 secondNavData: {
+                    defaultActive: "文件",
                     summary: "{{ url('project', $project_id) }}", // 看板
                     task: "{{ route('task/index', $project_id) }}", // 任务
                     requirement: "{{url('/')}}", // 需求
