@@ -10,7 +10,6 @@
     <script src="{{ asset('js/vue.js') }}"></script>
     <script src="{{ asset('js/element-ui/2.0.5/index.js') }}"></script>
     <script src="{{ asset('js/axios/0.17.1/axios.min.js') }}"></script>
-    <title>Laravel</title>
     <style>
         [v-cloak] {
             display: none;
