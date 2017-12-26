@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>文件 - 从心约App - 团队协作平台</title>
+    <title>个人中心 - 团队协作平台</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
     <style>
@@ -67,10 +67,9 @@
 <div id="app" v-cloak>
     <div class="page">
         <header-nav :header-data="headerData"></header-nav>
-        <second-nav :second-nav-data="secondNavData"></second-nav>
         <main>
             <section>
-                <file-explorer :file-explorer-data="fileExplorerData"></file-explorer>
+                {{--<file-explorer :file-explorer-data="fileExplorerData"></file-explorer>--}}
             </section>
         </main>
         <footer-component></footer-component>
@@ -79,7 +78,7 @@
 </body>
 <script src="{{ url(mix('js/app.js')) }}"></script>
 <script>
-    let app = new Vue({
+    let app =new Vue({
         el: '#app',
         data() {
             return {
@@ -91,24 +90,6 @@
                     logoutUrl: "{{ url('passport/logout') }}",
                     projectName: "{{ \App\Http\Middleware\ViewTempleteVal::$projectName }}",
                     usercenterUrl: "{{ url('user') }}",
-                },
-                // 二级导航数据
-                secondNavData: {
-                    defaultActive: "文件",
-                    summary: "{{ url('project', $project_id) }}", // 看板
-                    task: "{{ route('task/index', $project_id) }}", // 任务
-                    requirement: "{{url('/')}}", // 需求
-                    file: "{{ route('file/index', $project_id) }}", // 文件
-                    access: "{{ url('/') }}" // 审批
-                },
-                fileExplorerData: {
-                    uploadUrl: "{{ route('file/upload', $project_id) }}", // 上传文件
-                    deleteFileUrl: "{{ route('file/delete', $project_id) }}", // 删除文件
-                    viewFileUrl: "{{ route('file/view', $project_id) }}", // 查看文件
-                    previewDirUrl: "{{ route('file/previewDir', $project_id) }}", // 目录预览
-                    treeUrl: "{{ route('file/tree', $project_id) }}", // 目录树
-                    saveDirUrl: "{{ route('file/saveDir', $project_id) }}", // 保存新目录
-                    deleteDirUrl: "{{ route('file/deleteDir', $project_id) }}", // 保存新目录
                 }
             }
         }

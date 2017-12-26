@@ -11,11 +11,6 @@
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
-
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -41,70 +36,69 @@ Route::get('passport/logout', 'PassportController@logout');
 /**
  * ProjectController
  */
-// 项目首页纯页面
-Route::get('project', 'ProjectController@index')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
+Route::middleware([
+    \App\Http\Middleware\CheckLoginStatus::class,
+    \App\Http\Middleware\ViewTempleteVal::class
+])->group(function () {
+    // 项目首页纯页面
+    Route::get('project', 'ProjectController@index');
 // 项目列表AJAX纯数据
-Route::get('project/list', 'ProjectController@projList')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
+    Route::get('project/list', 'ProjectController@projList');
 // 创建和保存项目信息
-Route::post('project', 'ProjectController@save')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
+    Route::post('project', 'ProjectController@save');
 // 打开指定项目详情
-Route::get('project/{project_id}', 'ProjectController@read')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
+    Route::get('project/{project_id}', 'ProjectController@read');
+});
 
 /**
  * TaskController
  */
-// 任务面板首页
-Route::get('project/{project_id}/task', 'TaskController@index')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('task/index');
-// 项目任务AJAX纯数据
-Route::get('project/{project_id}/task/my', 'TaskController@my')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('task/my');
-// 创建任务
-Route::post('task', 'TaskController@save')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class);
+Route::middleware([
+    \App\Http\Middleware\CheckLoginStatus::class,
+    \App\Http\Middleware\ViewTempleteVal::class
+])->group(function () {
+    // 任务面板首页
+    Route::get('project/{project_id}/task', 'TaskController@index')->name('task/index');
+    // 项目任务AJAX纯数据
+    Route::get('project/{project_id}/task/my', 'TaskController@my')->name('task/my');
+    // 创建任务
+    Route::post('task', 'TaskController@save');
+});
 
 /**
  * FileController
  */
-// 文件面板首页
-Route::get('project/{project_id}/file', 'FileController@index')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('file/index');
-// 上传文件
-Route::post('project/{project_id}/file/upload', 'FileController@upload')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('file/upload');
-// 删除文件
-Route::post('project/{project_id}/file/delete', 'FileController@delete')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('file/delete');
-// 查看文件
-Route::get('project/{project_id}/file/view', 'FileController@view')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('file/view');
-// 下载文件
-Route::get('project/{project_id}/file/download', 'FileController@download')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('file/download');
-// 目录预览
-Route::post('project/{project_id}/file/previewDir', 'FileController@previewDir')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('file/previewDir');
-// 获取目录树
-Route::get('project/{project_id}/file/tree', 'FileController@tree')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('file/tree');
-// 创建目录
-Route::post('project/{project_id}/file/saveDir', 'FileController@saveDir')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('file/saveDir');
-// 删除目录
-Route::post('project/{project_id}/file/deleteDir', 'FileController@deleteDir')
-    ->middleware(\App\Http\Middleware\CheckLoginStatus::class)
-    ->name('file/deleteDir');
+Route::middleware([
+    \App\Http\Middleware\CheckLoginStatus::class,
+    \App\Http\Middleware\ViewTempleteVal::class
+])->group(function () {
+    // 文件面板首页
+    Route::get('project/{project_id}/file', 'FileController@index')->name('file/index');
+    // 上传文件
+    Route::post('project/{project_id}/file/upload', 'FileController@upload')->name('file/upload');
+    // 删除文件
+    Route::post('project/{project_id}/file/delete', 'FileController@delete')->name('file/delete');
+    // 查看文件
+    Route::get('project/{project_id}/file/view', 'FileController@view')->name('file/view');
+    // 下载文件
+    Route::get('project/{project_id}/file/download', 'FileController@download')->name('file/download');
+    // 目录预览
+    Route::post('project/{project_id}/file/previewDir', 'FileController@previewDir')->name('file/previewDir');
+    // 获取目录树
+    Route::get('project/{project_id}/file/tree', 'FileController@tree')->name('file/tree');
+    // 创建目录
+    Route::post('project/{project_id}/file/saveDir', 'FileController@saveDir')->name('file/saveDir');
+    // 删除目录
+    Route::post('project/{project_id}/file/deleteDir', 'FileController@deleteDir')->name('file/deleteDir');
+});
+
+/**
+ * UserController
+ */
+Route::middleware([
+    \App\Http\Middleware\CheckLoginStatus::class,
+    \App\Http\Middleware\ViewTempleteVal::class
+])->group(function () {
+    // 个人中心
+    Route::get('user', 'UserController@index');
+});

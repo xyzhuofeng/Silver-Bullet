@@ -19,15 +19,14 @@
             </el-col>
             <el-col :span="6">
                 <div class="header-nav-title">
-                    <span>从心约App</span>
+                    <span>{{headerData.projectName}}</span>
                 </div>
             </el-col>
             <el-col :span="9">
                 <div class="header-right-corner">
                     <el-submenu index="3">
                         <template slot="title">您好，{{headerData.username}}</template>
-                        <el-menu-item index="3-1">个人中心</el-menu-item>
-                        <el-menu-item index="3-1">账号设置</el-menu-item>
+                        <el-menu-item index="个人中心">个人中心</el-menu-item>
                         <el-menu-item index="louout"><a href=""></a>退出</el-menu-item>
                     </el-submenu>
                     <el-menu-item index="4" class="avatar">
@@ -51,6 +50,9 @@
                 switch (key) {
                     case 'louout':
                         window.location.href = this.headerData.logoutUrl;
+                        break;
+                    case '个人中心':
+                        window.location.href = this.headerData.usercenterUrl;
                         break;
                 }
             }
