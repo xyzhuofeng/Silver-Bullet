@@ -10,7 +10,7 @@
     <script src="{{ asset('js/vue.js') }}"></script>
     <script src="{{ asset('js/element-ui/2.0.5/index.js') }}"></script>
     <script src="{{ asset('js/axios/0.17.1/axios.min.js') }}"></script>
-    <title>看板 - 从心约App - 团队协作平台</title>
+    <title>看板 - {{ \App\Http\Middleware\ViewTempleteVal::$projectName }} - 团队协作平台</title>
     <style>
         html, body {
             background: #e7eaf1;
