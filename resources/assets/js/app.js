@@ -38,6 +38,11 @@ let FileExplorer = require('./components/FileExplorer.vue');
 FileExplorer.props = ['fileExplorerData']; // 声明props
 Vue.component('file-explorer', FileExplorer);
 
+// 添加个人中心组建
+let profile = require('./components/Profile.vue');
+profile.props = ['profileData']; // 声明props
+Vue.component('profile', profile);
+
 // 页脚组件
 Vue.component('footer-component', require('./components/FooterComponent.vue'));
 

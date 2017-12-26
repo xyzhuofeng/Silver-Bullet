@@ -69,7 +69,7 @@
         <header-nav :header-data="headerData"></header-nav>
         <main>
             <section>
-                {{--<file-explorer :file-explorer-data="fileExplorerData"></file-explorer>--}}
+                <profile :profile-data="profileData"></profile>
             </section>
         </main>
         <footer-component></footer-component>
@@ -78,7 +78,7 @@
 </body>
 <script src="{{ url(mix('js/app.js')) }}"></script>
 <script>
-    let app =new Vue({
+    let app = new Vue({
         el: '#app',
         data() {
             return {
@@ -90,6 +90,13 @@
                     logoutUrl: "{{ url('passport/logout') }}",
                     projectName: "{{ \App\Http\Middleware\ViewTempleteVal::$projectName }}",
                     usercenterUrl: "{{ url('user') }}",
+                },
+                profileData: {
+                    user_id: "{{ session('user_id') }}",
+                    email: "{{ session('email') }}",
+                    user_name: "{{ session('user_name') }}",
+                    user_password: "******",
+                    user_avatar: "{{ asset('images/男.png') }}",
                 }
             }
         }
