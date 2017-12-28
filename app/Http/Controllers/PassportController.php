@@ -110,4 +110,38 @@ class PassportController extends Controller
         $request->session()->flush();
         return redirect('passport/index');
     }
+
+    /**
+     * 修改密码
+     *
+     * POST
+     * original_password: 原密码
+     * new_password: 新密码
+     * confirm_password: 确认密码
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function updatePassword(Request $request)
+    {
+        $original_password = $request->post('original_password');
+        $new_password = $request->post('new_password');
+        $confirm_password = $request->post('confirm_password');
+        // 检查原密码
+        $account = Account::where('user_id', session('user_id'))->first();
+        if (!Password::verify($original_password, $account->user_password)) {
+            return response()->json(['info' => '原密码错误', 'status' => 0]);
+        }
+        if (empty($new_password) || empty($confirm_password)) {
+            return response()->json(['info' => '新密码不能为空', 'status' => 0]);
+        }
+        if ($new_password !== $confirm_password) {
+            return response()->json(['info' => '两次输入密码不一致', 'status' => 0]);
+        }
+        $account->user_password = Password::crypt($confirm_password);
+        if ($account->save()) {
+            return response()->json(['info' => '更改成功', 'status' => 1]);
+        }
+        return response()->json(['info' => '更改失败', 'status' => 0]);
+    }
 }

@@ -32,6 +32,14 @@ Route::post('passport/register', 'PassportController@register');
 // 退出登录
 Route::get('passport/logout', 'PassportController@logout');
 
+Route::middleware([
+    \App\Http\Middleware\CheckLoginStatus::class,
+    \App\Http\Middleware\ViewTempleteVal::class
+])->group(function () {
+    // 修改密码
+    Route::post('passport/updatePassword', 'PassportController@updatePassword');
+
+});
 
 /**
  * ProjectController

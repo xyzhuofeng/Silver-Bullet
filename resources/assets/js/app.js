@@ -41,7 +41,7 @@ Vue.component('file-explorer', FileExplorer);
 // 添加个人中心组建
 let profile = require('./components/Profile.vue');
 profile.props = ['profileData']; // 声明props
-Vue.component('profile', profile);
+Vue.component('profile-item', profile);
 
 // 页脚组件
 Vue.component('footer-component', require('./components/FooterComponent.vue'));

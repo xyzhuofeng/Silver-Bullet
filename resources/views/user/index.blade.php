@@ -69,7 +69,7 @@
         <header-nav :header-data="headerData"></header-nav>
         <main>
             <section>
-                <profile :profile-data="profileData"></profile>
+                <profile-item :profile-data="profileData"></profile-item>
             </section>
         </main>
         <footer-component></footer-component>
@@ -98,6 +98,7 @@
                     user_password: "******",
                     user_avatar: "{{ asset('images/男.png') }}",
                     job: "{{ session('job') }}",
+                    updatePasswordUrl: "{{ url('passport/updatePassword') }}",
                 }
             }
         }
