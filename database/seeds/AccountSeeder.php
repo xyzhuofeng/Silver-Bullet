@@ -20,6 +20,7 @@ class AccountSeeder extends Seeder
             'user_name' => '庆爷',
             'user_password' => \hyperqing\Password::crypt('123456'),
             'user_avatar' => 'images/男.png',
+            'job' => '项目经理',
             'created_at' => '2017-12-03 15:46:27',
             'updated_at' => '2017-12-03 15:46:27'
         ]);
