@@ -52,7 +52,7 @@
 
 <script>
     export default {
-        name: "profile",
+        name: "profile-item",
         data() {
             return {
                 form: {
