@@ -144,4 +144,21 @@ class PassportController extends Controller
         }
         return response()->json(['info' => '更改失败', 'status' => 0]);
     }
+
+    /**
+     * 更改职位
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateJob(Request $request)
+    {
+        $job = $request->post('job');
+        $account = Account::where('user_id', session('user_id'))->first();
+        $account->job = $job;
+        if ($account->save()) {
+            $request->session()->put('job', $job);
+            return response()->json(['info' => '更改成功', 'status' => 1]);
+        }
+        return response()->json(['info' => '更改失败', 'status' => 0]);
+    }
 }

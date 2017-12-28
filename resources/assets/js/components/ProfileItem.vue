@@ -25,7 +25,7 @@
                         <el-input v-model="form.email"></el-input>
                     </el-form-item>
                     <el-form-item label="职位">
-                        <el-input v-model="form.job"></el-input>
+                        <el-input v-model="form.job" @blur="updateJob"></el-input>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -89,6 +89,23 @@
                           that.updatePasswordData.new_password = "";
                           // 关闭弹窗
                           that.updatePasswordData.isVisible = false;
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
+            },
+            // 更新职位
+            updateJob:function () {
+                let that = this;
+                axios.post(that.profileData.updateJobUrl, {
+                    job: that.form.job
+                })
+                  .then(function (response) {
+                      if (response.data.status !== 1) {
+                          that.$message.error(response.data.info);
+                      } else {
+                          that.$message({message: response.data.info, type: "success"});
                       }
                   })
                   .catch(function (error) {

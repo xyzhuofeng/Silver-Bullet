@@ -38,7 +38,8 @@ Route::middleware([
 ])->group(function () {
     // 修改密码
     Route::post('passport/updatePassword', 'PassportController@updatePassword');
-
+    // 修改职位
+    Route::post('passport/updateJob', 'PassportController@updateJob');
 });
 
 /**

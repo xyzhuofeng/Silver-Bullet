@@ -100,6 +100,7 @@
                     user_avatar: "{{ asset('images/男.png') }}",
                     job: "{{ session('job') }}",
                     updatePasswordUrl: "{{ url('passport/updatePassword') }}",
+                    updateJobUrl: "{{ url('passport/updateJob') }}",
                 }
             }
         }
