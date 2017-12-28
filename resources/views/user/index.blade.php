@@ -97,6 +97,7 @@
                     user_name: "{{ session('user_name') }}",
                     user_password: "******",
                     user_avatar: "{{ asset('images/男.png') }}",
+                    job: "{{ session('job') }}",
                 }
             }
         }

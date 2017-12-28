@@ -52,6 +52,7 @@ class PassportController extends Controller
         $request->session()->put('user_name', $account->user_name);
         $request->session()->put('user_avatar', asset($account->user_avatar));
         $request->session()->put('email', $account->email);
+        $request->session()->put('job', $account->job);
         return response()->json([
             'info' => '登录成功',
             'status' => 1,
@@ -84,6 +85,7 @@ class PassportController extends Controller
             $request->session()->put('user_name', $account->getAttribute('user_name'));
             $request->session()->put('user_avatar', asset($account->getAttribute('user_avatar')));
             $request->session()->put('email', $account->getAttribute('email'));
+            $request->session()->put('job', '');
             return response()->json([
                 'info' => '注册成功！正在跳转到项目中心...',
                 'status' => 1,

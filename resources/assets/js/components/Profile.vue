@@ -24,6 +24,9 @@
                     <el-form-item label="邮箱">
                         <el-input v-model="form.email"></el-input>
                     </el-form-item>
+                    <el-form-item label="职位">
+                        <el-input v-model="form.job"></el-input>
+                    </el-form-item>
                 </el-form>
             </el-col>
         </el-row>
@@ -56,6 +59,7 @@
                     user_name: this.profileData.user_name,
                     user_avatar: this.profileData.user_avatar,
                     email: this.profileData.email,
+                    job: this.profileData.job,
                 },
                 updatePassword: {
                     isVisible: false, // 修改密码弹窗
