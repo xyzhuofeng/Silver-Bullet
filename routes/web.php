@@ -42,7 +42,8 @@ Route::middleware([
     Route::post('passport/updateJob', 'PassportController@updateJob');
     // 修改姓名
     Route::post('passport/updateName', 'PassportController@updateName');
-
+    // 修改头像
+    Route::post('passport/updateAvatar', 'PassportController@updateAvatar');
 });
 
 /**

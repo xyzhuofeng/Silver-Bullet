@@ -77,7 +77,7 @@ class PassportController extends Controller
         $account->setAttribute('email', $email);
         $account->setAttribute('user_name', $name);
         $account->setAttribute('user_password', Password::crypt($password));
-        $account->setAttribute('user_avatar', 'images/男.png');
+        $account->setAttribute('user_avatar', 'app/avatar/男.png');
         $account->setCreatedAt(time());
         $account->setUpdatedAt(time());
         if ($account->save()) {
@@ -180,5 +180,48 @@ class PassportController extends Controller
             return response()->json(['info' => '更改成功', 'status' => 1]);
         }
         return response()->json(['info' => '更改失败', 'status' => 0]);
+    }
+
+    /**
+     * 更新头像
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateAvatar(Request $request)
+    {
+        // 获取文件对象
+        $file = $request->file('avatar');
+        if (!$file) {
+            return response()->json(['info' => '未选择文件', 'status' => 0]);
+        }
+        // 检查文件上传错误码
+        if ($file->isValid()) {
+            // 存储文件，返回相对路径，如：avatar/Y8aWLJC5yitb3Ou41Jy9MK8E75OW3yJ1cingsD1K.txt
+            $relative_path = $file->store('avatar');
+            // 成功移动文件的情况
+            if ($relative_path) {
+                // 写入文件信息
+                $account = Account::where('user_id', session('user_id'))->first();
+                $account->user_avatar = 'app/' . $relative_path;
+                if ($account->save()) {
+                    $request->session()->put('user_avatar', asset('app/' . $relative_path));
+                    return response()->json([
+                        'info' => '上传成功',
+                        'status' => 1,
+                        'data' => [
+                            'fileUrl' => asset('app/' . $relative_path)
+                        ]
+                    ]);
+                }
+                return response()->json([
+                    'info' => '写入失败',
+                    'status' => 0
+                ]);
+            }
+        }
+        return response()->json([
+            'info' => '上传失败，错误码：' . $file->getErrorMessage(),
+            'status' => 0
+        ]);
     }
 }

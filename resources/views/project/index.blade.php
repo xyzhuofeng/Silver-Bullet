@@ -174,7 +174,7 @@
                 // 导航条数据
                 headerData: {
                     username: "{{ session('user_name') }}",
-                    avatarUrl: "{{ asset('images/男.png') }}",
+                    avatarUrl: "{{ session('user_avatar') }}",
                     logoutUrl: "{{ url('passport/logout') }}",
                     projectName: "",
                     usercenterUrl: "{{ url('user') }}",

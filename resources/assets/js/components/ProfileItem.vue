@@ -4,7 +4,9 @@
             <el-col :span="4">
                 <div class="avatar-box">
                     <img :src="profileData.user_avatar" alt="用户头像" class="avatar">
-                    <el-button type="text" native-type="button">修改头像</el-button>
+                    <el-button type="text" native-type="button" @click="updateAvatarData.isVisible = true">
+                        修改头像
+                    </el-button>
                 </div>
             </el-col>
             <el-col :span="10">
@@ -47,6 +49,20 @@
                 <el-button type="primary" @click="updatePassword">确 定</el-button>
               </span>
         </el-dialog>
+        <el-dialog title="修改头像" :visible.sync="updateAvatarData.isVisible" width="30%">
+            <span>请选择头像</span>
+            <el-upload class="avatar-uploader"
+                       :action="profileData.updateAvatarUrl"
+                       :show-file-list="false" name="avatar"
+                       :on-success="handleAvatarSuccess">
+                <img v-if="updateAvatarData.imageUrl" :src="updateAvatarData.imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="updateAvatarData.isVisible = false">取 消</el-button>
+                <el-button type="primary" @click="updateAvatarData.isVisible = false">完 成</el-button>
+              </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -66,10 +82,18 @@
                     original_password: "", // 原始密码
                     new_password: "", // 新密码
                     confirm_password: "", // 确认密码
+                },
+                updateAvatarData: {
+                    isVisible: false, // 弹窗
+                    imageUrl: null,
                 }
             }
         },
         methods: {
+            // 成功上传头像
+            handleAvatarSuccess(res, file) {
+                this.updateAvatarData.imageUrl = URL.createObjectURL(file.raw);
+            },
             // 更新密码
             updatePassword: function () {
                 let that = this;
@@ -152,5 +176,28 @@
 
     img.avatar {
         width: 100%;
+    }
+</style>
+
+<style>
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
     }
 </style>

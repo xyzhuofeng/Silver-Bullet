@@ -86,7 +86,7 @@
                 // 导航条数据
                 headerData: {
                     username: "{{ session('user_name') }}",
-                    avatarUrl: "{{ asset('images/男.png') }}",
+                    avatarUrl: "{{ session('user_avatar') }}",
                     logoutUrl: "{{ url('passport/logout') }}",
                     projectName: "{{ \App\Http\Middleware\ViewTempleteVal::$projectName }}",
                     usercenterUrl: "{{ url('user') }}",
@@ -97,11 +97,12 @@
                     email: "{{ session('email') }}",
                     user_name: "{{ session('user_name') }}",
                     user_password: "******",
-                    user_avatar: "{{ asset('images/男.png') }}",
+                    user_avatar: "{{ session('user_avatar') }}",
                     job: "{{ session('job') }}",
                     updatePasswordUrl: "{{ url('passport/updatePassword') }}",
                     updateJobUrl: "{{ url('passport/updateJob') }}",
                     updateNameUrl: "{{ url('passport/updateName') }}",
+                    updateAvatarUrl:"{{ url('passport/updateAvatar') }}"
                 }
             }
         }
