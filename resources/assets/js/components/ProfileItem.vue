@@ -93,6 +93,7 @@
             // 成功上传头像
             handleAvatarSuccess(res, file) {
                 this.updateAvatarData.imageUrl = URL.createObjectURL(file.raw);
+                this.profileData.user_avatar = URL.createObjectURL(file.raw);
             },
             // 更新密码
             updatePassword: function () {
