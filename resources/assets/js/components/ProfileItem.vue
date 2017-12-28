@@ -9,8 +9,8 @@
             </el-col>
             <el-col :span="10">
                 <el-form label-position="top" label-width="80px" :model="form">
-                    <el-form-item label="姓名" @blur="updateName">
-                        <el-input v-model="profileData.user_name"></el-input>
+                    <el-form-item label="姓名">
+                        <el-input v-model="form.user_name" @blur="updateName"></el-input>
                     </el-form-item>
                     <el-form-item label="密码">
                         <el-input v-model="profileData.user_password" disabled></el-input>
