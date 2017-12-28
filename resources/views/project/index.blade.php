@@ -178,6 +178,7 @@
                     logoutUrl: "{{ url('passport/logout') }}",
                     projectName: "",
                     usercenterUrl: "{{ url('user') }}",
+                    projectUrl: "{{ url('project') }}",
                 },
                 projLoading: false,
                 projList: [],

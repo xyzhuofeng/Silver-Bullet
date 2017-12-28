@@ -91,6 +91,7 @@
                     logoutUrl: "{{ url('passport/logout') }}",
                     projectName: "{{ \App\Http\Middleware\ViewTempleteVal::$projectName }}",
                     usercenterUrl: "{{ url('user') }}",
+                    projectUrl: "{{ url('project') }}",
                 },
                 // 二级导航数据
                 secondNavData: {

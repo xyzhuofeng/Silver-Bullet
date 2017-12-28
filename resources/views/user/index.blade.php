@@ -90,6 +90,7 @@
                     logoutUrl: "{{ url('passport/logout') }}",
                     projectName: "{{ \App\Http\Middleware\ViewTempleteVal::$projectName }}",
                     usercenterUrl: "{{ url('user') }}",
+                    projectUrl: "{{ url('project') }}",
                 },
                 profileData: {
                     user_id: "{{ session('user_id') }}",

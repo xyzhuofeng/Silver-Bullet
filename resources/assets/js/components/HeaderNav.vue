@@ -8,7 +8,8 @@
                         <span class="silver">Silver Bullet</span>
                     </a>
                 </el-menu-item>
-                <el-menu-item index="1"><a class="el-button el-button--text" href="#">项目中心</a>
+                <el-menu-item index="1">
+                    <a class="el-button el-button--text" :href="headerData.projectUrl">项目中心</a>
                 </el-menu-item>
                 <el-submenu index="2">
                     <template slot="title">我的工作台</template>
