@@ -9,7 +9,7 @@
             </el-col>
             <el-col :span="10">
                 <el-form label-position="top" label-width="80px" :model="form">
-                    <el-form-item label="姓名">
+                    <el-form-item label="姓名" @blur="updateName">
                         <el-input v-model="profileData.user_name"></el-input>
                     </el-form-item>
                     <el-form-item label="密码">
@@ -96,10 +96,27 @@
                   });
             },
             // 更新职位
-            updateJob:function () {
+            updateJob: function () {
                 let that = this;
                 axios.post(that.profileData.updateJobUrl, {
                     job: that.form.job
+                })
+                  .then(function (response) {
+                      if (response.data.status !== 1) {
+                          that.$message.error(response.data.info);
+                      } else {
+                          that.$message({message: response.data.info, type: "success"});
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
+            },
+            // 更新姓名
+            updateName: function () {
+                let that = this;
+                axios.post(that.profileData.updateNameUrl, {
+                    user_name: that.form.user_name
                 })
                   .then(function (response) {
                       if (response.data.status !== 1) {

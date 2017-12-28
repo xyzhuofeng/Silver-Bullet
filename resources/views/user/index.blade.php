@@ -101,6 +101,7 @@
                     job: "{{ session('job') }}",
                     updatePasswordUrl: "{{ url('passport/updatePassword') }}",
                     updateJobUrl: "{{ url('passport/updateJob') }}",
+                    updateNameUrl: "{{ url('passport/updateName') }}",
                 }
             }
         }

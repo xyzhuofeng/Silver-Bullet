@@ -161,4 +161,24 @@ class PassportController extends Controller
         }
         return response()->json(['info' => '更改失败', 'status' => 0]);
     }
+
+    /**
+     * 更改用户名
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateName(Request $request)
+    {
+        $user_name = $request->post('user_name');
+        if (empty($user_name)) {
+            return response()->json(['info' => '姓名不能为空', 'status' => 0]);
+        }
+        $account = Account::where('user_id', session('user_id'))->first();
+        $account->user_name = $user_name;
+        if ($account->save()) {
+            $request->session()->put('user_name', $user_name);
+            return response()->json(['info' => '更改成功', 'status' => 1]);
+        }
+        return response()->json(['info' => '更改失败', 'status' => 0]);
+    }
 }

@@ -40,6 +40,9 @@ Route::middleware([
     Route::post('passport/updatePassword', 'PassportController@updatePassword');
     // 修改职位
     Route::post('passport/updateJob', 'PassportController@updateJob');
+    // 修改姓名
+    Route::post('passport/updateName', 'PassportController@updateName');
+
 });
 
 /**
