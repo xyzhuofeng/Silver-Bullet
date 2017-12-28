@@ -4,12 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ asset('js/fonts.googleapis.com.css') }}">
-    <link rel="stylesheet" href="{{ asset('js/element-ui/2.0.5/theme-chalk/index.css') }}">
-    <link rel="stylesheet" href="{{ asset('js/public.css') }}">
-    <script src="{{ asset('js/vue.js') }}"></script>
-    <script src="{{ asset('js/element-ui/2.0.5/index.js') }}"></script>
-    <script src="{{ asset('js/axios/0.17.1/axios.min.js') }}"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
     <title>项目中心 - 团队协作平台</title>
     <style>
         html, body {
@@ -133,43 +129,7 @@
 <body>
 <div id="app" v-cloak>
     <div class="page">
-        <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-            <el-row>
-                <el-col :span="8">
-                    <el-menu-item index="0">
-                        <a href="{{url('/')}}" class="el-button el-button--text">
-                            <span class="silver">Silver Bullet</span>
-                        </a>
-                    </el-menu-item>
-                    <el-menu-item index="1"><a class="el-button el-button--text" href="{{ url('project') }}">项目中心</a>
-                    </el-menu-item>
-                    <el-submenu index="2">
-                        <template slot="title">我的工作台</template>
-                        <el-menu-item index="2-1">选项1</el-menu-item>
-                        <el-menu-item index="2-2">选项2</el-menu-item>
-                        <el-menu-item index="2-3">选项3</el-menu-item>
-                    </el-submenu>
-                </el-col>
-                <el-col :span="8">
-                    <div class="page-title">
-                        <span>项目中心</span>
-                    </div>
-                </el-col>
-                <el-col :span="8">
-                    <div class="page-right-corner">
-                        <el-submenu index="3">
-                            <template slot="title">您好，{{ session('user_name') }}</template>
-                            <el-menu-item index="3-1">个人中心</el-menu-item>
-                            <el-menu-item index="3-1">账号设置</el-menu-item>
-                            <el-menu-item index="louout"><a href=""></a>退出</el-menu-item>
-                        </el-submenu>
-                        <el-menu-item index="4" class="avatar">
-                            <img src="{{ session('user_avatar') }}" alt="用户头像">
-                        </el-menu-item>
-                    </div>
-                </el-col>
-            </el-row>
-        </el-menu>
+        <header-nav :header-data="headerData"></header-nav>
         <main>
             <div class="project" v-loading="projLoading">
                 <div class="project-list">
@@ -186,9 +146,7 @@
                 </div>
             </div>
         </main>
-        <footer>
-            Copyright &copy; 2017 Designed by HyperQing
-        </footer>
+        <footer-component></footer-component>
     </div>
     <el-dialog title="创建项目" :visible.sync="createProj.dlgVisible" width="580px">
         <el-form label-width="80px">
@@ -206,11 +164,21 @@
     </el-dialog>
 </div>
 </body>
+<script src="{{ url(mix('js/app.js')) }}"></script>
 <script>
     let app = new Vue({
         el: '#app',
         data() {
             return {
+                // 传给子组件数据
+                // 导航条数据
+                headerData: {
+                    username: "{{ session('user_name') }}",
+                    avatarUrl: "{{ asset('images/男.png') }}",
+                    logoutUrl: "{{ url('passport/logout') }}",
+                    projectName: "",
+                    usercenterUrl: "{{ url('user') }}",
+                },
                 projLoading: false,
                 projList: [],
                 createProj: {
