@@ -36,7 +36,6 @@ class TaskController
             $val->is_finished = $val->is_finished == 1 ? true : false;
         }
         return view('task.index', [
-            'project_id' => $project_id,
             'task_list' => $task_list
         ]);
     }

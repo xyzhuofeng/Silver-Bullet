@@ -90,13 +90,13 @@
                 secondNavData: secondNavData,
                 // 文件资源管理器数据
                 fileExplorerData: {
-                    uploadUrl: "{{ route('file/upload', $project_id) }}", // 上传文件
-                    deleteFileUrl: "{{ route('file/delete', $project_id) }}", // 删除文件
-                    viewFileUrl: "{{ route('file/view', $project_id) }}", // 查看文件
-                    previewDirUrl: "{{ route('file/previewDir', $project_id) }}", // 目录预览
-                    treeUrl: "{{ route('file/tree', $project_id) }}", // 目录树
-                    saveDirUrl: "{{ route('file/saveDir', $project_id) }}", // 保存新目录
-                    deleteDirUrl: "{{ route('file/deleteDir', $project_id) }}", // 删除目录
+                    uploadUrl: "{{ route('file/upload', \App\Http\Middleware\ViewTempleteVal::$projectId) }}", // 上传文件
+                    deleteFileUrl: "{{ route('file/delete', \App\Http\Middleware\ViewTempleteVal::$projectId) }}", // 删除文件
+                    viewFileUrl: "{{ route('file/view', \App\Http\Middleware\ViewTempleteVal::$projectId) }}", // 查看文件
+                    previewDirUrl: "{{ route('file/previewDir', \App\Http\Middleware\ViewTempleteVal::$projectId) }}", // 目录预览
+                    treeUrl: "{{ route('file/tree', \App\Http\Middleware\ViewTempleteVal::$projectId) }}", // 目录树
+                    saveDirUrl: "{{ route('file/saveDir', \App\Http\Middleware\ViewTempleteVal::$projectId) }}", // 保存新目录
+                    deleteDirUrl: "{{ route('file/deleteDir', \App\Http\Middleware\ViewTempleteVal::$projectId) }}", // 删除目录
                 }
             }
         },

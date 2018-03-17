@@ -34,7 +34,6 @@ class FileController extends Controller
     public function index(Request $request, $project_id)
     {
         return view('file.index', [
-            'project_id' => $project_id
         ]);
     }
 

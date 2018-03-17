@@ -63,6 +63,8 @@ Route::middleware([
     Route::get('project/{project_id}', 'ProjectController@read');
     // 打开指定项目的设置页面
     Route::get('project/{project_id}/setting', 'ProjectController@setting')->name('project/setting');
+    // 更新封面图
+    Route::post('project/{project_id}/updateThumb', 'ProjectController@updateThumb')->name('project/updateThumb');
 });
 
 /**
