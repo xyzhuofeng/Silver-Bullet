@@ -85,15 +85,7 @@
             return {
                 // 传给子组件数据
                 // 导航条数据
-                headerData: {
-                    homeUrl: "{{ url('/') }}",
-                    username: "{{ session('user_name') }}",
-                    avatarUrl: "{{ session('user_avatar') }}",
-                    logoutUrl: "{{ url('passport/logout') }}",
-                    projectName: "{{ \App\Http\Middleware\ViewTempleteVal::$projectName }}",
-                    usercenterUrl: "{{ url('user') }}",
-                    projectUrl: "{{ url('project') }}",
-                },
+                headerData: headerData,
                 // 二级导航数据
                 secondNavData: {
                     defaultActive: "文件",

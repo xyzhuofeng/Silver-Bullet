@@ -24,7 +24,7 @@
             <el-col :span="10">
                 <el-form label-position="top" label-width="80px" :model="form">
                     <el-form-item label="邮箱">
-                        <el-input v-model="form.email"></el-input>
+                        <el-input v-model="form.email" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="职位">
                         <el-input v-model="form.job" @blur="updateJob"></el-input>

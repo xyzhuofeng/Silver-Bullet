@@ -77,21 +77,14 @@
 </div>
 </body>
 <script src="{{ url(mix('js/app.js')) }}"></script>
+@include('public.vue_value')
 <script>
-    let app = new Vue({
+    let myapp = new Vue({
         el: '#app',
         data() {
             return {
-                // 传给子组件数据
-                // 导航条数据
-                headerData: {
-                    username: "{{ session('user_name') }}",
-                    avatarUrl: "{{ session('user_avatar') }}",
-                    logoutUrl: "{{ url('passport/logout') }}",
-                    projectName: "{{ \App\Http\Middleware\ViewTempleteVal::$projectName }}",
-                    usercenterUrl: "{{ url('user') }}",
-                    projectUrl: "{{ url('project') }}",
-                },
+                // 传给子组件数据: 导航条数据
+                headerData: headerData,
                 profileData: {
                     user_id: "{{ session('user_id') }}",
                     email: "{{ session('email') }}",
