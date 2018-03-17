@@ -288,30 +288,17 @@
 </div>
 </body>
 <script src="{{ url(mix('js/app.js')) }}"></script>
+@include('public.vue_value')
 <script>
-    let app = new Vue({
+    let myapp = new Vue({
         el: '#app',
         data() {
             return {
                 // 传给子组件数据
                 // 导航条数据
-                headerData: {
-                    username: "{{ session('user_name') }}",
-                    avatarUrl: "{{ session('user_avatar') }}",
-                    logoutUrl: "{{ url('passport/logout') }}",
-                    projectName: "{{ \App\Http\Middleware\ViewTempleteVal::$projectName }}",
-                    usercenterUrl: "{{ url('user') }}",
-                    projectUrl: "{{ url('project') }}",
-                },
+                headerData: headerData,
                 // 二级导航数据
-                secondNavData: {
-                    defaultActive: "看板",
-                    summary: "{{ url('project', $project_id) }}", // 看板
-                    task: "{{ route('task/index', $project_id) }}", // 任务
-                    requirement: "{{url('/')}}", // 需求
-                    file: "{{ route('file/index', $project_id) }}", // 文件
-                    access: "{{ url('/') }}" // 审批
-                },
+                secondNavData: secondNavData,
                 // 创建任务
                 createTask: {
                     btn: "创建",
@@ -426,6 +413,7 @@
         // vue生命周期
         mounted: function () {
             this.loadMyTask();
+            this.secondNavData.defaultActive = "看板";
         }
     })
 </script>

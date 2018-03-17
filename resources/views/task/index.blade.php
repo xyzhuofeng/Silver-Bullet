@@ -245,7 +245,7 @@
                     form: {  // 创建项目表单
                         task_content: "",
                         deadline: "",
-                        project_id: "{{ $project_id }}"
+                        project_id: "{{ \App\Http\Middleware\ViewTempleteVal::$projectId }}"
                     }
                 },
                 // 我的任务列表
@@ -318,7 +318,7 @@
             // 读取我的任务
             loadMyTask() {
                 let that = this;
-                axios.get("{{ route('task/my', ['protect_id'=>$project_id]) }}")
+                axios.get("{{ route('task/my', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}")
                   .then(function (response) {
                       if (response.data.status !== 1) {
                           that.$message.error(response.data.info);
@@ -335,7 +335,7 @@
                 alert();
                 return;
                 let that = this;
-                axios.get("{{ route('task/my', ['protect_id'=>$project_id]) }}")
+                axios.get("{{ route('task/my', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}")
                   .then(function (response) {
                       if (response.data.status !== 1) {
                           that.$message.error(response.data.info);

@@ -44,7 +44,7 @@ class ProjectController
             ->where('user_id', session('user_id'))
             ->get();
         foreach ($data as &$val) {
-            $val->project_thumb = asset($val->project_thumb);
+            $val->project_thumb = asset('app/' . $val->project_thumb);
             $val->project_url = url('project', ['project_id' => $val->project_id]);
         }
         return response()->json([
@@ -73,7 +73,7 @@ class ProjectController
         $project = new Project();
         $project->setAttribute('project_name', $project_name);
         $project->setAttribute('project_comment', $project_comment);
-        $project->setAttribute('project_thumb', 'images/物品申请.png');
+        $project->setAttribute('project_thumb', 'proj_thumb/物品申请.png');
         $project->setAttribute('creator', $request->session()->get('user_id'));
         DB::beginTransaction();
         try {
@@ -130,10 +130,53 @@ class ProjectController
      */
     public function setting(Request $request, $project_id)
     {
-//        $project = Project::where('project_id',$project_id)->first();
-//        var_dump($project);
+        $project = Project::where('project_id', $project_id)->first();
         return view('project.setting', [
-            'project_id' => $project_id
+            'project' => $project,
+        ]);
+    }
+
+    /**
+     * 上传封面图
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function updateThumb(Request $request, $project_id)
+    {
+        $project = Project::where('project_id', $project_id)->first();
+        if (empty($project)) {
+            return response()->json([
+                'info' => '没有找到项目',
+                'status' => 0,
+            ]);
+        }
+        // 获取文件对象
+        $file = $request->file('thumb');
+        if (!$file) {
+            return response()->json(['info' => '未选择文件', 'status' => 0]);
+        }
+        // 检查文件上传错误码
+        if ($file->isValid()) {
+            // 存储文件，返回相对路径，如：proj_thumb/Y8aWLJC5yitb3Ou41Jy9MK8E75OW3yJ1cingsD1K.txt
+            $relative_path = $file->store('proj_thumb');
+            // 成功移动文件的情况
+            if ($relative_path) {
+                // 写入文件信息
+                $project->setAttribute('project_thumb', $relative_path);
+                $project->save();
+                return response()->json([
+                    'info' => '上传成功',
+                    'status' => 1,
+                    'data' => [
+                        'fileUrl' => asset('app/' . $relative_path)
+                    ]
+                ]);
+            }
+        }
+        return response()->json([
+            'info' => '上传失败，错误码：' . $file->getErrorMessage(),
+            'status' => 0
         ]);
     }
 

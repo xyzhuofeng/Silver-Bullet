@@ -70,7 +70,7 @@
         <second-nav :second-nav-data="secondNavData"></second-nav>
         <main>
             <section>
-                <setting-item :setting-data="settingData"></setting-item>
+                <setting-item :setting-item-data="settingItemData"></setting-item>
             </section>
         </main>
         <footer-component></footer-component>
@@ -88,6 +88,15 @@
                 headerData: headerData,
                 // 二级导航数据
                 secondNavData: secondNavData,
+                // 项目设置数据
+                settingItemData: {
+                    project_id: "{{ \App\Http\Middleware\ViewTempleteVal::$projectId }}",
+                    project_name: "{{ \App\Http\Middleware\ViewTempleteVal::$projectName }}",
+                    project_comment: "{{ $project->project_comment }}",
+                    project_thumb: "{{ asset('app/' . $project->project_thumb) }}",
+                    updateProjNameUrl: "{{ route('project/updateThumb', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
+                    updateThumbUrl: "{{ route('project/updateThumb', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
+                },
             }
         },
         mounted() {
