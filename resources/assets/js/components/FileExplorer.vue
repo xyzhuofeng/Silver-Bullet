@@ -2,6 +2,7 @@
 <template>
     <div class="container">
         <div class="explorer">
+            <!-- 目录树 -->
             <div class="tree">
                 <div class="operation-btn-group">
                     <el-dropdown @command="handleCommand">
@@ -35,6 +36,7 @@
                          node-key="path" :highlight-current="true">
                 </el-tree>
             </div>
+            <!-- 文件夹内容预览 -->
             <div class="preview" v-if="!viewFileData.isVisible">
                 <el-breadcrumb separator="/">
                     <el-breadcrumb-item v-for="item in breadcrumb" key="breadcrumb">
@@ -60,6 +62,7 @@
                     </el-table-column>
                 </el-table>
             </div>
+            <!-- 文件预览窗口 -->
             <div class="viewfile" v-if="viewFileData.isVisible">
                 <div>
                     <el-button type="primary" native-type="button" plain @click="viewFileData.isVisible=false">
@@ -75,7 +78,7 @@
                        multiple :data="fileExtData" :before-upload="beforeUpload"
                        name="myfile">
                 <el-button size="small" type="primary">点击上传</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                <div slot="tip" class="el-upload__tip">文件大小不超过500KB。</div>
             </el-upload>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="uploadDiaVisible = false">关 闭</el-button>
@@ -184,7 +187,7 @@
             // 查看文件
             viewFile(row) {
                 this.viewFileData.isVisible = true;
-                this.viewFileData.src = this.fileExplorerData.viewFileUrl + "?file_id=" + row.file_id
+                this.viewFileData.src = this.fileExplorerData.viewFileUrl + "?file_id=" + row.file_id + "&random=" + Math.random()
             },
             // 保存新目录
             saveDir() {
@@ -247,9 +250,9 @@
             },
             // 删除目录
             delDir() {
-                console.log(this.fileExtData.virtual_path)
                 // 防止删除根目录
                 if (this.fileExtData.virtual_path === '全部文件') {
+                    this.$message.error('无法删除根目录');
                     return;
                 }
                 let that = this;
@@ -340,7 +343,7 @@
 
     .viewfile iframe {
         width: 100%;
-        height: 800px;
+        height: 700px;
         margin-top: 15px;
     }
 </style>

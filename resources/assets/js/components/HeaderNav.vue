@@ -4,7 +4,7 @@
         <el-row>
             <el-col :span="9">
                 <el-menu-item index="0">
-                    <a href="#" class="el-button el-button--text">
+                    <a :href="headerData.homeUrl" class="el-button el-button--text">
                         <span class="silver">Silver Bullet</span>
                     </a>
                 </el-menu-item>
@@ -12,7 +12,7 @@
                     <a class="el-button el-button--text" :href="headerData.projectUrl">项目中心</a>
                 </el-menu-item>
                 <el-submenu index="2">
-                    <template slot="title">我的工作台</template>
+                    <template slot="title">我的工作台（待完成）</template>
                     <el-menu-item index="2-1">选项1</el-menu-item>
                     <el-menu-item index="2-2">选项2</el-menu-item>
                     <el-menu-item index="2-3">选项3</el-menu-item>
@@ -53,9 +53,6 @@
                         window.location.href = this.headerData.logoutUrl;
                         break;
                     case '个人中心':
-                        window.location.href = this.headerData.usercenterUrl;
-                        break;
-                    case '个人中心2':
                         window.location.href = this.headerData.usercenterUrl;
                         break;
                 }

@@ -86,6 +86,7 @@
                 // 传给子组件数据
                 // 导航条数据
                 headerData: {
+                    homeUrl: "{{ url('/') }}",
                     username: "{{ session('user_name') }}",
                     avatarUrl: "{{ session('user_avatar') }}",
                     logoutUrl: "{{ url('passport/logout') }}",
@@ -109,7 +110,7 @@
                     previewDirUrl: "{{ route('file/previewDir', $project_id) }}", // 目录预览
                     treeUrl: "{{ route('file/tree', $project_id) }}", // 目录树
                     saveDirUrl: "{{ route('file/saveDir', $project_id) }}", // 保存新目录
-                    deleteDirUrl: "{{ route('file/deleteDir', $project_id) }}", // 保存新目录
+                    deleteDirUrl: "{{ route('file/deleteDir', $project_id) }}", // 删除目录
                 }
             }
         }

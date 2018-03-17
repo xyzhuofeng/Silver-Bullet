@@ -40,6 +40,9 @@ class FileController extends Controller
 
     /**
      * 文件上传
+     *
+     * POST
+     * virtual_path: 保存文件的目标虚拟目录路径
      * @param Request $request
      * @param string $project_id 项目id
      * @return \Illuminate\Http\JsonResponse
@@ -97,6 +100,7 @@ class FileController extends Controller
     public function delete(Request $request, string $project_id)
     {
         $file_id = $request->post('file_id');
+        // 查询是否存在待删除文件
         $result = ProjectFile::where('file_id', $file_id)
             ->where('project_id', $project_id)
             ->first();
@@ -107,8 +111,10 @@ class FileController extends Controller
             ]);
         }
         try {
-            $result->delete();
+            // 删除本地文件
             unlink(public_path('app/' . $result->relative_path));
+            // 删除数据库记录
+            $result->delete();
         } catch (\Exception $exception) {
             return response()->json([
                 'info' => '删除失败，找不到文件',
@@ -142,6 +148,11 @@ class FileController extends Controller
                 'status' => 0
             ]);
         }
+        if (preg_match('/(doc)|(docx)|(xls)|(xlsx)|(ppt)|(pptx)/', $result->relative_path)) {
+            // 使用 office online预览文件，需要将本项目部署在服务器中才能访问到用户文件
+            return response()->redirectTo('http://view.officeapps.live.com/op/view.aspx?src=' . url('app/' . $result->relative_path));
+        }
+        // 直接在浏览器打开文件
         return response()->file(public_path('app/' . $result->relative_path));
     }
 
@@ -184,6 +195,7 @@ class FileController extends Controller
     public function previewDir(Request $request, string $project_id)
     {
         $virtual_path = $request->post('virtual_path');
+        // 获取指定项目指定目录的文件列表
         $project_file_list = ProjectFile::join(Account::table,
             Account::table . '.user_id',
             '=',
@@ -263,12 +275,12 @@ class FileController extends Controller
         if (empty($new_dir) || empty($virtual_path)) {
             return response()->json(['info' => '新文件夹名和路径不能为空', 'status' => 0]);
         }
-
+        // 组织新目录数据
         $new_dir_data = [
             'path' => implode('/', [$virtual_path, $new_dir]),
             'label' => $new_dir
         ];
-
+        // 取出当前目录结构
         $dirStructure = DirStructure::where('project_id', $project_id)->first();
         $structure = json_decode($dirStructure['structure'], true);
         try {
@@ -364,25 +376,35 @@ class FileController extends Controller
         if (empty($virtual_path)) {
             return response()->json(['info' => '路径不能为空', 'status' => 0]);
         }
+        if ($virtual_path == '全部文件') {
+            return response()->json(['info' => '无法删除根目录', 'status' => 0]);
+        }
         $dirStructure = DirStructure::where('project_id', $project_id)->first();
         $structure = json_decode($dirStructure->structure, true);
         // 递归搜索删除目录
         try {
+            // 删除目录节点
             $this->deleteNodeFromStructure($structure, $virtual_path);
-            // 清理文件记录
+            // 删除当前目录下的文件
+            $result = ProjectFile::where('project_id', $project_id)
+                ->where('virtual_path', $virtual_path)
+                ->get();
+            foreach ($result as $value) {
+                unlink(public_path('app/' . $value->relative_path));
+            }
+            // 删除文件记录
             ProjectFile::where('project_id', $project_id)
                 ->where('virtual_path', $virtual_path)
                 ->delete();
-            // TODO 删除存储的文件
+            // 写入记录
+            $dirStructure->structure = json_encode($structure);
+            $dirStructure->save();
         } catch (\Exception $e) {
             return response()->json([
                 'info' => '删除失败，无法找到指定路径',
                 'status' => 0
             ]);
         }
-        // 写入记录
-        $dirStructure->structure = json_encode($structure);
-        $dirStructure->save();
         return response()->json([
             'info' => '删除成功',
             'status' => 1,
@@ -418,11 +440,6 @@ class FileController extends Controller
         // 开始自动化操作
         while (!$queue->isEmpty()) {
             $obj = $queue->dequeue();
-            // 检查是否当前为当前路径
-//            if ($obj->data['path'] === $needle) {
-//                unset($obj);
-//                return true;
-//            }
             // 当前不是目标路径的情况，将其他子目录放入队列，等待遍历
             if (isset($obj->data['children'])) {
                 foreach ($obj->data['children'] as $key => $val) {
