@@ -11,7 +11,9 @@ use Closure;
  */
 class ViewTempleteVal
 {
+    // 项目名称和id，可用于视图输出
     public static $projectName = '';
+    public static $projectId = '';
 
     /**
      * Handle an incoming request.
@@ -25,6 +27,7 @@ class ViewTempleteVal
         if (isset($request->route()->parameters['project_id'])) {
             $project = Project::where('project_id', $request->route()->parameters['project_id'])->first();
             self::$projectName = $project->project_name;
+            self::$projectId = $project->project_id;
         }
         return $next($request);
     }

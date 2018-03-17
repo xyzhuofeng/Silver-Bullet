@@ -226,6 +226,7 @@
 </div>
 </body>
 <script src="{{ url(mix('js/app.js')) }}"></script>
+@include('public.vue_value')
 <script>
     let app = new Vue({
         el: '#app',
@@ -233,20 +234,9 @@
             return {
                 // 传给子组件数据
                 // 导航条数据
-                headerData: {
-                    username: "{{ session('user_name') }}",
-                    avatarUrl: "{{ session('user_avatar') }}",
-                    logoutUrl: "{{ url('passport/logout') }}"
-                },
+                headerData: headerData,
                 // 二级导航数据
-                secondNavData: {
-                    defaultActive: "任务",
-                    summary: "{{ url('project', $project_id) }}", // 看板
-                    task: "{{ route('task/index', $project_id) }}", // 任务
-                    requirement: "{{url('/')}}", // 需求
-                    file: "{{ route('file/index', $project_id) }}", // 文件
-                    access: "{{ url('/') }}" // 审批
-                },
+                secondNavData: secondNavData,
                 // 创建任务
                 createTask: {
                     btn: "创建",
@@ -360,6 +350,7 @@
         },
         // vue生命周期
         mounted: function () {
+            this.secondNavData.defaultActive = "任务";
             this.loadMyTask();
         }
     })

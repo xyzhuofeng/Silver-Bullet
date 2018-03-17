@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>文件 - {{ \App\Http\Middleware\ViewTempleteVal::$projectName }} - 团队协作平台</title>
+    <title>设置 - {{ \App\Http\Middleware\ViewTempleteVal::$projectName }} - 团队协作平台</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
     <style>
@@ -70,7 +70,7 @@
         <second-nav :second-nav-data="secondNavData"></second-nav>
         <main>
             <section>
-                <file-explorer :file-explorer-data="fileExplorerData"></file-explorer>
+                <setting-item :setting-data="settingData"></setting-item>
             </section>
         </main>
         <footer-component></footer-component>
@@ -88,20 +88,10 @@
                 headerData: headerData,
                 // 二级导航数据
                 secondNavData: secondNavData,
-                // 文件资源管理器数据
-                fileExplorerData: {
-                    uploadUrl: "{{ route('file/upload', $project_id) }}", // 上传文件
-                    deleteFileUrl: "{{ route('file/delete', $project_id) }}", // 删除文件
-                    viewFileUrl: "{{ route('file/view', $project_id) }}", // 查看文件
-                    previewDirUrl: "{{ route('file/previewDir', $project_id) }}", // 目录预览
-                    treeUrl: "{{ route('file/tree', $project_id) }}", // 目录树
-                    saveDirUrl: "{{ route('file/saveDir', $project_id) }}", // 保存新目录
-                    deleteDirUrl: "{{ route('file/deleteDir', $project_id) }}", // 删除目录
-                }
             }
         },
         mounted() {
-            this.secondNavData.defaultActive = "文件";
+            this.secondNavData.defaultActive = "设置";
         }
     })
 </script>

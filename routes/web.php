@@ -55,12 +55,14 @@ Route::middleware([
 ])->group(function () {
     // 项目首页纯页面
     Route::get('project', 'ProjectController@index');
-// 项目列表AJAX纯数据
+    // 项目列表AJAX纯数据
     Route::get('project/list', 'ProjectController@projList');
-// 创建和保存项目信息
+    // 创建和保存项目信息
     Route::post('project', 'ProjectController@save');
-// 打开指定项目详情
+    // 打开指定项目详情
     Route::get('project/{project_id}', 'ProjectController@read');
+    // 打开指定项目的设置页面
+    Route::get('project/{project_id}/setting', 'ProjectController@setting')->name('project/setting');
 });
 
 /**

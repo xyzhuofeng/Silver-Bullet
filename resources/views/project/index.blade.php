@@ -140,7 +140,7 @@
                     <template v-for="item in projList">
                         <div class="project-box" :title="item.project_name" @click="openProjPage(item.project_url)">
                             <img :src="item.project_thumb" :alt="item.project_name ">
-                            <span>@{{ item.project_name }}</span>
+                            <span>@{{ item.creator }}/@{{ item.project_name }}</span>
                         </div>
                     </template>
                 </div>

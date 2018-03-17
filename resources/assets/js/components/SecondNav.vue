@@ -13,8 +13,8 @@
         <el-menu-item index="文件">
             <a :href="secondNavData.file" class="el-button el-button--text">文件</a>
         </el-menu-item>
-        <el-menu-item index="审批">
-            <a :href="secondNavData.access" class="el-button el-button--text">审批</a>
+        <el-menu-item index="设置">
+            <a :href="secondNavData.setting" class="el-button el-button--text">设置</a>
         </el-menu-item>
     </el-menu>
 </template>

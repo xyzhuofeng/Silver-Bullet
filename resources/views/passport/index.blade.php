@@ -52,7 +52,8 @@
             <el-input type="password" v-model="form.password" placeholder="您的密码"></el-input>
             <el-row>
                 <el-col :span="5" :offset="19">
-                    <el-button type="text">忘记密码？</el-button>
+                    <br>
+                    {{--<el-button type="text">忘记密码？</el-button>--}}
                 </el-col>
             </el-row>
             <el-form-item>

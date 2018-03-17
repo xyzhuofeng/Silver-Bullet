@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class ProjectController
 {
     /**
-     * 项目首页
+     * 项目首页（看板）
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
@@ -24,7 +24,7 @@ class ProjectController
     }
 
     /**
-     * 获取用户参与的项目列表数据
+     * 获取当前用户参与的项目列表（项目中心）
      *
      * 为AJAX获取数据设计的接口
      * @return \Illuminate\Http\JsonResponse
@@ -114,9 +114,25 @@ class ProjectController
     public function read(Request $request, $project_id)
     {
         $project_id = intval($project_id);
+        // TODO 未完成
 //        $project = Project::where('project_id',$project_id)->first();
 //        var_dump($project);
         return view('project.read', [
+            'project_id' => $project_id
+        ]);
+    }
+
+    /**
+     * 打开项目设置页面
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function setting(Request $request, $project_id)
+    {
+//        $project = Project::where('project_id',$project_id)->first();
+//        var_dump($project);
+        return view('project.setting', [
             'project_id' => $project_id
         ]);
     }
