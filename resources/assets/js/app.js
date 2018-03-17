@@ -32,11 +32,15 @@ let SecondNav = require('./components/SecondNav.vue');
 SecondNav.props = ['secondNavData']; // 声明props
 Vue.component('second-nav', SecondNav);
 
-
 // 文件浏览器组件
 let FileExplorer = require('./components/FileExplorer.vue');
 FileExplorer.props = ['fileExplorerData']; // 声明props
 Vue.component('file-explorer', FileExplorer);
+
+// 添加项目设置组件
+let SettingItem = require('./components/SettingItem.vue');
+SettingItem.props = ['settingItemData']; // 声明props
+Vue.component('setting-item', SettingItem);
 
 // 个人中心组件
 let profile = require('./components/ProfileItem.vue');

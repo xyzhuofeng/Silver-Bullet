@@ -11,12 +11,12 @@
                 <el-menu-item index="1">
                     <a class="el-button el-button--text" :href="headerData.projectUrl">项目中心</a>
                 </el-menu-item>
-                <el-submenu index="2">
-                    <template slot="title">我的工作台（待完成）</template>
-                    <el-menu-item index="2-1">选项1</el-menu-item>
-                    <el-menu-item index="2-2">选项2</el-menu-item>
-                    <el-menu-item index="2-3">选项3</el-menu-item>
-                </el-submenu>
+                <!--<el-submenu index="2">-->
+                    <!--<template slot="title">我的工作台（待完成）</template>-->
+                    <!--<el-menu-item index="2-1">选项1</el-menu-item>-->
+                    <!--<el-menu-item index="2-2">选项2</el-menu-item>-->
+                    <!--<el-menu-item index="2-3">选项3</el-menu-item>-->
+                <!--</el-submenu>-->
             </el-col>
             <el-col :span="6">
                 <div class="header-nav-title">
@@ -28,7 +28,7 @@
                     <el-submenu index="3">
                         <template slot="title">您好，{{headerData.username}}</template>
                         <el-menu-item index="个人中心">个人中心</el-menu-item>
-                        <el-menu-item index="louout"><a href=""></a>退出</el-menu-item>
+                        <el-menu-item index="退出"><a href=""></a>退出</el-menu-item>
                     </el-submenu>
                     <el-menu-item index="个人中心" class="avatar">
                         <img :src="headerData.avatarUrl" alt="用户头像">
@@ -49,7 +49,7 @@
             // 导航条选择相应方法
             handleSelect: function (key, keyPath) {
                 switch (key) {
-                    case 'louout':
+                    case '退出':
                         window.location.href = this.headerData.logoutUrl;
                         break;
                     case '个人中心':
