@@ -22,7 +22,7 @@ Vue.use(ElementUI);
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
-// 添加导航条组件
+// 导航条组件
 let HeaderNav = require('./components/HeaderNav.vue');
 HeaderNav.props = ['headerData']; // 声明props
 Vue.component('header-nav', HeaderNav);
@@ -33,12 +33,12 @@ SecondNav.props = ['secondNavData']; // 声明props
 Vue.component('second-nav', SecondNav);
 
 
-// 添加文件浏览器组件
+// 文件浏览器组件
 let FileExplorer = require('./components/FileExplorer.vue');
 FileExplorer.props = ['fileExplorerData']; // 声明props
 Vue.component('file-explorer', FileExplorer);
 
-// 添加个人中心组建
+// 个人中心组件
 let profile = require('./components/ProfileItem.vue');
 profile.props = ['profileData']; // 声明props
 Vue.component('profile-item', profile);

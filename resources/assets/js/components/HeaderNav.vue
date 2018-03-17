@@ -30,7 +30,7 @@
                         <el-menu-item index="个人中心">个人中心</el-menu-item>
                         <el-menu-item index="louout"><a href=""></a>退出</el-menu-item>
                     </el-submenu>
-                    <el-menu-item index="4" class="avatar">
+                    <el-menu-item index="个人中心" class="avatar">
                         <img :src="headerData.avatarUrl" alt="用户头像">
                     </el-menu-item>
                 </div>
@@ -53,6 +53,9 @@
                         window.location.href = this.headerData.logoutUrl;
                         break;
                     case '个人中心':
+                        window.location.href = this.headerData.usercenterUrl;
+                        break;
+                    case '个人中心2':
                         window.location.href = this.headerData.usercenterUrl;
                         break;
                 }
