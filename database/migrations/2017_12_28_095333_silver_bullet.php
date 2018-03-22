@@ -36,13 +36,14 @@ class SilverBullet extends Migration
             $table->text('project_comment')->nullable()->comment('项目备注');
             $table->unsignedBigInteger('creator')->comment('项目创建者');
             $table->text('project_thumb')->nullable()->comment('项目图标图片');
+            $table->string('githuburl', 255)->nullable()->comment('github开放地址');
             $table->timestamps();
         });
         Schema::create('blade_project_user', function (Blueprint $table) {
             $table->unsignedBigInteger('project_id')->comment('项目id');
             $table->unsignedBigInteger('user_id')->comment('用户id');
             $table->primary(['project_id', 'user_id']);
-            $table->string('role',20)->comment('用户角色，creator/manager/normal');
+            $table->string('role', 20)->comment('用户角色，creator/manager/normal');
             $table->timestamps();
         });
         Schema::create('blade_task', function (Blueprint $table) {

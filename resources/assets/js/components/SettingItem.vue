@@ -94,6 +94,26 @@
                         </el-form-item>
                     </el-form>
                 </template>
+                <template v-if="defaultActive === 'Git绑定'">
+                    <el-form label-position="left" label-width="120px" :model="form">
+                        <p>添加GitHub仓库信息</p>
+                        <el-form-item label="GitHub 用户名">
+                            <el-input v-model="github.owner"></el-input>
+                        </el-form-item>
+                        <el-form-item label="GitHub 仓库名">
+                            <el-input v-model="github.repo"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            预览：
+                            <el-button type="text">https://api.github.com/repos/{{github.owner}}/{{github.repo}}/events</el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="removeProj">绑定</el-button>
+                        </el-form-item>
+                    </el-form>
+                </template>
+
+
             </el-col>
         </el-row>
         <el-dialog title="上传封面图" :visible.sync="updateThumbData.isVisible" width="30%">
@@ -117,6 +137,11 @@
         name: "setting-item",
         data() {
             return {
+                defaultActive: "Git绑定", // 默认菜单激活项
+                github: {
+                    owner: "clyoko",
+                    repo: "Silver-Bullet",
+                },
                 invite: {
                     isShow: false, // 邀请新成员弹窗
                     url: "",
@@ -131,7 +156,6 @@
                     list: [], // 成员列表
                     loading: false, // 加载动画
                 },
-                defaultActive: "高级设置", // 默认菜单激活项
                 form: {},
                 updateThumbData: {
                     isVisible: false,
