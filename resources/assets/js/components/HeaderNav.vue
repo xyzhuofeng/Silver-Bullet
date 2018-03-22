@@ -1,22 +1,18 @@
 <!-- 顶部导航条 -->
 <template>
-    <el-menu default-active="1" mode="horizontal" @select="handleSelect">
+    <div class="container">
         <el-row>
             <el-col :span="9">
-                <el-menu-item index="0">
-                    <a :href="headerData.homeUrl" class="el-button el-button--text">
-                        <span class="silver">Silver Bullet</span>
-                    </a>
-                </el-menu-item>
-                <el-menu-item index="1">
-                    <a class="el-button el-button--text" :href="headerData.projectUrl">项目中心</a>
-                </el-menu-item>
-                <!--<el-submenu index="2">-->
-                    <!--<template slot="title">我的工作台（待完成）</template>-->
-                    <!--<el-menu-item index="2-1">选项1</el-menu-item>-->
-                    <!--<el-menu-item index="2-2">选项2</el-menu-item>-->
-                    <!--<el-menu-item index="2-3">选项3</el-menu-item>-->
-                <!--</el-submenu>-->
+                <el-menu default-active="" mode="horizontal" @select="handleSelect">
+                    <el-menu-item index="0">
+                        <a :href="headerData.homeUrl" class="el-button el-button--text">
+                            <span class="silver">Silver Bullet</span>
+                        </a>
+                    </el-menu-item>
+                    <el-menu-item index="项目中心">
+                        <a class="el-button el-button--text" :href="headerData.projectUrl">项目中心</a>
+                    </el-menu-item>
+                </el-menu>
             </el-col>
             <el-col :span="6">
                 <div class="header-nav-title">
@@ -25,18 +21,20 @@
             </el-col>
             <el-col :span="9">
                 <div class="header-right-corner">
-                    <el-submenu index="3">
-                        <template slot="title">您好，{{headerData.username}}</template>
-                        <el-menu-item index="个人中心">个人中心</el-menu-item>
-                        <el-menu-item index="退出"><a href=""></a>退出</el-menu-item>
-                    </el-submenu>
-                    <el-menu-item index="个人中心" class="avatar">
-                        <img :src="headerData.avatarUrl" alt="用户头像">
-                    </el-menu-item>
+                    <el-menu :default-active="1" mode="horizontal" @select="handleSelect">
+                        <el-submenu index="3">
+                            <template slot="title">您好，{{headerData.username}}</template>
+                            <el-menu-item index="个人中心">个人中心</el-menu-item>
+                            <el-menu-item index="退出"><a href=""></a>退出</el-menu-item>
+                        </el-submenu>
+                        <el-menu-item index="个人中心" class="avatar">
+                            <img :src="headerData.avatarUrl" alt="用户头像">
+                        </el-menu-item>
+                    </el-menu>
                 </div>
             </el-col>
         </el-row>
-    </el-menu>
+    </div>
 </template>
 
 <script>
@@ -69,11 +67,16 @@
         outline: none;
     }
 
+    .container{
+        background: #fff;
+    }
+
     .header-nav-title {
         display: flex;
         justify-content: center;
         align-items: center;
         height: 60px;
+        background-color: #fff;
     }
 
     .header-nav-title span {
@@ -86,6 +89,7 @@
         justify-content: flex-end;
         height: 60px;
         padding-right: 20px;
+        background-color: #fff;
     }
 
     .avatar {

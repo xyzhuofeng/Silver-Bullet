@@ -6,6 +6,7 @@ use App\Http\model\Account;
 use App\Http\model\Project;
 use App\Http\model\ProjectUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * 项目控制器
@@ -37,7 +38,7 @@ class MemberController
             ->where('project_id', $project_id)
             ->orderBy('role', 'asc')
             ->get();
-        foreach ($project_user_list as &$val){
+        foreach ($project_user_list as &$val) {
             $val['user_avatar'] = asset($val['user_avatar']);
         }
         return response()->json([
@@ -45,6 +46,37 @@ class MemberController
             'status' => 1,
             'data' => [
                 'project_user_list' => $project_user_list
+            ]
+        ]);
+    }
+
+    /**
+     * 邀请链接
+     */
+    public function invite(Request $request, $code)
+    {
+
+    }
+
+    /**
+     * 创建邀请码
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function genInviteCode(Request $request, $project_id)
+    {
+        if (!Cache::has('invite_code_' . $project_id)) {
+            $code = md5($project_id . time());
+            Cache::put('invite_code_' . $project_id, $code, now()->addSeconds(300));  // 有效期五分钟
+        }
+        $code = Cache::get('invite_code_' . $project_id);
+        return response()->json([
+            'info' => '获取成功',
+            'status' => 1,
+            'data' => [
+                'url' => route('member/invite', [$project_id, $code]),
+                'image' => '',
             ]
         ]);
     }

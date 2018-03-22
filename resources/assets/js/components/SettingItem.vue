@@ -44,7 +44,7 @@
                 <template v-if="defaultActive === '成员管理'">
                     <el-row>
                         <el-col :span="24">
-                            <el-button size="mini" type="primary" @click="invite.isShow = true" plain>邀请加入新成员
+                            <el-button size="mini" type="primary" @click="getInviteCode" plain>邀请加入新成员
                             </el-button>
                         </el-col>
                     </el-row>
@@ -70,7 +70,8 @@
                     <el-dialog title="邀请新成员加入" :visible.sync="invite.isShow" width="30%">
                         <div style="margin-top: 15px;text-align: center">
                             <p>新成员访问链接或扫码即可加入项目</p>
-                            <img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=1062989499,1682648318&fm=58" class="qr-code">
+                            <img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=1062989499,1682648318&fm=58"
+                                 class="qr-code">
                             <el-input v-model="invite.url" readonly>
                                 <el-button slot="append"
                                            v-clipboard:copy="invite.url"
@@ -111,7 +112,8 @@
             return {
                 invite: {
                     isShow: false, // 邀请新成员弹窗
-                    url: "http://localhost/smartwork/public"
+                    url: "",
+                    image: "",
                 },
                 member: {
                     list: [], // 成员列表
@@ -159,6 +161,22 @@
                       console.log(error);
                   });
             },
+            // 获取邀请链接
+            getInviteCode() {
+                this.invite.isShow = true;
+                let that = this;
+                axios.get(this.settingItemData.getInviteCodeUrl)
+                  .then(function (response) {
+                      if (response.data.status === 1) {
+                          that.invite.url = response.data.data.url;
+                      } else {
+                          that.$message.error(response.data.info);
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
+            },
             // 获取成员列表
             getMemberList() {
                 let that = this;
@@ -189,7 +207,6 @@
         },
         mounted() {
             this.getMemberList();
-
         }
     }
 </script>
@@ -241,7 +258,7 @@
         border-radius: 50px;
     }
 
-    .qr-code{
+    .qr-code {
         width: 150px;
         height: 150px;
     }

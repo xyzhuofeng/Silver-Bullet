@@ -34,7 +34,7 @@ Route::get('passport/logout', 'PassportController@logout');
 
 Route::middleware([
     \App\Http\Middleware\CheckLoginStatus::class,
-    \App\Http\Middleware\ViewTempleteVal::class
+    \App\Http\Middleware\ViewTempleteVal::class,
 ])->group(function () {
     // 修改密码
     Route::post('passport/updatePassword', 'PassportController@updatePassword');
@@ -51,7 +51,7 @@ Route::middleware([
  */
 Route::middleware([
     \App\Http\Middleware\CheckLoginStatus::class,
-    \App\Http\Middleware\ViewTempleteVal::class
+    \App\Http\Middleware\ViewTempleteVal::class,
 ])->group(function () {
     // 项目首页纯页面
     Route::get('project', 'ProjectController@index');
@@ -78,6 +78,10 @@ Route::middleware([
 ])->group(function () {
     // 打开指定项目的成员列表，AJAX数据
     Route::get('project/{project_id}/member', 'MemberController@index')->name('member/index');
+    // 创建邀请码
+    Route::get('project/{project_id}/member/genInviteCode', 'MemberController@genInviteCode')->name('member/genInviteCode');
+    // 邀请链接
+    Route::get('invite/{project_id}/{code}', 'MemberController@invite')->name('member/invite');
 });
 
 /**
