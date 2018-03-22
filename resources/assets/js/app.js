@@ -11,8 +11,10 @@ window.Vue = require('vue');
 // 引入Elemenet-UI
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import VueClipboard from 'vue-clipboard2'
 
 Vue.use(ElementUI);
+Vue.use(VueClipboard);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

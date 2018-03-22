@@ -44,7 +44,8 @@
                 <template v-if="defaultActive === '成员管理'">
                     <el-row>
                         <el-col :span="24">
-                            <el-button size="mini" type="primary">邀请加入新成员</el-button>
+                            <el-button size="mini" type="primary" @click="invite.isShow = true" plain>邀请加入新成员
+                            </el-button>
                         </el-col>
                     </el-row>
                     <el-table :data="member.list" style="width: 100%" v-loading="member.loading">
@@ -64,26 +65,34 @@
                                     移出项目
                                 </el-button>
                             </template>
-                            <!--<template slot-scope="scope" v-if="scope.row.role !== 'creator'">-->
-                                <!--{{scope.row.role}}-->
-
-                                <el-button type="danger" size="mini"
-                                           @click="removeMember(scope.$index, scope.row.user_id)">
-                                    移出项目
-                                </el-button>
-                            <!--</template>-->
                         </el-table-column>
-
                     </el-table>
+                    <el-dialog title="邀请新成员加入" :visible.sync="invite.isShow" width="30%">
+                        <div style="margin-top: 15px;text-align: center">
+                            <p>新成员访问链接或扫码即可加入项目</p>
+                            <img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=1062989499,1682648318&fm=58" class="qr-code">
+                            <el-input v-model="invite.url" readonly>
+                                <el-button slot="append"
+                                           v-clipboard:copy="invite.url"
+                                           v-clipboard:success="onCopy"
+                                           v-clipboard:error="onCopyError">
+                                    复制
+                                </el-button>
+                            </el-input>
+                        </div>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="invite.isShow = false">取 消</el-button>
+                            <el-button type="primary" @click="invite.isShow = false">确 定</el-button>
+                        </span>
+                    </el-dialog>
+
                 </template>
             </el-col>
         </el-row>
         <el-dialog title="上传封面图" :visible.sync="updateThumbData.isVisible" width="30%">
             <span>请选择封面图</span>
-            <el-upload class="thumb-uploader"
-                       :action="settingItemData.updateThumbUrl"
-                       :show-file-list="false" name="thumb"
-                       :on-success="handleThumbSuccess">
+            <el-upload class="thumb-uploader" :action="settingItemData.updateThumbUrl"
+                       :show-file-list="false" name="thumb" :on-success="handleThumbSuccess">
                 <img v-if="updateThumbData.imageUrl" :src="updateThumbData.imageUrl" class="thumb">
                 <i v-else class="el-icon-plus thumb-uploader-icon"></i>
             </el-upload>
@@ -100,6 +109,10 @@
         name: "setting-item",
         data() {
             return {
+                invite: {
+                    isShow: false, // 邀请新成员弹窗
+                    url: "http://localhost/smartwork/public"
+                },
                 member: {
                     list: [], // 成员列表
                     loading: false, // 加载动画
@@ -166,6 +179,12 @@
             // 将成员移出项目
             removeMember(index, user_id) {
 
+            },
+            onCopy() {
+                this.$message({message: '复制成功', type: 'success'});
+            },
+            onCopyError() {
+                this.$message.error("复制失败");
             }
         },
         mounted() {
@@ -220,5 +239,10 @@
         height: 32px;
         border: 0;
         border-radius: 50px;
+    }
+
+    .qr-code{
+        width: 150px;
+        height: 150px;
     }
 </style>
