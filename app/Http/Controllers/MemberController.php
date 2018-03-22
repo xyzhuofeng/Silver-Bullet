@@ -52,14 +52,35 @@ class MemberController
 
     /**
      * 邀请链接
+     * @param Request $request
+     * @param $code
+     * @return \Illuminate\Http\JsonResponse|string
      */
     public function invite(Request $request, $code)
     {
-
+        if (empty($code)) {
+            return response()->json([
+                'status' => 0,
+                'info' => '邀请码不能为空',
+            ]);
+        }
+        // 解析邀请码
+        $arr = explode('_', $code);
+        $code_origin = Cache::get('invite_code_' . $arr[0]);
+        if ($code == $code_origin) {
+            // 加群处理
+            return "成功";
+        }
+        return response()->json([
+            'status' => 0,
+            'info' => '邀请码错误',
+        ]);
     }
 
     /**
      * 创建邀请码
+     *
+     * 邀请码格式： {project_id}_[a-f0-9]{32}
      * @param Request $request
      * @param $project_id
      * @return \Illuminate\Http\JsonResponse
@@ -67,15 +88,15 @@ class MemberController
     public function genInviteCode(Request $request, $project_id)
     {
         if (!Cache::has('invite_code_' . $project_id)) {
-            $code = md5($project_id . time());
-            Cache::put('invite_code_' . $project_id, $code, now()->addSeconds(300));  // 有效期五分钟
+            $code = $project_id . '_' . md5($project_id . time());
+            Cache::put('invite_code_' . $project_id, $code, now()->addSeconds(900));  // 有效期十五分钟
         }
         $code = Cache::get('invite_code_' . $project_id);
         return response()->json([
             'info' => '获取成功',
             'status' => 1,
             'data' => [
-                'url' => route('member/invite', [$project_id, $code]),
+                'url' => route('member/invite', [$code]),
                 'image' => '',
             ]
         ]);

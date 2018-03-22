@@ -12,6 +12,8 @@ window.Vue = require('vue');
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueClipboard from 'vue-clipboard2'
+import VueQArt from 'vue-qart'
+window.VueQArt = VueQArt;
 
 Vue.use(ElementUI);
 Vue.use(VueClipboard);

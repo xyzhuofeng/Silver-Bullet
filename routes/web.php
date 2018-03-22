@@ -81,7 +81,7 @@ Route::middleware([
     // 创建邀请码
     Route::get('project/{project_id}/member/genInviteCode', 'MemberController@genInviteCode')->name('member/genInviteCode');
     // 邀请链接
-    Route::get('invite/{project_id}/{code}', 'MemberController@invite')->name('member/invite');
+    Route::get('invite/{code}', 'MemberController@invite')->name('member/invite');
 });
 
 /**

@@ -70,8 +70,7 @@
                     <el-dialog title="邀请新成员加入" :visible.sync="invite.isShow" width="30%">
                         <div style="margin-top: 15px;text-align: center">
                             <p>新成员访问链接或扫码即可加入项目</p>
-                            <img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=1062989499,1682648318&fm=58"
-                                 class="qr-code">
+                            <vue-q-art :config="invite.qartConfig"></vue-q-art>
                             <el-input v-model="invite.url" readonly>
                                 <el-button slot="append"
                                            v-clipboard:copy="invite.url"
@@ -107,6 +106,7 @@
 
 <script>
     export default {
+        components: {VueQArt},
         name: "setting-item",
         data() {
             return {
@@ -114,6 +114,11 @@
                     isShow: false, // 邀请新成员弹窗
                     url: "",
                     image: "",
+                    qartConfig: {
+                        value: 'https://www.baidu.com',
+                        imagePath: this.settingItemData.project_thumb,
+                        filter: 'color'
+                    }
                 },
                 member: {
                     list: [], // 成员列表
@@ -169,6 +174,7 @@
                   .then(function (response) {
                       if (response.data.status === 1) {
                           that.invite.url = response.data.data.url;
+                          that.invite.qartConfig.value = response.data.data.url;
                       } else {
                           that.$message.error(response.data.info);
                       }

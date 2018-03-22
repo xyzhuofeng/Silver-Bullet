@@ -3,7 +3,7 @@
     <div class="container">
         <el-row>
             <el-col :span="9">
-                <el-menu default-active="" mode="horizontal" @select="handleSelect">
+                <el-menu default-active="abc" mode="horizontal" @select="handleSelect">
                     <el-menu-item index="0">
                         <a :href="headerData.homeUrl" class="el-button el-button--text">
                             <span class="silver">Silver Bullet</span>
@@ -21,7 +21,7 @@
             </el-col>
             <el-col :span="9">
                 <div class="header-right-corner">
-                    <el-menu :default-active="1" mode="horizontal" @select="handleSelect">
+                    <el-menu default-active="abc" mode="horizontal" @select="handleSelect">
                         <el-submenu index="3">
                             <template slot="title">您好，{{headerData.username}}</template>
                             <el-menu-item index="个人中心">个人中心</el-menu-item>
