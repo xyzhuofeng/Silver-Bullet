@@ -94,6 +94,7 @@
                     project_name: "{{ \App\Http\Middleware\ViewTempleteVal::$projectName }}",
                     project_comment: "{{ $project->project_comment }}",
                     project_thumb: "{{ asset('app/' . $project->project_thumb) }}",
+                    getMemberListUrl: "{{ route('member/index', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
                     updateNameAndCommentUrl: "{{ route('project/updateNameAndCommentUrl', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
                     updateThumbUrl: "{{ route('project/updateThumb', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
                 },

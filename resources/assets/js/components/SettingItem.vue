@@ -41,6 +41,41 @@
                         </el-form-item>
                     </el-form>
                 </template>
+                <template v-if="defaultActive === '成员管理'">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-button size="mini" type="primary">邀请加入新成员</el-button>
+                        </el-col>
+                    </el-row>
+                    <el-table :data="member.list" style="width: 100%" v-loading="member.loading">
+                        <el-table-column prop="user_avatar" label="头像" width="64" align="center">
+                            <template slot-scope="scope">
+                                <img :src="scope.row.user_avatar" class="avatar-radius">
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="user_name" label="姓名" align="center"></el-table-column>
+                        <el-table-column prop="job" label="职位" align="center"></el-table-column>
+                        <el-table-column prop="role" label="角色" align="center"></el-table-column>
+                        <el-table-column label="操作" align="center">
+                            <template slot-scope="scope">
+                                <el-button type="text" v-if="scope.row.role === 'creator'">项目拥有者</el-button>
+                                <el-button type="danger" size="mini" v-if="scope.row.role !== 'creator'"
+                                           @click="removeMember(scope.$index, scope.row.user_id)">
+                                    移出项目
+                                </el-button>
+                            </template>
+                            <!--<template slot-scope="scope" v-if="scope.row.role !== 'creator'">-->
+                                <!--{{scope.row.role}}-->
+
+                                <el-button type="danger" size="mini"
+                                           @click="removeMember(scope.$index, scope.row.user_id)">
+                                    移出项目
+                                </el-button>
+                            <!--</template>-->
+                        </el-table-column>
+
+                    </el-table>
+                </template>
             </el-col>
         </el-row>
         <el-dialog title="上传封面图" :visible.sync="updateThumbData.isVisible" width="30%">
@@ -65,7 +100,11 @@
         name: "setting-item",
         data() {
             return {
-                defaultActive: "项目管理",
+                member: {
+                    list: [], // 成员列表
+                    loading: false, // 加载动画
+                },
+                defaultActive: "成员管理", // 默认菜单激活项
                 form: {},
                 updateThumbData: {
                     isVisible: false,
@@ -77,6 +116,12 @@
             // 导航条选择相应方法
             handleSelect: function (key, keyPath) {
                 this.defaultActive = key;
+                switch (key) {
+                    case "成员管理":
+                        // 更新成员列表
+                        this.getMemberList();
+                        break;
+                }
             },
             // 成功上传图片
             handleThumbSuccess(res, file) {
@@ -84,7 +129,7 @@
                 this.settingItemData.project_thumb = URL.createObjectURL(file.raw);
             },
             // 更新项目名称
-            updateNameAndComment: function () {
+            updateNameAndComment() {
                 let that = this;
                 axios.post(this.settingItemData.updateNameAndCommentUrl, {
                     project_name: this.settingItemData.project_name,
@@ -101,7 +146,32 @@
                       console.log(error);
                   });
             },
+            // 获取成员列表
+            getMemberList() {
+                let that = this;
+                that.member.loading = true;
+                axios.get(this.settingItemData.getMemberListUrl)
+                  .then(function (response) {
+                      that.member.loading = false;
+                      if (response.data.status === 1) {
+                          that.member.list = response.data.data.project_user_list
+                      } else {
+                          that.$message.error(response.data.info);
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
+            },
+            // 将成员移出项目
+            removeMember(index, user_id) {
+
+            }
         },
+        mounted() {
+            this.getMemberList();
+
+        }
     }
 </script>
 
@@ -143,5 +213,12 @@
         height: 178px;
         line-height: 178px;
         text-align: center;
+    }
+
+    .avatar-radius {
+        width: 32px;
+        height: 32px;
+        border: 0;
+        border-radius: 50px;
     }
 </style>

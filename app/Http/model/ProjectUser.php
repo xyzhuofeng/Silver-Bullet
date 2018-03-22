@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ProjectUser extends Model
 {
+    const table = 'blade_project_user';
+    const tableWithDot = 'blade_project_user.';
+
     /**
      * 与模型关联的数据表
      *

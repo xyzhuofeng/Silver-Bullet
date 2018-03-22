@@ -226,6 +226,6 @@ class ProjectController
      */
     public function delete(Request $request)
     {
-
+        // TODO 未完成
     }
 }

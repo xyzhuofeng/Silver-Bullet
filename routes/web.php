@@ -70,6 +70,17 @@ Route::middleware([
 });
 
 /**
+ * MemberController
+ */
+Route::middleware([
+    \App\Http\Middleware\CheckLoginStatus::class,
+    \App\Http\Middleware\ViewTempleteVal::class
+])->group(function () {
+    // 打开指定项目的成员列表，AJAX数据
+    Route::get('project/{project_id}/member', 'MemberController@index')->name('member/index');
+});
+
+/**
  * TaskController
  */
 Route::middleware([
