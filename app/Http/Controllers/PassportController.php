@@ -14,10 +14,14 @@ class PassportController extends Controller
 {
     /**
      * 登录注册页面
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('passport.index');
+        return view('passport.index', [
+            'redirect_url' => $request->get('redirect_url')
+        ]);
     }
 
     /**

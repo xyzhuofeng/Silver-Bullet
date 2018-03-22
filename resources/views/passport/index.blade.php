@@ -125,7 +125,11 @@
                       that.isLoading = false;
                       that.loginBtn = "登录";
                       if (response.data.status === 1) {
-                          window.location.href = response.data.redirect_url;
+                          if ("{{ $redirect_url }}".length > 0) {
+                              window.location.href = "{{ $redirect_url }}";
+                          } else {
+                              window.location.href = response.data.redirect_url;
+                          }
                       } else {
                           that.$message.error(response.data.info);
                       }

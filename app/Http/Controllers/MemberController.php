@@ -59,21 +59,47 @@ class MemberController
     public function invite(Request $request, $code)
     {
         if (empty($code)) {
-            return response()->json([
-                'status' => 0,
-                'info' => '邀请码不能为空',
+            return view('member.invite', [
+                'msg' => '加入失败：邀请码不能为空',
             ]);
         }
         // 解析邀请码
-        $arr = explode('_', $code);
-        $code_origin = Cache::get('invite_code_' . $arr[0]);
+        $project_id = explode('_', $code)[0];
+        $code_origin = Cache::get('invite_code_' . $project_id);
+        $project = Project::where('project_id', $project_id)->first();
+        if (!$project) {
+            return view('member.invite', [
+                'msg' => '加入失败：无法解析邀请码',
+            ]);
+        }
         if ($code == $code_origin) {
             // 加群处理
-            return "成功";
+            $project_user = ProjectUser::where('user_id', session()->get('user_id'))
+                ->where('project_id', $project_id)
+                ->first();
+            if ($project_user) {
+                // 用户已加入项目，直接打开项目首页
+                return view('member.invite', [
+                    'msg' => '加入成功',
+                ]);
+            }
+            $project_user = new ProjectUser();
+            $project_user->setAttribute('project_id', $project_id);
+            $project_user->setAttribute('user_id', session()->get('user_id'));
+
+            $project_user->setAttribute('role', 'user');
+            if ($project_user->save()) {
+                // 用户成功加入项目，直接打开项目首页
+                return view('member.invite', [
+                    'msg' => '加入成功',
+                ]);
+            }
+            return view('member.invite', [
+                'msg' => '加入失败：无法写入记录',
+            ]);
         }
-        return response()->json([
-            'status' => 0,
-            'info' => '邀请码错误',
+        return view('member.invite', [
+            'msg' => '加入失败：邀请码异常',
         ]);
     }
 
