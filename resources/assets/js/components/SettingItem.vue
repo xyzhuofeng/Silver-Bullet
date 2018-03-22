@@ -105,15 +105,15 @@
                         </el-form-item>
                         <el-form-item>
                             预览：
-                            <el-button type="text">https://api.github.com/repos/{{github.owner}}/{{github.repo}}/events</el-button>
+                            <el-button type="text">
+                                https://api.github.com/repos/{{github.owner}}/{{github.repo}}/events
+                            </el-button>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="removeProj">绑定</el-button>
+                            <el-button type="primary" @click="bindGithub">绑定</el-button>
                         </el-form-item>
                     </el-form>
                 </template>
-
-
             </el-col>
         </el-row>
         <el-dialog title="上传封面图" :visible.sync="updateThumbData.isVisible" width="30%">
@@ -139,8 +139,8 @@
             return {
                 defaultActive: "Git绑定", // 默认菜单激活项
                 github: {
-                    owner: "clyoko",
-                    repo: "Silver-Bullet",
+                    owner: "",
+                    repo: "",
                 },
                 invite: {
                     isShow: false, // 邀请新成员弹窗
@@ -185,6 +185,23 @@
                 axios.post(this.settingItemData.updateNameAndCommentUrl, {
                     project_name: this.settingItemData.project_name,
                     project_comment: this.settingItemData.project_comment,
+                })
+                  .then(function (response) {
+                      if (response.data.status === 1) {
+                          that.$message({message: response.data.info, type: "success"});
+                      } else {
+                          that.$message.error(response.data.info);
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
+            },
+            // 绑定github
+            bindGithub() {
+                let that = this;
+                axios.post(this.settingItemData.githubUrl, {
+                    githuburl: "https://api.github.com/repos/" + that.github.owner + "/" + that.github.repo + "/events",
                 })
                   .then(function (response) {
                       if (response.data.status === 1) {

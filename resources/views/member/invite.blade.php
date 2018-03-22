@@ -67,7 +67,6 @@
 <div id="app" v-cloak>
     <div class="page">
         <main>
-
             <section style="text-align: center;font-size: 30px;padding-top: 200px">
                 <i class="el-icon-info"></i>{{ $msg }}
             </section>

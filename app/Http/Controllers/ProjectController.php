@@ -218,22 +218,45 @@ class ProjectController
         ]);
     }
 
+    public function github(Request $request, $project_id)
+    {
+        $project = Project::where('project_id', $project_id)->first();
+        if (empty($project)) {
+            return response()->json([
+                'info' => '没有找到项目',
+                'status' => 0,
+            ]);
+        }
+        $githuburl = $request->post('githuburl');
+        $project->setAttribute('githuburl', $githuburl);
+        if ($project->save()) {
+            return response()->json([
+                'info' => '绑定成功',
+                'status' => 1,
+            ]);
+        }
+        return response()->json([
+            'info' => '绑定失败',
+            'status' => 0,
+        ]);
+    }
+
     /**
      * 删除项目
      * @param Request $request
      * @param $project_id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(Request $request,$project_id)
+    public function delete(Request $request, $project_id)
     {
-        $project = Project::where('project_id',$project_id)->first();
-        if(!$project){
+        $project = Project::where('project_id', $project_id)->first();
+        if (!$project) {
             return response()->json([
                 'info' => '项目不存在',
                 'status' => 0,
             ]);
         }
-        if($project->delete()){
+        if ($project->delete()) {
             return response()->json([
                 'info' => '删除成功',
                 'status' => 1,
