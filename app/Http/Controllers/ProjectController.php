@@ -181,24 +181,41 @@ class ProjectController
     }
 
     /**
-     * 编辑项目信息页面
+     * 更新项目名称
      * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function edit(Request $request)
+    public function updateNameAndCommentUrl(Request $request, $project_id)
     {
-        $project_id = $request->get('project_id');
-
-    }
-
-    /**
-     * 更新项目信息
-     *
-     * PUT
-     * @param Request $request
-     */
-    public function update(Request $request)
-    {
-        $project_id = $request->input('project_id');
+        $project = Project::where('project_id', $project_id)->first();
+        if (empty($project)) {
+            return response()->json([
+                'info' => '没有找到项目',
+                'status' => 0,
+            ]);
+        }
+        $project_comment = $request->post('project_comment');
+        $project_name = $request->post('project_name');
+        if (empty($project_name) || mb_strlen($project_name) < 1) {
+            return response()->json([
+                'info' => '项目名不能为空',
+                'status' => 0,
+            ]);
+        }
+        // 更新项目信息
+        $project->setAttribute('project_name', $project_name);
+        $project->setAttribute('project_comment', $project_comment);
+        if ($project->save()) {
+            return response()->json([
+                'info' => '修改成功',
+                'status' => 1,
+            ]);
+        }
+        return response()->json([
+            'info' => '修改失败',
+            'status' => 0,
+        ]);
     }
 
     /**

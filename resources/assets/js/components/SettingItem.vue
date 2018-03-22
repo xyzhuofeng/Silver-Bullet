@@ -2,12 +2,12 @@
     <div class="container clearfix">
         <el-row :gutter="20">
             <el-col :span="6">
-                <el-menu default-active="项目设置" @select="handleSelect">
+                <el-menu :default-active="defaultActive" @select="handleSelect">
                     <el-menu-item index="项目设置">
                         <i class="el-icon-menu"></i>
                         <span slot="title">项目设置</span>
                     </el-menu-item>
-                    <el-menu-item index="成员管理" disabled>
+                    <el-menu-item index="成员管理">
                         <i class="el-icon-service"></i>
                         <span slot="title">成员管理</span>
                     </el-menu-item>
@@ -22,23 +22,25 @@
                 </el-menu>
             </el-col>
             <el-col :span="18">
-                <el-form label-position="top" label-width="80px" :model="form">
-                    <el-form-item label="项目名称">
-                        <el-input v-model="settingItemData.project_name" @blur="updateProjName"></el-input>
-                    </el-form-item>
-                    <el-form-item label="项目描述">
-                        <el-input type="textarea" v-model="settingItemData.project_comment"
-                                  @blur="updateProjComment"></el-input>
-                    </el-form-item>
-                    <el-form-item label="封面图">
-                        <img :src="settingItemData.project_thumb" alt="用户头像" class="thumb">
-                        <div>
-                            <el-button type="text" native-type="button" @click="updateThumbData.isVisible=true">
-                                上传图片
-                            </el-button>
-                        </div>
-                    </el-form-item>
-                </el-form>
+                <template v-if="defaultActive === '项目设置'">
+                    <el-form label-position="top" label-width="80px" :model="form">
+                        <el-form-item label="项目名称">
+                            <el-input v-model="settingItemData.project_name" @blur="updateNameAndComment"></el-input>
+                        </el-form-item>
+                        <el-form-item label="项目描述">
+                            <el-input type="textarea" v-model="settingItemData.project_comment"
+                                      @blur="updateNameAndComment"></el-input>
+                        </el-form-item>
+                        <el-form-item label="封面图">
+                            <img :src="settingItemData.project_thumb" alt="用户头像" class="thumb">
+                            <div>
+                                <el-button type="text" native-type="button" @click="updateThumbData.isVisible=true">
+                                    上传图片
+                                </el-button>
+                            </div>
+                        </el-form-item>
+                    </el-form>
+                </template>
             </el-col>
         </el-row>
         <el-dialog title="上传封面图" :visible.sync="updateThumbData.isVisible" width="30%">
@@ -63,6 +65,7 @@
         name: "setting-item",
         data() {
             return {
+                defaultActive: "项目管理",
                 form: {},
                 updateThumbData: {
                     isVisible: false,
@@ -73,14 +76,7 @@
         methods: {
             // 导航条选择相应方法
             handleSelect: function (key, keyPath) {
-                switch (key) {
-                    case 'louout':
-                        window.location.href = this.headerData.logoutUrl;
-                        break;
-                    case '个人中心':
-                        window.location.href = this.headerData.usercenterUrl;
-                        break;
-                }
+                this.defaultActive = key;
             },
             // 成功上传图片
             handleThumbSuccess(res, file) {
@@ -88,64 +84,23 @@
                 this.settingItemData.project_thumb = URL.createObjectURL(file.raw);
             },
             // 更新项目名称
-            updateProjName: function () {
+            updateNameAndComment: function () {
                 let that = this;
-                axios.post(that.profileData.updatePasswordUrl, {
-                    original_password: that.updatePasswordData.original_password,
-                    new_password: that.updatePasswordData.new_password,
-                    confirm_password: that.updatePasswordData.confirm_password,
+                axios.post(this.settingItemData.updateNameAndCommentUrl, {
+                    project_name: this.settingItemData.project_name,
+                    project_comment: this.settingItemData.project_comment,
                 })
                   .then(function (response) {
-                      if (response.data.status !== 1) {
-                          that.$message.error(response.data.info);
-                      } else {
+                      if (response.data.status === 1) {
                           that.$message({message: response.data.info, type: "success"});
-                          // 清理输入
-                          that.updatePasswordData.confirm_password = "";
-                          that.updatePasswordData.original_password = "";
-                          that.updatePasswordData.new_password = "";
-                          // 关闭弹窗
-                          that.updatePasswordData.isVisible = false;
+                      } else {
+                          that.$message.error(response.data.info);
                       }
                   })
                   .catch(function (error) {
                       console.log(error);
                   });
             },
-            // 更新职位
-            updateProjComment: function () {
-                let that = this;
-                axios.post(that.profileData.updateJobUrl, {
-                    job: that.form.job
-                })
-                  .then(function (response) {
-                      if (response.data.status !== 1) {
-                          that.$message.error(response.data.info);
-                      } else {
-                          that.$message({message: response.data.info, type: "success"});
-                      }
-                  })
-                  .catch(function (error) {
-                      console.log(error);
-                  });
-            },
-            // 更新姓名
-            updateName: function () {
-                let that = this;
-                axios.post(that.profileData.updateNameUrl, {
-                    user_name: that.form.user_name
-                })
-                  .then(function (response) {
-                      if (response.data.status !== 1) {
-                          that.$message.error(response.data.info);
-                      } else {
-                          that.$message({message: response.data.info, type: "success"});
-                      }
-                  })
-                  .catch(function (error) {
-                      console.log(error);
-                  });
-            }
         },
     }
 </script>

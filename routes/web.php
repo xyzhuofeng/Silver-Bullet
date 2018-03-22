@@ -65,6 +65,8 @@ Route::middleware([
     Route::get('project/{project_id}/setting', 'ProjectController@setting')->name('project/setting');
     // 更新封面图
     Route::post('project/{project_id}/updateThumb', 'ProjectController@updateThumb')->name('project/updateThumb');
+    // 更新项目名称和描述
+    Route::post('project/{project_id}/updateNameAndCommentUrl', 'ProjectController@updateNameAndCommentUrl')->name('project/updateNameAndCommentUrl');
 });
 
 /**
