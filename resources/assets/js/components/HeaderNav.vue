@@ -69,6 +69,10 @@
 
     .container{
         background: #fff;
+        border-bottom: solid 1px #e6e6e6;
+    }
+    .el-menu--horizontal{
+     border-bottom: unset;
     }
 
     .header-nav-title {

@@ -93,6 +93,7 @@
                     project_id: "{{ \App\Http\Middleware\ViewTempleteVal::$projectId }}",
                     project_name: "{{ \App\Http\Middleware\ViewTempleteVal::$projectName }}",
                     project_comment: "{{ $project->project_comment }}",
+                    project_githuburl: "{{ $project->githuburl }}",
                     project_thumb: "{{ asset('app/' . $project->project_thumb) }}",
                     projectIndexUrl: "{{ url('project') }}",
                     getMemberListUrl: "{{ route('member/index', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",

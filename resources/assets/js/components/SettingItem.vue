@@ -11,13 +11,13 @@
                         <i class="el-icon-service"></i>
                         <span slot="title">成员管理</span>
                     </el-menu-item>
-                    <el-menu-item index="高级设置">
-                        <i class="el-icon-setting"></i>
-                        <span slot="title">高级设置</span>
-                    </el-menu-item>
                     <el-menu-item index="Git绑定">
                         <i class="el-icon-share"></i>
                         <span slot="title">Git绑定</span>
+                    </el-menu-item>
+                    <el-menu-item index="高级设置">
+                        <i class="el-icon-setting"></i>
+                        <span slot="title">高级设置</span>
                     </el-menu-item>
                 </el-menu>
             </el-col>
@@ -104,13 +104,21 @@
                             <el-input v-model="github.repo"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            预览：
-                            <el-button type="text">
-                                https://api.github.com/repos/{{github.owner}}/{{github.repo}}/events
-                            </el-button>
+                            <p>
+                                当前：
+                                <el-button type="text">
+                                    {{settingItemData.project_githuburl}}
+                                </el-button>
+
+                            <p>预览：
+                                <el-button type="text">
+                                    https://api.github.com/repos/{{github.owner}}/{{github.repo}}/events
+                                </el-button>
+                            </p>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="bindGithub">绑定</el-button>
+                            <el-button type="primary" @click="bindGithub(true)">绑定</el-button>
+                            <el-button type="primary" @click="bindGithub(false)" plain>清除绑定</el-button>
                         </el-form-item>
                     </el-form>
                 </template>
@@ -198,14 +206,21 @@
                   });
             },
             // 绑定github
-            bindGithub() {
+            bindGithub(isBind) {
                 let that = this;
+                let url;
+                if (!isBind) {
+                    url = "";
+                } else {
+                    url = "https://api.github.com/repos/" + that.github.owner + "/" + that.github.repo + "/events";
+                }
                 axios.post(this.settingItemData.githubUrl, {
-                    githuburl: "https://api.github.com/repos/" + that.github.owner + "/" + that.github.repo + "/events",
+                    githuburl: url,
                 })
                   .then(function (response) {
                       if (response.data.status === 1) {
                           that.$message({message: response.data.info, type: "success"});
+                          window.location.reload();
                       } else {
                           that.$message.error(response.data.info);
                       }
