@@ -69,6 +69,8 @@ Route::middleware([
     Route::post('project/{project_id}/updateNameAndCommentUrl', 'ProjectController@updateNameAndCommentUrl')->name('project/updateNameAndCommentUrl');
     // 删除项目
     Route::get('project/{project_id}/delete', 'ProjectController@delete')->name('project/delete');
+    // 获取git数据
+    Route::get('project/{project_id}/git', 'ProjectController@git')->name('project/git');
     // 绑定github
     Route::post('project/{project_id}/github', 'ProjectController@github')->name('project/github');
 

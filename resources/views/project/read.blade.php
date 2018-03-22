@@ -86,12 +86,6 @@
 
         }
 
-        section .title span {
-            display: block;
-            font-size: 18px;
-            padding: 12px 0;
-        }
-
         /*任务条目*/
         .task {
             margin: 10px 0;
@@ -140,6 +134,11 @@
         .task .deadline-danger span {
             background: #fee;
             color: #fa5555;
+        }
+
+        .git-row + .git-row {
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
         }
 
         /*页脚样式*/
@@ -217,38 +216,52 @@
                 </el-col>
                 <el-col :span="8">
                     <div class="center">
-                        <section class="docker-history">
-                            <div class="title">
-                                <span>Docker容器版本</span>
-                                <div>
-                                    <a href="" class="el-button el-button--text"><i class="el-icon-refresh"></i> 刷新</a>
-                                </div>
-                            </div>
-                            <div>
-                                服务器 i1289a2f8b9: 已部署镜像 2f269a
-                            </div>
-                        </section>
-                        <section class="commit-history">
+                        <section class="commit-history" v-loading="gitdata.loading">
                             <div class="title">
                                 <span>代码提交记录</span>
-                                <a href="" class="el-button el-button--text"><i class="el-icon-refresh"></i> 刷新</a>
+                                <el-button type="primary" size="mini" @click="git" plain><i class="el-icon-refresh"></i>
+                                    刷新
+                                </el-button>
                             </div>
                             <div>
-
-                                <h3>GitHub hyperqing/congxinyue</h3>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 2f269a <br>
-                                comment message：添加页面内容 <br>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 76cba2 <br>
-                                comment message：添加页面内容 <br>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 968ade <br>
-                                comment message：添加页面内容 <br>
-                                <h3>码云 hyperqing/congxinyue</h3>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 2f269a <br>
-                                comment message：添加页面内容 <br>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 76cba2 <br>
-                                comment message：添加页面内容 <br>
-                                469379004@qq.com: 2017-12-05 11:09 提交了 968ade <br>
-                                comment message：添加页面内容 <br>
+                                <h3 v-if="gitdata.data">@{{ gitdata.data[0].repo.name }}</h3>
+                                <template v-for="item in gitdata.data">
+                                    <template v-if="item.type ==='PushEvent'">
+                                        <div class="git-row">
+                                            <el-row>
+                                                <el-col :span="3">
+                                                    <img :src="item.actor.avatar_url" width="32px">
+                                                </el-col>
+                                                <el-col :span="6">
+                                                    @{{item.actor.display_login}}
+                                                </el-col>
+                                                <el-col :span="15">
+                                                    @{{item.created_at}}
+                                                </el-col>
+                                            </el-row>
+                                            <template v-for="commit in item.payload.commits">
+                                                <p><code>@{{commit.sha.substr(0,8)}}</code> @{{commit.message}}</p>
+                                            </template>
+                                        </div>
+                                    </template>
+                                    <template v-if="item.type ==='CreateEvent'">
+                                        <div class="git-row">
+                                            <el-row>
+                                                <el-col :span="3">
+                                                    <img :src="item.actor.avatar_url" width="28px"
+                                                         style="border-radius: 50px">
+                                                </el-col>
+                                                <el-col :span="6">
+                                                    @{{item.actor.display_login}}
+                                                </el-col>
+                                                <el-col :span="15">
+                                                    @{{item.created_at}}
+                                                </el-col>
+                                            </el-row>
+                                            <p>发布 @{{item.payload.ref_type}}：<code>@{{item.payload.ref}}</code></p>
+                                        </div>
+                                    </template>
+                                </template>
                             </div>
                         </section>
                     </div>
@@ -299,6 +312,11 @@
                 headerData: headerData,
                 // 二级导航数据
                 secondNavData: secondNavData,
+                gitdata: {
+                    loading: false,
+                    url: "{{$project->githuburl}}",
+                    data: null, // github数据
+                },
                 // 创建任务
                 createTask: {
                     btn: "创建",
@@ -408,11 +426,31 @@
                   .catch(function (error) {
                       console.log(error);
                   });
+            },
+            git() {
+                let that = this;
+                if (this.gitdata.url === '') {
+                    return;
+                }
+                that.gitdata.loading = true;
+                axios.get("{{ route('project/git', \App\Http\Middleware\ViewTempleteVal::$projectId) }}")
+                  .then(function (response) {
+                      that.gitdata.loading = false;
+                      if (response.data.status === 1) {
+                          that.gitdata.data = response.data.data.git;
+                      } else {
+                          that.$message.error(response.data.info);
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
             }
         },
         // vue生命周期
         mounted: function () {
             this.loadMyTask();
+            this.git();
             this.secondNavData.defaultActive = "看板";
         }
     })

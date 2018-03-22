@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\model\DirStructure;
 use App\Http\model\Project;
 use App\Http\model\ProjectUser;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -114,11 +115,41 @@ class ProjectController
     public function read(Request $request, $project_id)
     {
         $project_id = intval($project_id);
-        // TODO 未完成
-//        $project = Project::where('project_id',$project_id)->first();
-//        var_dump($project);
+        $project = Project::where('project_id', $project_id)->first();
         return view('project.read', [
-            'project_id' => $project_id
+            'project_id' => $project_id,
+            'project' => $project,
+        ]);
+    }
+
+    /**
+     * 获取git记录
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function git(Request $request, $project_id)
+    {
+        $project = Project::where('project_id', $project_id)->first();
+        $client = new Client([
+            'timeout' => 5,
+            'verify' => __DIR__ . '/cacert.pem',
+        ]);
+        try {
+            $response = $client->get($project->githuburl);
+            $json = json_decode((string)$response->getBody());
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'info' => '连接Git超时',
+            ]);
+        }
+        return response()->json([
+            'status' => 1,
+            'info' => '获取成功',
+            'data' => [
+                'git' => $json
+            ],
         ]);
     }
 
