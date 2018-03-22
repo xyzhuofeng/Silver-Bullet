@@ -220,12 +220,28 @@ class ProjectController
 
     /**
      * 删除项目
-     *
-     * DELETE
      * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(Request $request)
+    public function delete(Request $request,$project_id)
     {
-        // TODO 未完成
+        $project = Project::where('project_id',$project_id)->first();
+        if(!$project){
+            return response()->json([
+                'info' => '项目不存在',
+                'status' => 0,
+            ]);
+        }
+        if($project->delete()){
+            return response()->json([
+                'info' => '删除成功',
+                'status' => 1,
+            ]);
+        }
+        return response()->json([
+            'info' => '删除失败',
+            'status' => 0,
+        ]);
     }
 }

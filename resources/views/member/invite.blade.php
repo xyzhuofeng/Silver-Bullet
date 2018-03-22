@@ -69,7 +69,7 @@
         <main>
 
             <section style="text-align: center;font-size: 30px;padding-top: 200px">
-                {{ $msg }}
+                <i class="el-icon-info"></i>{{ $msg }}
             </section>
         </main>
         <footer-component></footer-component>

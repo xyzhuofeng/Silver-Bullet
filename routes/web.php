@@ -67,6 +67,8 @@ Route::middleware([
     Route::post('project/{project_id}/updateThumb', 'ProjectController@updateThumb')->name('project/updateThumb');
     // 更新项目名称和描述
     Route::post('project/{project_id}/updateNameAndCommentUrl', 'ProjectController@updateNameAndCommentUrl')->name('project/updateNameAndCommentUrl');
+    // 删除项目
+    Route::get('project/{project_id}/delete', 'ProjectController@delete')->name('project/delete');
 });
 
 /**

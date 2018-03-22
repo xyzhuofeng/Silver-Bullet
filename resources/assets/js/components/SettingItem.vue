@@ -85,7 +85,14 @@
                             <el-button type="primary" @click="invite.isShow = false">确 定</el-button>
                         </span>
                     </el-dialog>
-
+                </template>
+                <template v-if="defaultActive === '高级设置'">
+                    <el-form label-position="top" label-width="80px" :model="form">
+                        <el-form-item label="删除项目">
+                            <el-button type="danger" @click="removeProj">删除项目</el-button>
+                            <p>项目删除后将无法恢复</p>
+                        </el-form-item>
+                    </el-form>
                 </template>
             </el-col>
         </el-row>
@@ -124,7 +131,7 @@
                     list: [], // 成员列表
                     loading: false, // 加载动画
                 },
-                defaultActive: "成员管理", // 默认菜单激活项
+                defaultActive: "高级设置", // 默认菜单激活项
                 form: {},
                 updateThumbData: {
                     isVisible: false,
@@ -213,6 +220,21 @@
                           that.$message.error(response.data.info);
                       }
                       that.getMemberList()
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
+            },
+            removeProj() {
+                let that = this;
+                axios.get(this.settingItemData.removeProjUrl)
+                  .then(function (response) {
+                      if (response.data.status === 1) {
+                          that.$message({message: response.data.info, type: "success"});
+                          window.location.href = that.settingItemData.projectIndexUrl;
+                      } else {
+                          that.$message.error(response.data.info);
+                      }
                   })
                   .catch(function (error) {
                       console.log(error);
