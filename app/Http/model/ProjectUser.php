@@ -2,6 +2,7 @@
 
 namespace App\Http\model;
 
+use App\Traits\HasCompositePrimaryKey;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ProjectUser extends Model
 {
+    use HasCompositePrimaryKey;
     const table = 'blade_project_user';
     const tableWithDot = 'blade_project_user.';
 
@@ -23,5 +25,5 @@ class ProjectUser extends Model
     // 禁用自增主键
     public $incrementing = false;
 
-    protected $primaryKey = 'project_user_id';
+    protected $primaryKey = ['project_id', 'user_id'];
 }

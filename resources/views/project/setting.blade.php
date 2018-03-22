@@ -98,6 +98,7 @@
                     getInviteCodeUrl: "{{ route('member/genInviteCode', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
                     updateNameAndCommentUrl: "{{ route('project/updateNameAndCommentUrl', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
                     updateThumbUrl: "{{ route('project/updateThumb', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
+                    removeMemberUrl:"{{ route('member/remove', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
                 },
             }
         },

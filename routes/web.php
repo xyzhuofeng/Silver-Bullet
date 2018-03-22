@@ -82,6 +82,8 @@ Route::middleware([
     Route::get('project/{project_id}/member/genInviteCode', 'MemberController@genInviteCode')->name('member/genInviteCode');
     // 邀请链接
     Route::get('invite/{code}', 'MemberController@invite')->name('member/invite');
+    // 成员移出项目
+    Route::post('project/{project_id}/member/remove', 'MemberController@remove')->name('member/remove');
 });
 
 /**

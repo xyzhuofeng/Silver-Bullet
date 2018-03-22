@@ -86,7 +86,6 @@ class MemberController
             $project_user = new ProjectUser();
             $project_user->setAttribute('project_id', $project_id);
             $project_user->setAttribute('user_id', session()->get('user_id'));
-
             $project_user->setAttribute('role', 'user');
             if ($project_user->save()) {
                 // 用户成功加入项目，直接打开项目首页
@@ -125,6 +124,42 @@ class MemberController
                 'url' => route('member/invite', [$code]),
                 'image' => '',
             ]
+        ]);
+    }
+
+    /**
+     * 将成员移出项目
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function remove(Request $request, $project_id)
+    {
+        $user_id = $request->post('user_id');
+        if ($user_id == session()->get('user_id')) {
+            return response()->json([
+                'status' => 0,
+                'info' => '你不能将自己移出项目',
+            ]);
+        }
+        $project_user = ProjectUser::where('user_id', $user_id)
+            ->where('project_id', $project_id)
+            ->first();
+        if (!$project_user) {
+            return response()->json([
+                'status' => 0,
+                'info' => '没有找到记录',
+            ]);
+        }
+        if ($project_user = ProjectUser::where('user_id', $user_id)->where('project_id', $project_id)->first()->delete()) {
+            return response()->json([
+                'status' => 1,
+                'info' => '操作成功',
+            ]);
+        }
+        return response()->json([
+            'status' => 0,
+            'info' => '操作失败',
         ]);
     }
 }

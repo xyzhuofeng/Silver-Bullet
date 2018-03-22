@@ -202,7 +202,21 @@
             },
             // 将成员移出项目
             removeMember(index, user_id) {
-
+                let that = this;
+                axios.post(this.settingItemData.removeMemberUrl, {
+                    user_id: user_id,
+                })
+                  .then(function (response) {
+                      if (response.data.status === 1) {
+                          that.$message({message: response.data.info, type: "success"});
+                      } else {
+                          that.$message.error(response.data.info);
+                      }
+                      that.getMemberList()
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
             },
             onCopy() {
                 this.$message({message: '复制成功', type: 'success'});
