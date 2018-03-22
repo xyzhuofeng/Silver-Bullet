@@ -8,7 +8,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
-
     <link rel="stylesheet" href="{{ asset('js/fonts.googleapis.com.css') }}">
     <link rel="stylesheet" href="{{ asset('js/element-ui/2.0.5/theme-chalk/index.css') }}">
     <link rel="stylesheet" href="{{ asset('js/public.css') }}">
@@ -332,6 +331,7 @@
             },
             // 完成任务
             finishTask(task_id) {
+                // TODO 未完成
                 alert();
                 return;
                 let that = this;
