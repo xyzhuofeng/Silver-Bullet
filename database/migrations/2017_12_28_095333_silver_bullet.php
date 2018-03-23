@@ -49,6 +49,7 @@ class SilverBullet extends Migration
         Schema::create('blade_task', function (Blueprint $table) {
             $table->bigIncrements('task_id')->comment('任务id');
             $table->text('task_content')->comment('任务内容');
+            $table->string('remark', 255)->comment('备注');
             $table->bigInteger('creator')->comment('创建者');
             $table->bigInteger('project_id')->comment('项目id');
             $table->tinyInteger('is_finished')->comment('完成标识，1完成/0未完成');
