@@ -89,6 +89,8 @@
                 secondNavData: secondNavData,
                 // WIKI数据
                 wikiItemData: {
+                    articleUrl: "{{ route('wiki/article', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
+                    saveWikiUrl: "{{ route('wiki/save', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
                 },
             }
         },

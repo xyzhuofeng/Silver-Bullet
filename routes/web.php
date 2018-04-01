@@ -90,6 +90,10 @@ Route::middleware([
 ])->group(function () {
     // 项目Wiki首页
     Route::get('project/{project_id}/wiki', 'WikiController@index')->name('wiki/index');
+    // 获取wiki
+    Route::get('project/{project_id}/wiki/article', 'WikiController@article')->name('wiki/article');
+    // 保存wiki
+    Route::post('project/{project_id}/wiki/save', 'WikiController@save')->name('wiki/save');
 });
 
 /**
