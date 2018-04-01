@@ -59,9 +59,10 @@ class TaskController
             ->orderBy('deadline', 'desc')
             ->orderBy(Task::table . '.updated_at', 'desc')
             ->get();
-        // 转换为bool方便渲染
         foreach ($data as &$val) {
+            // 转换为bool方便渲染
             $val->is_finished = $val->is_finished == 1 ? true : false;
+            $val->tag = json_decode($val->tag, true);
         }
         return response()->json([
             'info' => '获取成功',
@@ -111,5 +112,38 @@ class TaskController
                 'status' => 0
             ]);
         }
+    }
+
+    /**
+     * 完成任务
+     * 可切换完成和未完成
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function finish(Request $request, $project_id)
+    {
+        $task_id = $request->post('task_id');
+        $task = Task::where('project_id', $project_id)
+            ->where('task_id', $task_id)
+            ->first();
+        if ($task->getAttribute('is_finished') === 0) {
+            $task->setAttribute('is_finished', 1);
+        } else {
+            $task->setAttribute('is_finished', 0);
+        }
+        if ($task->save()) {
+            return response()->json([
+                'status' => 1,
+                'info' => '操作成功',
+                'data' => [
+                    'is_finished' => $task->getAttribute('is_finished')
+                ],
+            ]);
+        }
+        return response()->json([
+            'status' => 0,
+            'info' => '操作失败',
+        ]);
     }
 }

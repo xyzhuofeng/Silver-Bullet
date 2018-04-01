@@ -92,8 +92,10 @@
                 secondNavData: secondNavData,
                 taskItemData: {
                     project_id: "{{ \App\Http\Middleware\ViewTempleteVal::$projectId }}",
+                    myTaskUrl: "{{ route('task/my', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}",
                     listTaskUrl: "{{ route('task/index', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
                     createTaskUrl: "{{ route('task/save', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
+                    finishTaskUrl:"{{ route('task/finish', \App\Http\Middleware\ViewTempleteVal::$projectId) }}"
                 },
             }
         },

@@ -10,10 +10,21 @@
         </div>
         <template v-for="item in myTaskList">
             <div class="task">
-                <el-checkbox v-model="item.is_finished">{{item.task_content}}</el-checkbox>
-                <el-tag size="small">实现功能</el-tag>
+                <el-checkbox v-model="item.is_finished" @change="finishTask(item.task_id)">{{item.task_content}}
+                </el-checkbox>
+                <template v-for="tag in item.tag">
+                    <el-tag size="small">{{tag}}</el-tag>
+                </template>
                 <div class="deadline deadline-danger">
-                    <span>明天 23：00 截止</span>创建者：{{item.user_name}}
+                    <span>明天 23：00 截止</span>
+                </div>
+                <template v-if="item.remark">
+                    <div class="people">
+                        备注： {{item.remark}}
+                    </div>
+                </template>
+                <div class="people">
+                    创建者：{{item.user_name}} 参与者：{{item.user_name}}
                 </div>
             </div>
         </template>
@@ -73,7 +84,7 @@
                     dlgVisible: false, // 显示创建对话框
                     form: {  // 创建项目表单
                         task_content: "",
-                        remark:"",
+                        remark: "",
                         deadline: "",
                         project_id: that.taskItemData.project_id
                     }
@@ -85,20 +96,30 @@
                     shortcuts: [{
                         text: '今天下班前',
                         onClick(picker) {
-                            picker.$emit('pick', new Date());
+                            const date = new Date();
+                            date.setHours(18);
+                            date.setMinutes(0);
+                            date.setSeconds(0);
+                            picker.$emit('pick', date);
                         }
                     }, {
                         text: '明天下班前',
                         onClick(picker) {
                             const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            date.setDate(date.getDate() + 1);
+                            date.setHours(18);
+                            date.setMinutes(0);
+                            date.setSeconds(0);
                             picker.$emit('pick', date);
                         }
                     }, {
                         text: '后天下班前',
                         onClick(picker) {
                             const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            date.setDate(date.getDate() + 2);
+                            date.setHours(18);
+                            date.setMinutes(0);
+                            date.setSeconds(0);
                             picker.$emit('pick', date);
                         }
                     }]
@@ -148,7 +169,7 @@
             // 读取我的任务
             loadMyTask() {
                 let that = this;
-                axios.get("{{ route('task/my', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}")
+                axios.get(this.taskItemData.myTaskUrl)
                   .then(function (response) {
                       if (response.data.status !== 1) {
                           that.$message.error(response.data.info);
@@ -162,16 +183,15 @@
             },
             // 完成任务
             finishTask(task_id) {
-                // TODO 未完成
-                alert();
-                return;
                 let that = this;
-                axios.get("{{ route('task/my', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}")
+                axios.post(this.taskItemData.finishTaskUrl, {
+                    task_id: task_id
+                })
                   .then(function (response) {
-                      if (response.data.status !== 1) {
-                          that.$message.error(response.data.info);
+                      if (response.data.status === 1) {
+                          that.$message.success(response.data.info);
                       } else {
-                          that.myTaskList = response.data.data;
+                          that.$message.error(response.data.info);
                       }
                   })
                   .catch(function (error) {
@@ -180,12 +200,17 @@
             }
         },
         mounted() {
-            // this.loadMyTask();
+            this.loadMyTask();
         }
     }
 </script>
 
 <style scoped>
+    /*留空间距*/
+    .el-tag {
+        margin-right: 5px;
+    }
+
     .container {
         width: 800px;
         margin: 0 auto;
@@ -239,5 +264,10 @@
     .task .deadline-danger span {
         background: #fee;
         color: #fa5555;
+    }
+
+    .task .people {
+        color: #777;
+        font-size: 14px;
     }
 </style>

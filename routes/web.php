@@ -106,6 +106,8 @@ Route::middleware([
     Route::get('project/{project_id}/task/my', 'TaskController@my')->name('task/my');
     // 创建任务
     Route::post('project/{project_id}/task/save', 'TaskController@save')->name('task/save');
+    // 标记完成任务
+    Route::post('project/{project_id}/task/finish', 'TaskController@finish')->name('task/finish');
 });
 
 /**
