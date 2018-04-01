@@ -68,7 +68,8 @@
                     <el-input v-model="createTask.form.task_content"></el-input>
                 </el-form-item>
                 <el-form-item label="备注">
-                    <el-input type="textarea" v-model="createTask.form.remark" placeholder="支持HTML"></el-input>
+                    <el-input type="textarea" v-model="createTask.form.remark" placeholder="支持HTML"
+                              :autosize="{ minRows: 2, maxRows: 5}"></el-input>
                 </el-form-item>
                 <el-form-item label="截止时间">
                     <el-date-picker type="datetime" placeholder="选择日期时间" align="center"

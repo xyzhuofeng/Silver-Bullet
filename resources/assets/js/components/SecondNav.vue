@@ -7,7 +7,7 @@
         <el-menu-item index="任务">
             <a :href="secondNavData.task" class="el-button el-button--text">任务</a>
         </el-menu-item>
-        <el-menu-item index="需求">
+        <el-menu-item index="讨论">
             <a :href="secondNavData.requirement" class="el-button el-button--text">需求</a>
         </el-menu-item>
         <el-menu-item index="文件">
