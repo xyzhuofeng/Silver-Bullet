@@ -144,6 +144,7 @@ class ProjectController
                 'info' => '连接Git超时',
             ]);
         }
+        $json = array_slice($json, 0, 10);
         return response()->json([
             'status' => 1,
             'info' => '获取成功',
