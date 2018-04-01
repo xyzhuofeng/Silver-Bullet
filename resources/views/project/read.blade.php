@@ -90,6 +90,7 @@
             justify-content: space-between;
 
         }
+
         /*git动态信息*/
         .commit-history p {
             margin: 5px 0;
@@ -286,6 +287,9 @@
                       console.log(error);
                   });
             }
+        },
+        beforeMount(){
+            this.taskItemData.task_type = "unfinish";
         },
         // vue生命周期
         mounted: function () {

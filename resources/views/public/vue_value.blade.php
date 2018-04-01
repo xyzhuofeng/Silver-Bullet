@@ -23,11 +23,12 @@
     // 任务组件数据
     let taskItemData = {
         project_id: "{{ \App\Http\Middleware\ViewTempleteVal::$projectId }}",
-        task_is_finished: "all",
+        task_type: "all",
         myTaskUrl: "{{ route('task/my', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}",
-        listTaskUrl: "{{ route('task/index', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
+        unfinishTaskUrl:"{{ route('task/unfinish', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}",
         createTaskUrl: "{{ route('task/save', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
         finishTaskUrl: "{{ route('task/finish', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
-        deleteTaskUrl: "{{ route('task/delete', \App\Http\Middleware\ViewTempleteVal::$projectId) }}"
+        deleteTaskUrl: "{{ route('task/delete', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
+        getMemberListUrl: "{{ route('member/index', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
     };
 </script>

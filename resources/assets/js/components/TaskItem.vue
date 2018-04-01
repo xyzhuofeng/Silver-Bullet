@@ -9,7 +9,7 @@
             </div>
         </div>
         <div v-loading="taskListLoading">
-            <template v-if="!myTaskList">
+            <template v-if="myTaskList.length===0">
                 <div class="empty-tips">
                     没有任务啦！
                 </div>
@@ -34,7 +34,11 @@
                         <span>{{item.deadline}} 截止</span>
                     </div>
                     <p v-if="item.remark">备注： {{item.remark}}</p>
-                    <p class="people">创建者：{{item.user_name}} 参与者：{{item.user_name}}</p>
+                    <p class="people">创建者：{{item.user_name}} 参与者：
+                        <template v-for="user in item.task_user">
+                            {{user.user_name}}&nbsp;
+                        </template>
+                    </p>
                 </div>
             </template>
         </div>
@@ -64,7 +68,7 @@
                     <el-input v-model="createTask.form.task_content"></el-input>
                 </el-form-item>
                 <el-form-item label="备注">
-                    <el-input v-model="createTask.form.remark"></el-input>
+                    <el-input type="textarea" v-model="createTask.form.remark"></el-input>
                 </el-form-item>
                 <el-form-item label="截止时间">
                     <el-date-picker type="datetime" placeholder="选择日期时间" align="center"
@@ -77,6 +81,13 @@
                                placeholder="请输入任务标签">
                         <el-option v-for="item in createTask.tagOptions" :key="item.value" :label="item.label"
                                    :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="参与者">
+                    <el-select v-model="createTask.form.task_user" multiple placeholder="请选择参与者">
+                        <el-option v-for="item in createTask.memberOption" :key="item.user_id" :label="item.user_name"
+                                   :value="item.user_id">
+                        </el-option>
                     </el-select>
                 </el-form-item>
             </el-form>
@@ -102,13 +113,15 @@
                     isLoading: false, // 等待图标
                     dlgVisible: false, // 显示创建对话框
                     form: {  // 创建项目表单
-                        task_content: "",
-                        remark: "",
-                        deadline: "",
+                        task_content: "", // 任务内容
+                        remark: "", // 备注
+                        deadline: "", // 截止时间
                         project_id: that.taskItemData.project_id,
-                        tag_list: "", // 标签列表
+                        tag_list: [], // 标签列表
+                        task_user: [], // 参与者用户列表
                     },
-                    tagOptions: [
+                    memberOption: [], // 备选的参与者列表
+                    tagOptions: [ // 任务标签列表
                         {value: "功能", label: "功能",},
                         {value: "Bug", label: "Bug",},
                         {value: "变更需求", label: "变更需求",},
@@ -164,6 +177,21 @@
                         window.location.href = that.taskItemData.project_id
                 }
             },
+            // 获取成员列表
+            getMemberList() {
+                let that = this;
+                axios.get(that.taskItemData.getMemberListUrl)
+                  .then(function (response) {
+                      if (response.data.status === 1) {
+                          that.createTask.memberOption = response.data.data.project_user_list
+                      } else {
+                          that.$message.error(response.data.info);
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
+            },
             // 创建任务
             createTaskFunc: function () {
                 let that = this;
@@ -197,7 +225,14 @@
             loadMyTask() {
                 let that = this;
                 that.taskListLoading = true;
-                axios.get(this.taskItemData.myTaskUrl)
+                let url = this.taskItemData.myTaskUrl;
+                if (that.taskItemData.task_type === 'all') {
+                    url = this.taskItemData.myTaskUrl;
+                }
+                if (that.taskItemData.task_type === 'unfinish') {
+                    url = this.taskItemData.unfinishTaskUrl;
+                }
+                axios.get(url)
                   .then(function (response) {
                       that.taskListLoading = false;
                       if (response.data.status !== 1) {
@@ -255,6 +290,7 @@
         },
         mounted() {
             this.loadMyTask();
+            this.getMemberList();
         }
     }
 </script>

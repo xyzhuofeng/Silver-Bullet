@@ -104,6 +104,8 @@ Route::middleware([
     Route::get('project/{project_id}/task', 'TaskController@index')->name('task/index');
     // 项目任务AJAX纯数据
     Route::get('project/{project_id}/task/my', 'TaskController@my')->name('task/my');
+    // 项目未完成的任务
+    Route::get('project/{project_id}/task/unfinish', 'TaskController@unfinish')->name('task/unfinish');
     // 创建任务
     Route::post('project/{project_id}/task/save', 'TaskController@save')->name('task/save');
     // 标记完成任务

@@ -23,44 +23,65 @@ class TaskController
      */
     public function index(Request $request, $project_id)
     {
-        // 获取项目所有任务
-        $task_list = Task::join(TaskUser::table,
-            TaskUser::table . '.task_id', '=', Task::table . '.task_id'
-        )
-            ->where(Task::table . '.project_id', $project_id)
-            ->orderBy('deadline', 'desc')
-            ->orderBy(Task::table . '.updated_at', 'desc')
-            ->get();
-        // 转换为bool方便渲染
-        foreach ($task_list as &$val) {
-            $val->is_finished = $val->is_finished == 1 ? true : false;
-        }
         return view('task.index', [
-            'task_list' => $task_list
         ]);
     }
 
     /**
-     * 获取我的项目任务
+     * 获取项目所有任务
      * @param Request $request
      * @param string $project_id 项目id
      * @return \Illuminate\Http\JsonResponse
      */
     public function my(Request $request, $project_id)
     {
-        $data = Task::join(TaskUser::table,
-            TaskUser::table . '.task_id', '=', Task::table . '.task_id'
+        $data = Task::join(Account::table,
+            Account::table . '.user_id', '=', Task::table . '.creator'
         )
-            ->join(Account::table,
-                Account::table . '.user_id', '=', Task::table . '.creator'
-            )
-            ->where(TaskUser::table . '.user_id', session()->get('user_id'))
             ->where(Task::table . '.project_id', $project_id)
             ->orderBy(Task::table . '.created_at', 'desc')
-            ->orderBy(Task::table . '.updated_at', 'desc')
             ->get();
         foreach ($data as &$val) {
+            $member_list = TaskUser::join(Account::table,
+                Account::table . '.user_id', '=', TaskUser::table . '.user_id'
+            )
+                ->where(TaskUser::table . '.task_id', $val->task_id)
+                ->get();
             // 转换为bool方便渲染
+            $val->task_user = $member_list;
+            $val->is_finished = $val->is_finished == 1 ? true : false;
+            $val->tag = json_decode($val->tag, true);
+        }
+        return response()->json([
+            'info' => '获取成功',
+            'status' => 1,
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * 获取未完成的任务
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function unfinish(Request $request, $project_id)
+    {
+        $data = Task::join(Account::table,
+            Account::table . '.user_id', '=', Task::table . '.user_id'
+        )
+            ->where(Task::table . '.project_id', $project_id)
+            ->where(Task::table . '.is_finished', 0)
+            ->orderBy(Task::table . '.created_at', 'desc')
+            ->get();
+        foreach ($data as &$val) {
+            $member_list = TaskUser::join(Account::table,
+                Account::table . '.user_id', '=', TaskUser::table . '.user_id'
+            )
+                ->where(TaskUser::table . '.task_id', $val->task_id)
+                ->get();
+            // 转换为bool方便渲染
+            $val->task_user = $member_list;
             $val->is_finished = $val->is_finished == 1 ? true : false;
             $val->tag = json_decode($val->tag, true);
         }
