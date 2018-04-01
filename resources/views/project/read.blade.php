@@ -134,7 +134,7 @@
         <second-nav :second-nav-data="secondNavData"></second-nav>
         <main>
             <el-row :gutter="20">
-                <el-col :span="10">
+                <el-col :span="8">
                     <div class="left">
                         <section class="my-task">
                             <task-item :task-item-data="taskItemData"></task-item>
@@ -194,7 +194,7 @@
                         </section>
                     </div>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="8">
                     <div class="right">
                         <section class="project-news">
                             <div class="title"><span>项目动态</span></div>
