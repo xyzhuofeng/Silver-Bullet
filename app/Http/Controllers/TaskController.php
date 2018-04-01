@@ -80,6 +80,7 @@ class TaskController
     public function save(Request $request)
     {
         $task_content = $request->post('task_content');
+        $remark = $request->post('remark');
         $deadline = $request->post('deadline');
         $project_id = $request->post('project_id');
         DB::beginTransaction();
@@ -87,6 +88,7 @@ class TaskController
             // 分别写入任务和用户任务关联表
             $task = new Task();
             $task->setAttribute('task_content', $task_content);
+            $task->setAttribute('remark', $remark);
             $task->setAttribute('creator', session()->get('user_id'));
             $task->setAttribute('project_id', $project_id);
             $task->setAttribute('is_finished', 0);

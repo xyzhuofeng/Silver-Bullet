@@ -81,7 +81,7 @@ Route::middleware([
  */
 Route::middleware([
     \App\Http\Middleware\CheckLoginStatus::class,
-    \App\Http\Middleware\ViewTempleteVal::class
+    \App\Http\Middleware\ViewTempleteVal::class,
 ])->group(function () {
     // 打开指定项目的成员列表，AJAX数据
     Route::get('project/{project_id}/member', 'MemberController@index')->name('member/index');
@@ -98,14 +98,14 @@ Route::middleware([
  */
 Route::middleware([
     \App\Http\Middleware\CheckLoginStatus::class,
-    \App\Http\Middleware\ViewTempleteVal::class
+    \App\Http\Middleware\ViewTempleteVal::class,
 ])->group(function () {
     // 任务面板首页
     Route::get('project/{project_id}/task', 'TaskController@index')->name('task/index');
     // 项目任务AJAX纯数据
     Route::get('project/{project_id}/task/my', 'TaskController@my')->name('task/my');
     // 创建任务
-    Route::post('task', 'TaskController@save');
+    Route::post('project/{project_id}/task/save', 'TaskController@save')->name('task/save');
 });
 
 /**
@@ -113,7 +113,7 @@ Route::middleware([
  */
 Route::middleware([
     \App\Http\Middleware\CheckLoginStatus::class,
-    \App\Http\Middleware\ViewTempleteVal::class
+    \App\Http\Middleware\ViewTempleteVal::class,
 ])->group(function () {
     // 文件面板首页
     Route::get('project/{project_id}/file', 'FileController@index')->name('file/index');
@@ -140,7 +140,7 @@ Route::middleware([
  */
 Route::middleware([
     \App\Http\Middleware\CheckLoginStatus::class,
-    \App\Http\Middleware\ViewTempleteVal::class
+    \App\Http\Middleware\ViewTempleteVal::class,
 ])->group(function () {
     // 个人中心
     Route::get('user', 'UserController@index');

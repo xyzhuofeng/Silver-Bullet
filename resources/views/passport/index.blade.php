@@ -64,9 +64,6 @@
         </el-form>
         <hr>
         <div class="text-center">
-            <el-button type="text">第三方账号登录</el-button>
-        </div>
-        <div class="text-center">
             <span style="color:#a6a6a6;font-size: 14px;">还没有账号？</span>
             <el-button type="text" @click="loginPage = false">创建新账号</el-button>
         </div>
@@ -89,9 +86,6 @@
             </el-form-item>
         </el-form>
         <hr>
-        <div class="text-center">
-            <el-button type="text">第三方账号登录</el-button>
-        </div>
         <div class="text-center">
             <span style="color:#a6a6a6;font-size: 14px;">已有账号？</span>
             <el-button type="text" @click="loginPage = true">立即登录</el-button>

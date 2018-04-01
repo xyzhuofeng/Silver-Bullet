@@ -11,12 +11,8 @@ window.Vue = require('vue');
 // 引入Elemenet-UI
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import VueClipboard from 'vue-clipboard2'
-import VueQArt from 'vue-qart'
-window.VueQArt = VueQArt;
 
 Vue.use(ElementUI);
-Vue.use(VueClipboard);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -36,35 +32,10 @@ let SecondNav = require('./components/SecondNav.vue');
 SecondNav.props = ['secondNavData']; // 声明props
 Vue.component('second-nav', SecondNav);
 
-// 文件浏览器组件
-let FileExplorer = require('./components/FileExplorer.vue');
-FileExplorer.props = ['fileExplorerData']; // 声明props
-Vue.component('file-explorer', FileExplorer);
-
-// 添加项目设置组件
-let SettingItem = require('./components/SettingItem.vue');
-SettingItem.props = ['settingItemData']; // 声明props
-Vue.component('setting-item', SettingItem);
-
 // 任务组件
 let TaskItem = require('./components/TaskItem.vue');
 TaskItem.props = ['taskItemData']; // 声明props
 Vue.component('task-item', require('./components/TaskItem.vue'));
 
-// 个人中心组件
-let profile = require('./components/ProfileItem.vue');
-profile.props = ['profileData']; // 声明props
-Vue.component('profile-item', profile);
-
 // 页脚组件
 Vue.component('footer-component', require('./components/FooterComponent.vue'));
-
-// 由页面进行实例化，不在此处操作
-// const app = new Vue({
-//     el: '#app',
-//     data(){
-//         return{
-//             msg:""
-//         }
-//     }
-// });

@@ -14,6 +14,7 @@ let mix = require('laravel-mix');
 mix.browserSync('localhost/smartwork/public');
 
 mix.js('resources/assets/js/app.js', 'public/js')
+  .js('resources/assets/js/task.js', 'public/js')
   .sass('resources/assets/sass/app.scss', 'public/css');
 
 mix.setResourceRoot('/smartwork/public/'); // 避免字体文件目录错误

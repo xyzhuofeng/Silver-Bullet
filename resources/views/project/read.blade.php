@@ -230,7 +230,8 @@
                                         <div class="git-row">
                                             <el-row>
                                                 <el-col :span="3">
-                                                    <img :src="item.actor.avatar_url" width="32px">
+                                                    <img :src="item.actor.avatar_url" width="32px"
+                                                         style="border-radius: 50px">
                                                 </el-col>
                                                 <el-col :span="6">
                                                     @{{item.actor.display_login}}
