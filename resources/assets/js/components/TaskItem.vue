@@ -8,30 +8,36 @@
                 </a>
             </div>
         </div>
-        <template v-for="item in myTaskList" v-loading="taskListLoading">
-            <div class="task">
-                <el-row type="flex" class="row-bg" justify="space-between">
-                    <el-col :span="6">
-                        <el-checkbox v-model="item.is_finished" @change="finishTask(item.task_id)">
-                            {{item.task_content}}
-                        </el-checkbox>
-                    </el-col>
-                    <el-col :span="6" :offset="6" class="text-right">
-                        <el-button type="danger" icon="el-icon-delete" @click="deleteTask(item.task_id)"
-                                   class="btn-delete" circle></el-button>
-                    </el-col>
-                </el-row>
-
-                <template v-for="tag in item.tag">
-                    <el-tag size="small">{{tag}}</el-tag>
-                </template>
-                <div class="deadline deadline-normal" v-if="item.deadline">
-                    <span>{{item.deadline}} 截止</span>
+        <div v-loading="taskListLoading">
+            <template v-if="!myTaskList">
+                <div class="empty-tips">
+                    没有任务啦！
                 </div>
-                <p v-if="item.remark">备注： {{item.remark}}</p>
-                <p class="people">创建者：{{item.user_name}} 参与者：{{item.user_name}}</p>
-            </div>
-        </template>
+            </template>
+            <template v-for="item in myTaskList">
+                <div class="task">
+                    <el-row type="flex" class="row-bg" justify="space-between">
+                        <el-col :span="6">
+                            <el-checkbox v-model="item.is_finished" @change="finishTask(item.task_id)">
+                                {{item.task_content}}
+                            </el-checkbox>
+                        </el-col>
+                        <el-col :span="6" :offset="6" class="text-right">
+                            <el-button type="danger" icon="el-icon-delete" @click="deleteTask(item.task_id)"
+                                       class="btn-delete" circle></el-button>
+                        </el-col>
+                    </el-row>
+                    <template v-for="tag in item.tag">
+                        <el-tag size="small">{{tag}}</el-tag>
+                    </template>
+                    <div class="deadline deadline-normal" v-if="item.deadline">
+                        <span>{{item.deadline}} 截止</span>
+                    </div>
+                    <p v-if="item.remark">备注： {{item.remark}}</p>
+                    <p class="people">创建者：{{item.user_name}} 参与者：{{item.user_name}}</p>
+                </div>
+            </template>
+        </div>
         <!--<div class="task">-->
         <!--<el-checkbox>XXX功能修改</el-checkbox>-->
         <!--<el-tag size="small">实现功能</el-tag>-->
@@ -89,7 +95,7 @@
             let that = this;
             return {
                 // 任务窗口加载动画
-                taskListLoading: false,
+                taskListLoading: true,
                 // 创建任务
                 createTask: {
                     btn: "创建",
@@ -265,13 +271,20 @@
     }
 </style>
 <style scoped>
+    .empty-tips {
+        margin: 10px 0;
+        text-align: center;
+        color: #888;
+    }
+
     /*留空间距*/
     .el-tag {
         margin-right: 5px;
     }
 
     .container {
-        width: 800px;
+        width: 100%;
+        max-width: 800px;
         margin: 0 auto;
     }
 

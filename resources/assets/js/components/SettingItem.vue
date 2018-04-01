@@ -145,7 +145,7 @@
         name: "setting-item",
         data() {
             return {
-                defaultActive: "Git绑定", // 默认菜单激活项
+                defaultActive: "项目设置", // 默认菜单激活项
                 github: {
                     owner: "",
                     repo: "",

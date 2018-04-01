@@ -19,4 +19,15 @@
         file: "{{ route('file/index', \App\Http\Middleware\ViewTempleteVal::$projectId) }}", // 文件
         setting: "{{ route('project/setting', \App\Http\Middleware\ViewTempleteVal::$projectId) }}", // 项目设置
     };
+
+    // 任务组件数据
+    let taskItemData = {
+        project_id: "{{ \App\Http\Middleware\ViewTempleteVal::$projectId }}",
+        task_is_finished: "all",
+        myTaskUrl: "{{ route('task/my', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}",
+        listTaskUrl: "{{ route('task/index', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
+        createTaskUrl: "{{ route('task/save', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
+        finishTaskUrl: "{{ route('task/finish', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
+        deleteTaskUrl: "{{ route('task/delete', \App\Http\Middleware\ViewTempleteVal::$projectId) }}"
+    };
 </script>

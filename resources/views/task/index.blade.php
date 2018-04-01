@@ -85,19 +85,12 @@
         el: '#app',
         data() {
             return {
-                // 传给子组件数据
                 // 导航条数据
                 headerData: headerData,
                 // 二级导航数据
                 secondNavData: secondNavData,
-                taskItemData: {
-                    project_id: "{{ \App\Http\Middleware\ViewTempleteVal::$projectId }}",
-                    myTaskUrl: "{{ route('task/my', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}",
-                    listTaskUrl: "{{ route('task/index', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
-                    createTaskUrl: "{{ route('task/save', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
-                    finishTaskUrl:"{{ route('task/finish', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
-                    deleteTaskUrl:"{{ route('task/delete', \App\Http\Middleware\ViewTempleteVal::$projectId) }}"
-                },
+                // 任务组件数据
+                taskItemData: taskItemData,
             }
         },
         methods: {},
