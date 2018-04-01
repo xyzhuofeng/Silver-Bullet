@@ -22,19 +22,21 @@ class Timeline extends Model
     protected $primaryKey = 'id';
 
     /**
-     * 添加任务
+     * 任务动态
      * @param $project_id
      * @param $task_content
+     * @param string $operate
      */
-    public static function addTask($project_id, $task_content)
+    public static function task($project_id, $task_content, $operate = '创建')
     {
         $task_content = mb_substr($task_content, 0, 20);
         $timeline = new Timeline();
         $timeline->setAttribute('user_id', session('user_id'));
         $timeline->setAttribute('project_id', $project_id);
-        $timeline->setAttribute('content', '添加了任务<span class="sb-timeline-text">' . $task_content . '</span>');
+        $timeline->setAttribute('content', $operate . '了任务<span class="sb-timeline-text">' . $task_content . '</span>');
         $timeline->save();
     }
+
 
     /**
      * 通过项目id获取项目动态

@@ -135,7 +135,7 @@ class TaskController
                 $task_user->setAttribute('role', '参与者');
                 $task_user->save();
             }
-            Timeline::addTask($project_id, $task_content);
+            Timeline::Task($project_id, $task_content, '创建');
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
@@ -164,6 +164,7 @@ class TaskController
         $task = Task::where('project_id', $project_id)
             ->where('task_id', $task_id)
             ->first();
+        Timeline::Task($project_id, $task->task_content, '完成');
         if ($task->getAttribute('is_finished') === 0) {
             $task->setAttribute('is_finished', 1);
         } else {
@@ -195,9 +196,11 @@ class TaskController
         $task_id = $request->post('task_id');
         DB::beginTransaction();
         try {
-            Task::where('project_id', $project_id)
+            $task = Task::where('project_id', $project_id)
                 ->where('task_id', $task_id)
-                ->delete();
+                ->first();
+            Timeline::Task($project_id, $task->task_content, '删除');
+            $task->delete();
             TaskUser::where('task_id', $task_id)
                 ->delete();
             DB::commit();

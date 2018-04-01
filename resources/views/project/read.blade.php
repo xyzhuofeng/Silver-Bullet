@@ -220,7 +220,7 @@
                 </el-col>
                 <el-col :span="8">
                     <div class="right">
-                        <section class="project-news">
+                        <section class="project-news" v-loading="timeline.loading">
                             <div class="title"><span>项目动态</span></div>
                             <template v-for="line in timeline.data">
                                 <div class="sb-timeline">
