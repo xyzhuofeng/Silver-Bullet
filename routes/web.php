@@ -71,6 +71,8 @@ Route::middleware([
     Route::get('project/{project_id}/delete', 'ProjectController@delete')->name('project/delete');
     // 获取git数据
     Route::get('project/{project_id}/git', 'ProjectController@git')->name('project/git');
+    // 获取项目动态
+    Route::get('project/{project_id}/timeline', 'ProjectController@timeline')->name('project/timeline');
     // 绑定github
     Route::post('project/{project_id}/github', 'ProjectController@github')->name('project/github');
 

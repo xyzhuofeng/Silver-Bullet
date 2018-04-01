@@ -119,6 +119,30 @@
             padding-top: 10px;
         }
 
+        /*项目动态*/
+
+        .sb-timeline p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .sb-timeline p:first-of-type {
+            font-size: 15px;
+            color: #222;
+        }
+
+        .sb-timeline + .sb-timeline {
+            margin-top: 10px;
+            border-top: 1px #ccc solid;
+        }
+
+        .sb-timeline-text {
+            margin: 0 5px;
+            padding: 0 5px;
+            background: #e7eaf1;
+        }
+
         /*页脚样式*/
         footer {
             margin: 20px 0;
@@ -198,11 +222,13 @@
                     <div class="right">
                         <section class="project-news">
                             <div class="title"><span>项目动态</span></div>
-                            <div>
-                                用户A 更新了代码<br>
-                                用户B 上传了文件 xxxx.doc<br>
-                                用户C 添加了新任务<br>
-                            </div>
+                            <template v-for="line in timeline.data">
+                                <div class="sb-timeline">
+                                    <p>@{{line.user_name}}</p>
+                                    <p v-html="line.content"></p>
+                                    <p>@{{line.created_at}}</p>
+                                </div>
+                            </template>
                         </section>
                     </div>
                 </el-col>
@@ -226,6 +252,12 @@
                 secondNavData: secondNavData,
                 // 任务组件数据
                 taskItemData: taskItemData,
+                // 项目动态数据
+                timeline: {
+                    loading: false,
+                    data: [],
+                },
+                // git动态数据
                 gitdata: {
                     loading: false,
                     url: "{{$project->githuburl}}",
@@ -286,14 +318,31 @@
                   .catch(function (error) {
                       console.log(error);
                   });
+            },
+            getTimeline() {
+                let that = this;
+                that.timeline.loading = true;
+                axios.get("{{ route('project/timeline', \App\Http\Middleware\ViewTempleteVal::$projectId) }}")
+                  .then(function (response) {
+                      that.timeline.loading = false;
+                      if (response.data.status === 1) {
+                          that.timeline.data = response.data.data;
+                      } else {
+                          that.$message.error(response.data.info);
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
             }
         },
-        beforeMount(){
+        beforeMount() {
             this.taskItemData.task_type = "unfinish";
         },
         // vue生命周期
         mounted: function () {
             this.git();
+            this.getTimeline();
             this.secondNavData.defaultActive = "看板";
         }
     })

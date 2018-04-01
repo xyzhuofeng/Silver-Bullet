@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\model\Account;
 use App\Http\model\Task;
 use App\Http\model\TaskUser;
+use App\Http\model\Timeline;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -103,14 +104,17 @@ class TaskController
      */
     public function save(Request $request)
     {
-        $task_content = $request->post('task_content');
-        $remark = $request->post('remark');
+        $task_content = $request->post('task_content', '');
+        $remark = $request->post('remark', '');
         $deadline = $request->post('deadline');
         $project_id = $request->post('project_id');
         $tag_list = json_encode($request->post('tag_list'));
         $task_user = $request->post('task_user');
         if (empty($task_content)) {
             return response()->json(['info' => '任务内容不能为空', 'status' => 0]);
+        }
+        if (empty($remark)) {
+            $remark = '';
         }
         DB::beginTransaction();
         try {
@@ -131,6 +135,7 @@ class TaskController
                 $task_user->setAttribute('role', '参与者');
                 $task_user->save();
             }
+            Timeline::addTask($project_id, $task_content);
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();

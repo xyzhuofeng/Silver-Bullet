@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\model\DirStructure;
 use App\Http\model\Project;
 use App\Http\model\ProjectUser;
+use App\Http\model\Timeline;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -116,9 +117,28 @@ class ProjectController
     {
         $project_id = intval($project_id);
         $project = Project::where('project_id', $project_id)->first();
+        $timeline = Timeline::listByProject_id($project_id);
         return view('project.read', [
             'project_id' => $project_id,
             'project' => $project,
+            'timeline' => $timeline,
+        ]);
+    }
+
+    /**
+     * 获取项目动态
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function timeline(Request $request, $project_id)
+    {
+        $project_id = intval($project_id);
+        $timeline = Timeline::listByProject_id($project_id);
+        return response()->json([
+            'status' => 1,
+            'info' => '获取成功',
+            'data' => $timeline,
         ]);
     }
 
