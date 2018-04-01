@@ -90,9 +90,27 @@
             justify-content: space-between;
 
         }
-        .commit-history p{
+        /*git动态信息*/
+        .commit-history p {
             margin: 5px 0;
-            color: #222222;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .commit-history p code {
+            background: #e7eaf1;
+            color: #888;
+            padding: 0 5px;
+            font-family: Consolas, sans-serif;
+        }
+
+        .commit-history h3 {
+            color: #555;
+            font: 16px Consolas, sans-serif;
+        }
+
+        .git-row {
+            color: #888;
         }
 
         .git-row + .git-row {
@@ -132,7 +150,7 @@
                                 </el-button>
                             </div>
                             <div>
-                                <h3 v-if="gitdata.data">@{{ gitdata.data[0].repo.name }}</h3>
+                                <h3 v-if="gitdata.data">项目: @{{ gitdata.data[0].repo.name }}</h3>
                                 <template v-for="item in gitdata.data">
                                     <template v-if="item.type ==='PushEvent'">
                                         <div class="git-row">
