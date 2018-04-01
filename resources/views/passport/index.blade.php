@@ -147,8 +147,14 @@
                               message: response.data.info,
                               type: 'success'
                           });
-                          if (response.data.redirect_url !== undefined) {
-                              window.location.href = response.data.redirect_url;
+                          if (response.data.status === 1) {
+                              if ("{{ $redirect_url }}".length > 0) {
+                                  window.location.href = "{{ $redirect_url }}";
+                              } else {
+                                  window.location.href = response.data.redirect_url;
+                              }
+                          } else {
+                              that.$message.error(response.data.info);
                           }
                       } else {
                           that.$message.error(response.data.info);

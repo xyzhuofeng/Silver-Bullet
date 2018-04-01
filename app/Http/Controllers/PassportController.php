@@ -43,13 +43,13 @@ class PassportController extends Controller
         if (!$account) {
             return response()->json([
                 'info' => '邮箱不存在',
-                'code' => 0
+                'status' => 0
             ]);
         }
         if (!Password::verify($password, $account->user_password)) {
             return response()->json([
                 'info' => '邮箱或密码错误',
-                'code' => 0
+                'status' => 0
             ]);
         }
         $request->session()->put('user_id', $account->user_id);
@@ -60,7 +60,7 @@ class PassportController extends Controller
         return response()->json([
             'info' => '登录成功',
             'status' => 1,
-            'redirect_url' => url('project')
+            'redirect_url' => $request->has('redirect_url') ? $request->get('redirect_url') : url('project')
         ]);
     }
 
@@ -77,11 +77,18 @@ class PassportController extends Controller
         $email = $request->post('email');
         $password = $request->post('password');
         $name = $request->post('name');
+        if (Account::where('email', $email)->first()) {
+            return response()->json([
+                'info' => '邮箱已存在',
+                'status' => 0
+            ]);
+        }
         $account = new Account();
         $account->setAttribute('email', $email);
         $account->setAttribute('user_name', $name);
         $account->setAttribute('user_password', Password::crypt($password));
         $account->setAttribute('user_avatar', 'app/avatar/男.png');
+        $account->setAttribute('job', '');
         $account->setCreatedAt(time());
         $account->setUpdatedAt(time());
         if ($account->save()) {
@@ -93,7 +100,7 @@ class PassportController extends Controller
             return response()->json([
                 'info' => '注册成功！正在跳转到项目中心...',
                 'status' => 1,
-                'redirect_url' => url('project')
+                'redirect_url' => $request->has('redirect_url') ? $request->get('redirect_url') : url('project')
             ]);
         }
         return response()->json([
