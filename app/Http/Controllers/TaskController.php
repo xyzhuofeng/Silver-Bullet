@@ -164,11 +164,12 @@ class TaskController
         $task = Task::where('project_id', $project_id)
             ->where('task_id', $task_id)
             ->first();
-        Timeline::Task($project_id, $task->task_content, '完成');
         if ($task->getAttribute('is_finished') === 0) {
             $task->setAttribute('is_finished', 1);
+            Timeline::Task($project_id, $task->task_content, '完成');
         } else {
             $task->setAttribute('is_finished', 0);
+            Timeline::Task($project_id, $task->task_content, '重新打开');
         }
         if ($task->save()) {
             return response()->json([

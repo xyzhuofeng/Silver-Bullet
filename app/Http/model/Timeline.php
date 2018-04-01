@@ -34,9 +34,26 @@ class Timeline extends Model
         $timeline->setAttribute('user_id', session('user_id'));
         $timeline->setAttribute('project_id', $project_id);
         $timeline->setAttribute('content', $operate . '了任务<span class="sb-timeline-text">' . $task_content . '</span>');
+        $timeline->setAttribute('created_at', date('Y-m-d H:i:s'));
+        $timeline->setAttribute('updated_at', date('Y-m-d H:i:s'));
         $timeline->save();
     }
 
+    /**
+     * 自定义动态
+     * @param $project_id
+     * @param $content
+     */
+    public static function custom($project_id, $content)
+    {
+        $timeline = new Timeline();
+        $timeline->setAttribute('user_id', session('user_id'));
+        $timeline->setAttribute('project_id', $project_id);
+        $timeline->setAttribute('content', $content);
+        $timeline->setAttribute('created_at', date('Y-m-d H:i:s'));
+        $timeline->setAttribute('updated_at', date('Y-m-d H:i:s'));
+        $timeline->save();
+    }
 
     /**
      * 通过项目id获取项目动态

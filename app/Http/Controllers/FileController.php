@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\model\Account;
 use App\Http\model\DirStructure;
 use App\Http\model\ProjectFile;
+use App\Http\model\Timeline;
 use Illuminate\Http\Request;
 
 /**
@@ -72,6 +73,7 @@ class FileController extends Controller
                 $project_file->setAttribute('file_size', $file->getSize());
                 $project_file->setAttribute('file_ext', $file->getClientOriginalExtension());
                 $project_file->save();
+                Timeline::custom($project_id, '上传了文件<span class="sb-timeline-text">' . $file->getClientOriginalName() . '</span>');
                 return response()->json([
                     'info' => '上传成功',
                     'status' => 1,
@@ -112,6 +114,7 @@ class FileController extends Controller
         try {
             // 删除本地文件
             unlink(public_path('app/' . $result->relative_path));
+            Timeline::custom($project_id, '删除了文件<span class="sb-timeline-text">' . $result->original_name . '</span>');
             // 删除数据库记录
             $result->delete();
         } catch (\Exception $exception) {
@@ -291,6 +294,7 @@ class FileController extends Controller
         // 写入记录
         $dirStructure->structure = json_encode($structure);
         if ($dirStructure->save()) {
+            Timeline::custom($project_id, '创建了目录<span class="sb-timeline-text">' . $new_dir . '</span>');
             return response()->json([
                 'info' => '创建成功',
                 'status' => 1,
@@ -370,7 +374,6 @@ class FileController extends Controller
      */
     public function deleteDir(Request $request, $project_id)
     {
-
         $virtual_path = $request->post('virtual_path');
         if (empty($virtual_path)) {
             return response()->json(['info' => '路径不能为空', 'status' => 0]);
@@ -404,6 +407,7 @@ class FileController extends Controller
                 'status' => 0
             ]);
         }
+        Timeline::custom($project_id, '删除了目录<span class="sb-timeline-text">' . $virtual_path . '</span>');
         return response()->json([
             'info' => '删除成功',
             'status' => 1,

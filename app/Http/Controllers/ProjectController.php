@@ -91,6 +91,7 @@ class ProjectController
             $dirStructure->setAttribute('project_id', $project->getAttribute('project_id'));
             $dirStructure->setAttribute('structure', json_encode([['path' => '全部文件', 'label' => '全部文件']]));
             $dirStructure->save();
+            Timeline::custom($project->getAttribute('project_id'), '创建了项目');
             DB::commit();
             return response()->json([
                 'info' => '创建成功',
@@ -117,11 +118,9 @@ class ProjectController
     {
         $project_id = intval($project_id);
         $project = Project::where('project_id', $project_id)->first();
-        $timeline = Timeline::listByProject_id($project_id);
         return view('project.read', [
             'project_id' => $project_id,
             'project' => $project,
-            'timeline' => $timeline,
         ]);
     }
 
@@ -220,6 +219,7 @@ class ProjectController
                 // 写入文件信息
                 $project->setAttribute('project_thumb', $relative_path);
                 $project->save();
+                Timeline::custom($project->getAttribute('project_id'), '上传了新封面');
                 return response()->json([
                     'info' => '上传成功',
                     'status' => 1,
@@ -262,6 +262,7 @@ class ProjectController
         $project->setAttribute('project_name', $project_name);
         $project->setAttribute('project_comment', $project_comment);
         if ($project->save()) {
+            Timeline::custom($project->getAttribute('project_id'), '更新了项目名称');
             return response()->json([
                 'info' => '修改成功',
                 'status' => 1,
@@ -273,6 +274,12 @@ class ProjectController
         ]);
     }
 
+    /**
+     * 绑定github
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function github(Request $request, $project_id)
     {
         $project = Project::where('project_id', $project_id)->first();
