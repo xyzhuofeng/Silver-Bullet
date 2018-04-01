@@ -33,7 +33,7 @@
                     <div class="deadline deadline-normal" v-if="item.deadline">
                         <span>{{item.deadline}} 截止</span>
                     </div>
-                    <p v-if="item.remark">备注： {{item.remark}}</p>
+                    <p v-if="item.remark" v-html="item.remark"></p>
                     <p class="people">创建者：{{item.user_name}} 参与者：
                         <template v-for="user in item.task_user">
                             {{user.user_name}}&nbsp;
@@ -68,7 +68,7 @@
                     <el-input v-model="createTask.form.task_content"></el-input>
                 </el-form-item>
                 <el-form-item label="备注">
-                    <el-input type="textarea" v-model="createTask.form.remark"></el-input>
+                    <el-input type="textarea" v-model="createTask.form.remark" placeholder="支持HTML"></el-input>
                 </el-form-item>
                 <el-form-item label="截止时间">
                     <el-date-picker type="datetime" placeholder="选择日期时间" align="center"

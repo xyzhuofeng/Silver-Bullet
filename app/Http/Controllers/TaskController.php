@@ -51,6 +51,7 @@ class TaskController
             $val->task_user = $member_list;
             $val->is_finished = $val->is_finished == 1 ? true : false;
             $val->tag = json_decode($val->tag, true);
+            $val->remark = nl2br($val->remark);
         }
         return response()->json([
             'info' => '获取成功',
@@ -84,6 +85,7 @@ class TaskController
             $val->task_user = $member_list;
             $val->is_finished = $val->is_finished == 1 ? true : false;
             $val->tag = json_decode($val->tag, true);
+            $val->remark = nl2br($val->remark);
         }
         return response()->json([
             'info' => '获取成功',
@@ -106,6 +108,7 @@ class TaskController
         $deadline = $request->post('deadline');
         $project_id = $request->post('project_id');
         $tag_list = json_encode($request->post('tag_list'));
+        $task_user = $request->post('task_user');
         if (empty($task_content)) {
             return response()->json(['info' => '任务内容不能为空', 'status' => 0]);
         }
@@ -121,11 +124,13 @@ class TaskController
             $task->setAttribute('deadline', $deadline);
             $task->setAttribute('tag', $tag_list);
             $task->save();
-            $task_user = new TaskUser();
-            $task_user->setAttribute('task_id', $task->getAttribute('task_id'));
-            $task_user->setAttribute('user_id', session()->get('user_id'));
-            $task_user->setAttribute('role', '创建者');
-            $task_user->save();
+            foreach ($task_user as $value) {
+                $task_user = new TaskUser();
+                $task_user->setAttribute('task_id', $task->getAttribute('task_id'));
+                $task_user->setAttribute('user_id', $value);
+                $task_user->setAttribute('role', '参与者');
+                $task_user->save();
+            }
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
