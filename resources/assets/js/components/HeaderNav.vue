@@ -3,7 +3,7 @@
     <div class="container">
         <el-row>
             <el-col :span="9">
-                <el-menu default-active="abc" mode="horizontal" @select="handleSelect">
+                <el-menu :default-active="headerData.defaultActive" mode="horizontal" @select="handleSelect">
                     <el-menu-item index="0">
                         <a :href="headerData.homeUrl" class="el-button el-button--text">
                             <span class="silver">Silver Bullet</span>

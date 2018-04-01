@@ -173,7 +173,7 @@
             return {
                 // 传给子组件数据
                 // 导航条数据
-                headerData:headerData,
+                headerData: headerData,
                 projLoading: false,
                 projList: [],
                 createProj: {
@@ -253,6 +253,7 @@
         },
         // vue生命周期
         mounted: function () {
+            this.headerData.defaultActive = '项目中心';
             // 加载项目列表
             this.loadProjectList()
         }

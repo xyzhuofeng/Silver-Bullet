@@ -1,6 +1,7 @@
 <script>
     // 导航条子组件数据
     let headerData = {
+        defaultActive: "abc",
         homeUrl: "{{ url('/') }}",
         username: "{{ session('user_name') }}",
         avatarUrl: "{{ session('user_avatar') }}",
@@ -25,7 +26,7 @@
         project_id: "{{ \App\Http\Middleware\ViewTempleteVal::$projectId }}",
         task_type: "all",
         myTaskUrl: "{{ route('task/my', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}",
-        unfinishTaskUrl:"{{ route('task/unfinish', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}",
+        unfinishTaskUrl: "{{ route('task/unfinish', ['protect_id'=>\App\Http\Middleware\ViewTempleteVal::$projectId]) }}",
         createTaskUrl: "{{ route('task/save', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
         finishTaskUrl: "{{ route('task/finish', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
         deleteTaskUrl: "{{ route('task/delete', \App\Http\Middleware\ViewTempleteVal::$projectId) }}",
