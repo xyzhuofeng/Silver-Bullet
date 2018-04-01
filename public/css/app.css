@@ -32,3 +32,7 @@ a.el-button--text {
   float: right;
 }
 
+.text-right {
+  text-align: right;
+}
+

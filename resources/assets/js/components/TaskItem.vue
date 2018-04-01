@@ -10,12 +10,21 @@
         </div>
         <template v-for="item in myTaskList" v-loading="taskListLoading">
             <div class="task">
-                <el-checkbox v-model="item.is_finished" @change="finishTask(item.task_id)">{{item.task_content}}
-                </el-checkbox>
+                <el-row type="flex" class="row-bg" justify="space-between">
+                    <el-col :span="6">
+                        <el-checkbox v-model="item.is_finished" @change="finishTask(item.task_id)">
+                            {{item.task_content}}
+                        </el-checkbox>
+                    </el-col>
+                    <el-col :span="6" :offset="6" class= "text-right">
+                        <el-button type="danger" icon="el-icon-delete" class="btn-delete" circle></el-button>
+                    </el-col>
+                </el-row>
+
                 <template v-for="tag in item.tag">
                     <el-tag size="small">{{tag}}</el-tag>
                 </template>
-                <div class="deadline deadline-normal">
+                <div class="deadline deadline-normal" v-if="item.deadline">
                     <span>{{item.deadline}} 截止</span>
                 </div>
                 <p v-if="item.remark">备注： {{item.remark}}</p>
@@ -42,7 +51,7 @@
         <!--<span>12月5日18:00 截止</span>-->
         <!--</div>-->
         <!--</div>-->
-        <el-dialog title="创建任务" :visible.sync="createTask.dlgVisible" width="400px">
+        <el-dialog title="创建任务" :visible.sync="createTask.dlgVisible" width="600px">
             <el-form label-width="80px">
                 <el-form-item label="任务内容">
                     <el-input v-model="createTask.form.task_content"></el-input>
@@ -55,6 +64,13 @@
                                     v-model="createTask.form.deadline"
                                     :picker-options="pickerOptions" value-format="yyyy-MM-dd HH:mm:ss">
                     </el-date-picker>
+                </el-form-item>
+                <el-form-item label="任务标签">
+                    <el-select v-model="createTask.form.tag_list" multiple filterable allow-create default-first-option
+                               placeholder="请输入任务标签">
+                        <el-option v-for="item in createTask.tagOptions" :key="item.value" :label="item.label"
+                                   :value="item.value"></el-option>
+                    </el-select>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -71,6 +87,7 @@
         data() {
             let that = this;
             return {
+                // 任务窗口加载动画
                 taskListLoading: false,
                 // 创建任务
                 createTask: {
@@ -81,8 +98,15 @@
                         task_content: "",
                         remark: "",
                         deadline: "",
-                        project_id: that.taskItemData.project_id
-                    }
+                        project_id: that.taskItemData.project_id,
+                        tag_list: "", // 标签列表
+                    },
+                    tagOptions: [
+                        {value: "功能", label: "功能",},
+                        {value: "Bug", label: "Bug",},
+                        {value: "变更需求", label: "变更需求",},
+                        {value: "新增需求", label: "新增需求",},
+                    ],
                 },
                 // 我的任务列表
                 myTaskList: [],
@@ -232,7 +256,19 @@
         box-sizing: border-box;
         border: 1px solid #ccc;
         border-radius: 6px;
-        font-size: 16px;
+    }
+
+    /*删除按钮默认隐藏*/
+    .task .btn-delete {
+        visibility: hidden;
+        font-size: 14px;
+        border-radius: 100px;
+        padding: 10px 10px;
+    }
+
+    /*鼠标经过任务时显示*/
+    .task:hover .btn-delete {
+        visibility: visible;
     }
 
     /*调整checkbox文字勾选后的状态*/
@@ -243,7 +279,6 @@
 
     .task .deadline {
         margin-top: 8px;
-        margin-left: 14px;
     }
 
     .task .deadline span {
@@ -269,7 +304,7 @@
         color: #fa5555;
     }
 
-    .task p{
+    .task p {
         margin: 5px 0;
         color: #777;
         font-size: 14px;

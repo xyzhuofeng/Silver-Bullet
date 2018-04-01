@@ -84,6 +84,10 @@ class TaskController
         $remark = $request->post('remark');
         $deadline = $request->post('deadline');
         $project_id = $request->post('project_id');
+        $tag_list = json_encode($request->post('tag_list'));
+        if (empty($task_content)) {
+            return response()->json(['info' => '任务内容不能为空', 'status' => 0]);
+        }
         DB::beginTransaction();
         try {
             // 分别写入任务和用户任务关联表
@@ -94,6 +98,7 @@ class TaskController
             $task->setAttribute('project_id', $project_id);
             $task->setAttribute('is_finished', 0);
             $task->setAttribute('deadline', $deadline);
+            $task->setAttribute('tag', $tag_list);
             $task->save();
             $task_user = new TaskUser();
             $task_user->setAttribute('task_id', $task->getAttribute('task_id'));
