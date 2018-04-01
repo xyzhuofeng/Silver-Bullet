@@ -13,6 +13,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueClipboard from 'vue-clipboard2'
 import VueQArt from 'vue-qart'
+
 window.VueQArt = VueQArt;
 
 Vue.use(ElementUI);
@@ -55,6 +56,11 @@ Vue.component('task-item', require('./components/TaskItem.vue'));
 let profile = require('./components/ProfileItem.vue');
 profile.props = ['profileData']; // 声明props
 Vue.component('profile-item', profile);
+
+// wiki组件
+let wiki = require('./components/WikiItem.vue');
+wiki.props = ['wikiItemData']; // 声明props
+Vue.component('wiki-item', wiki);
 
 // 页脚组件
 Vue.component('footer-component', require('./components/FooterComponent.vue'));

@@ -91,6 +91,15 @@ class SilverBullet extends Migration
             $table->text('content')->comment('动态发起人');
             $table->timestamps();
         });
+        // 项目wiki
+        Schema::create('blade_wiki', function (Blueprint $table) {
+            $table->bigIncrements('id')->comment('wiki id');
+            $table->bigInteger('project_id')->comment('项目id');
+            $table->bigInteger('user_id')->comment('作者');
+            $table->string('title', 255)->comment('标题');
+            $table->text('content')->comment('内容');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -109,5 +118,6 @@ class SilverBullet extends Migration
         Schema::dropIfExists('blade_project_file');
         Schema::dropIfExists('blade_dir_structure');
         Schema::dropIfExists('blade_timeline');
+        Schema::dropIfExists('blade_wiki');
     }
 }

@@ -32,6 +32,9 @@ Route::post('passport/register', 'PassportController@register');
 // 退出登录
 Route::get('passport/logout', 'PassportController@logout');
 
+/**
+ * PassportController
+ */
 Route::middleware([
     \App\Http\Middleware\CheckLoginStatus::class,
     \App\Http\Middleware\ViewTempleteVal::class,
@@ -76,6 +79,17 @@ Route::middleware([
     // 绑定github
     Route::post('project/{project_id}/github', 'ProjectController@github')->name('project/github');
 
+});
+
+/**
+ * Wikicontroller
+ */
+Route::middleware([
+    \App\Http\Middleware\CheckLoginStatus::class,
+    \App\Http\Middleware\ViewTempleteVal::class,
+])->group(function () {
+    // 项目Wiki首页
+    Route::get('project/{project_id}/wiki', 'WikiController@index')->name('wiki/index');
 });
 
 /**
