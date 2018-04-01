@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     const table = 'blade_task';
+    const tableWithDot = 'blade_task.';
 
     /**
      * 与模型关联的数据表

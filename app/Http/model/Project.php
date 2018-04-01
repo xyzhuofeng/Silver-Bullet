@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     const table = 'blade_project';
+    const tableWithDot = 'blade_project.';
+
     /**
      * 与模型关联的数据表
      *

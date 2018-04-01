@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 class DirStructure extends Model
 {
     const table = 'blade_dir_structure';
+    const tableWithDot = 'blade_dir_structure.';
+
     /**
      * 与模型关联的数据表
      *

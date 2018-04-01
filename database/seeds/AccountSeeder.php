@@ -17,8 +17,8 @@ class AccountSeeder extends Seeder
     {
         DB::table('blade_account')->insert([
             'email' => '469379004@qq.com',
-            'user_name' => '庆爷',
-            'user_password' => \hyperqing\Password::crypt('123456'),
+            'user_name' => '李广庆',
+            'user_password' => password_hash('123456', PASSWORD_DEFAULT),
             'user_avatar' => 'app/avatar/男.png',
             'job' => '项目经理',
             'created_at' => '2017-12-03 15:46:27',

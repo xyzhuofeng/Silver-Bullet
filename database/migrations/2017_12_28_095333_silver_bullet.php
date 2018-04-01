@@ -82,6 +82,15 @@ class SilverBullet extends Migration
             $table->json('structure')->comment('目录结构json');
             $table->timestamps();
         });
+
+        // 项目动态
+        Schema::create('blade_timeline', function (Blueprint $table) {
+            $table->bigIncrements('id')->comment('项目动态id');
+            $table->bigInteger('user_id')->comment('动态发起人');
+            $table->bigInteger('project_id')->comment('相关项目');
+            $table->text('content')->comment('动态发起人');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -99,5 +108,6 @@ class SilverBullet extends Migration
         Schema::dropIfExists('blade_task_user');
         Schema::dropIfExists('blade_project_file');
         Schema::dropIfExists('blade_dir_structure');
+        Schema::dropIfExists('blade_timeline');
     }
 }
