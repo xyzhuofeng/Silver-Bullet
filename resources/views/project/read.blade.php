@@ -90,6 +90,10 @@
             justify-content: space-between;
 
         }
+        .commit-history p{
+            margin: 5px 0;
+            color: #222222;
+        }
 
         .git-row + .git-row {
             border-top: 1px solid #ccc;
@@ -116,21 +120,7 @@
                         <section class="my-task">
                             <task-item :task-item-data="taskItemData"></task-item>
                         </section>
-                        <section class="project-progress">
-                            <div class="title"><span>项目进度</span></div>
-                            <el-row>
-                                <el-col :span="8">8 个紧急任务待处理</el-col>
-                                <el-col :span="8">4个 功能正在开发</el-col>
-                                <el-col :span="8">2个 需求待开发</el-col>
-                            </el-row>
-                            <el-row>
-                                <el-col :span="8">1个线上版本正在运行</el-col>
-                                <el-col :span="8">1个测试进行中</el-col>
-                                <el-col :span="8">5个 Bug待修复</el-col>
-                            </el-row>
-                        </section>
                     </div>
-
                 </el-col>
                 <el-col :span="8">
                     <div class="center">

@@ -137,7 +137,7 @@ class ProjectController
         ]);
         try {
             $response = $client->get($project->githuburl);
-            $json = json_decode((string)$response->getBody());
+            $json = json_decode((string)$response->getBody(), true);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 0,
@@ -145,6 +145,9 @@ class ProjectController
             ]);
         }
         $json = array_slice($json, 0, 10);
+        foreach ($json as &$val) {
+            $val['created_at'] = date('Y-m-d H:i:s', strtotime($val['created_at']));
+        }
         return response()->json([
             'status' => 1,
             'info' => '获取成功',
