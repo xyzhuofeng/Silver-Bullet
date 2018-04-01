@@ -108,6 +108,8 @@ Route::middleware([
     Route::post('project/{project_id}/task/save', 'TaskController@save')->name('task/save');
     // 标记完成任务
     Route::post('project/{project_id}/task/finish', 'TaskController@finish')->name('task/finish');
+    // 删除任务
+    Route::post('project/{project_id}/task/delete', 'TaskController@delete')->name('task/delete');
 });
 
 /**

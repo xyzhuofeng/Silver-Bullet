@@ -105,11 +105,7 @@ class TaskController
             $task_user->setAttribute('user_id', session()->get('user_id'));
             $task_user->setAttribute('role', '创建者');
             $task_user->save();
-            return response()->json([
-                'info' => '创建成功',
-                'status' => 1,
-                'data' => $task
-            ]);
+            DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
             return response()->json([
@@ -117,6 +113,11 @@ class TaskController
                 'status' => 0
             ]);
         }
+        return response()->json([
+            'info' => '创建成功',
+            'status' => 1,
+            'data' => $task
+        ]);
     }
 
     /**
@@ -149,6 +150,36 @@ class TaskController
         return response()->json([
             'status' => 0,
             'info' => '操作失败',
+        ]);
+    }
+
+    /**
+     * 删除任务
+     * @param Request $request
+     * @param $project_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(Request $request, $project_id)
+    {
+        $task_id = $request->post('task_id');
+        DB::beginTransaction();
+        try {
+            Task::where('project_id', $project_id)
+                ->where('task_id', $task_id)
+                ->delete();
+            TaskUser::where('task_id', $task_id)
+                ->delete();
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 0,
+                'info' => '删除失败:' . $exception->getMessage(),
+            ]);
+        }
+        return response()->json([
+            'status' => 1,
+            'info' => '删除成功',
         ]);
     }
 }

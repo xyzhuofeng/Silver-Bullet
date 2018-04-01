@@ -16,8 +16,9 @@
                             {{item.task_content}}
                         </el-checkbox>
                     </el-col>
-                    <el-col :span="6" :offset="6" class= "text-right">
-                        <el-button type="danger" icon="el-icon-delete" class="btn-delete" circle></el-button>
+                    <el-col :span="6" :offset="6" class="text-right">
+                        <el-button type="danger" icon="el-icon-delete" @click="deleteTask(item.task_id)"
+                                   class="btn-delete" circle></el-button>
                     </el-col>
                 </el-row>
 
@@ -219,7 +220,32 @@
                   .catch(function (error) {
                       console.log(error);
                   });
-            }
+            },
+            // 删除任务
+            deleteTask(task_id) {
+                let that = this;
+                this.$confirm('此操作将永久删除该任务, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.post(this.taskItemData.deleteTaskUrl, {
+                        task_id: task_id
+                    })
+                      .then(function (response) {
+                          that.loadMyTask();
+                          if (response.data.status === 1) {
+                              that.$message.success(response.data.info);
+                          } else {
+                              that.$message.error(response.data.info);
+                          }
+                      })
+                      .catch(function (error) {
+                          console.log(error);
+                      });
+                }).catch(() => {
+                });
+            },
         },
         mounted() {
             this.loadMyTask();
