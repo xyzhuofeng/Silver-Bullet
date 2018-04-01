@@ -8,46 +8,40 @@
                 </a>
             </div>
         </div>
-        <template v-for="item in myTaskList">
+        <template v-for="item in myTaskList" v-loading="taskListLoading">
             <div class="task">
                 <el-checkbox v-model="item.is_finished" @change="finishTask(item.task_id)">{{item.task_content}}
                 </el-checkbox>
                 <template v-for="tag in item.tag">
                     <el-tag size="small">{{tag}}</el-tag>
                 </template>
-                <div class="deadline deadline-danger">
-                    <span>明天 23：00 截止</span>
+                <div class="deadline deadline-normal">
+                    <span>{{item.deadline}} 截止</span>
                 </div>
-                <template v-if="item.remark">
-                    <div class="people">
-                        备注： {{item.remark}}
-                    </div>
-                </template>
-                <div class="people">
-                    创建者：{{item.user_name}} 参与者：{{item.user_name}}
-                </div>
+                <p v-if="item.remark">备注： {{item.remark}}</p>
+                <p class="people">创建者：{{item.user_name}} 参与者：{{item.user_name}}</p>
             </div>
         </template>
-        <div class="task">
-            <el-checkbox>XXX功能修改</el-checkbox>
-            <el-tag size="small">实现功能</el-tag>
-            <div class="deadline deadline-danger">
-                <span>明天 23：00 截止</span>
-            </div>
-        </div>
-        <div class="task">
-            <el-checkbox>修复XXXx逻辑错误</el-checkbox>
-            <el-tag size="small" type="danger">修复bug</el-tag>
-            <div class="deadline deadline-warning">
-                <span>后天 18:00 截止</span>
-            </div>
-        </div>
-        <div class="task">
-            <el-checkbox>优化页面样式</el-checkbox>
-            <div class="deadline deadline-normal">
-                <span>12月5日18:00 截止</span>
-            </div>
-        </div>
+        <!--<div class="task">-->
+        <!--<el-checkbox>XXX功能修改</el-checkbox>-->
+        <!--<el-tag size="small">实现功能</el-tag>-->
+        <!--<div class="deadline deadline-danger">-->
+        <!--<span>明天 23：00 截止</span>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="task">-->
+        <!--<el-checkbox>修复XXXx逻辑错误</el-checkbox>-->
+        <!--<el-tag size="small" type="danger">修复bug</el-tag>-->
+        <!--<div class="deadline deadline-warning">-->
+        <!--<span>后天 18:00 截止</span>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="task">-->
+        <!--<el-checkbox>优化页面样式</el-checkbox>-->
+        <!--<div class="deadline deadline-normal">-->
+        <!--<span>12月5日18:00 截止</span>-->
+        <!--</div>-->
+        <!--</div>-->
         <el-dialog title="创建任务" :visible.sync="createTask.dlgVisible" width="400px">
             <el-form label-width="80px">
                 <el-form-item label="任务内容">
@@ -77,6 +71,7 @@
         data() {
             let that = this;
             return {
+                taskListLoading: false,
                 // 创建任务
                 createTask: {
                     btn: "创建",
@@ -145,6 +140,7 @@
                 that.createTask.isLoading = true;
                 axios.post(that.taskItemData.createTaskUrl, that.createTask.form)
                   .then(function (response) {
+                      that.loadMyTask();
                       that.createTask.isLoading = false;
                       that.createTask.btn = "创建";
                       if (response.data.status !== 1) {
@@ -169,8 +165,10 @@
             // 读取我的任务
             loadMyTask() {
                 let that = this;
+                that.taskListLoading = true;
                 axios.get(this.taskItemData.myTaskUrl)
                   .then(function (response) {
+                      that.taskListLoading = false;
                       if (response.data.status !== 1) {
                           that.$message.error(response.data.info);
                       } else {
@@ -204,7 +202,18 @@
         }
     }
 </script>
+<style>
+    /*调整checkbox文字大小*/
+    .task .el-checkbox__label {
+        color: #222;
+    }
 
+    /*调整checkbox文字勾选后的状态*/
+    .task .el-checkbox__input.is-checked + .el-checkbox__label {
+        text-decoration: line-through;
+        color: #878d99;
+    }
+</style>
 <style scoped>
     /*留空间距*/
     .el-tag {
@@ -223,12 +232,6 @@
         box-sizing: border-box;
         border: 1px solid #ccc;
         border-radius: 6px;
-        font-size: 16px;
-    }
-
-    /*调整checkbox文字大小*/
-    .task .el-checkbox__label {
-        color: #2d2f33;
         font-size: 16px;
     }
 
@@ -266,7 +269,8 @@
         color: #fa5555;
     }
 
-    .task .people {
+    .task p{
+        margin: 5px 0;
         color: #777;
         font-size: 14px;
     }

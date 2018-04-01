@@ -56,7 +56,7 @@ class TaskController
             )
             ->where(TaskUser::table . '.user_id', session()->get('user_id'))
             ->where(Task::table . '.project_id', $project_id)
-            ->orderBy('deadline', 'desc')
+            ->orderBy(Task::table . '.created_at', 'desc')
             ->orderBy(Task::table . '.updated_at', 'desc')
             ->get();
         foreach ($data as &$val) {
