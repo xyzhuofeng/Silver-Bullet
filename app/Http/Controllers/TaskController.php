@@ -68,7 +68,7 @@ class TaskController
     public function unfinish(Request $request, $project_id)
     {
         $data = Task::join(Account::table,
-            Account::table . '.user_id', '=', Task::table . '.user_id'
+            Account::table . '.user_id', '=', Task::table . '.creator'
         )
             ->where(Task::table . '.project_id', $project_id)
             ->where(Task::table . '.is_finished', 0)
