@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "element-ui": "^2.0.7",
+    "mavon-editor": "^2.5.2",
     "vue-clipboard2": "^0.1.0",
     "vue-qart": "^2.1.1"
   }

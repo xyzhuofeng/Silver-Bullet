@@ -8,6 +8,9 @@
     <title>WIKI - {{ \App\Http\Middleware\ViewTempleteVal::$projectName }} - 团队协作平台</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
+    <div id="editormd">
+        <textarea style="display:none;">### Hello Editor.md !</textarea>
+    </div>
     <style>
         html, body {
             background: #e7eaf1;

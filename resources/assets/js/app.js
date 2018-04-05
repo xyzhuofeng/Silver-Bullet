@@ -14,6 +14,11 @@ import 'element-ui/lib/theme-chalk/index.css'
 import VueClipboard from 'vue-clipboard2'
 import VueQArt from 'vue-qart'
 
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+// use
+Vue.use(mavonEditor)
+
 window.VueQArt = VueQArt;
 
 Vue.use(ElementUI);

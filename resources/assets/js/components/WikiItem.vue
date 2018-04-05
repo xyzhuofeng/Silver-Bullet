@@ -11,7 +11,7 @@
                         <el-input placeholder="请在此输入标题" v-model="current.title"></el-input>
                     </div>
                     <div class="content">
-                        <el-input type="textarea" placeholder="请在此输入内容" :rows="25" v-model="current.content"></el-input>
+                        <mavon-editor v-model="current.content"></mavon-editor>
                     </div>
                     <div class="btn-row">
                         <el-button type="primary" @click="save">保存</el-button>
@@ -97,5 +97,9 @@
 
     .btn-row {
         margin-top: 15px;
+    }
+
+    .markdown-body{
+        height: 600px;
     }
 </style>
