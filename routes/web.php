@@ -78,7 +78,6 @@ Route::middleware([
     Route::get('project/{project_id}/timeline', 'ProjectController@timeline')->name('project/timeline');
     // 绑定github
     Route::post('project/{project_id}/github', 'ProjectController@github')->name('project/github');
-
 });
 
 /**
