@@ -84,7 +84,9 @@ Route::middleware([
  * Wikicontroller
  */
 Route::middleware([
+    // 登录检查处理中间件
     \App\Http\Middleware\CheckLoginStatus::class,
+    // 模板变量处理中间件
     \App\Http\Middleware\ViewTempleteVal::class,
 ])->group(function () {
     // 项目Wiki首页
